@@ -7,35 +7,31 @@ import { Briefcase, CheckCircle, Users, TrendingUp } from "lucide-react";
 import { auth } from "@/auth";
 import { signIn } from "@/auth";
 import { redirect } from "next/navigation";
+import { getContent } from "@/lib/content";
+import { getLocale } from "@/lib/get-locale";
+import { getDirection } from "@/lib/i18n-config";
+import { LanguageSwitcher } from "@/components/language-switcher";
 
 export default async function Home() {
   const session = await auth();
+  const locale = await getLocale();
+  const dir = getDirection(locale);
   
   // If user is already logged in, redirect to dashboard
   if (session?.user) {
     redirect("/dashboard");
   }
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex min-h-screen flex-col" dir={dir}>
       {/* Header */}
-      <header className="border-b bg-background">
-        <div className="container mx-auto flex h-16 items-center justify-between px-4">
-          <div className="flex items-center gap-2">
-            <Briefcase className="h-6 w-6" />
-            <span className="text-xl font-bold">Hireable</span>
-          </div>
-          <nav className="hidden md:flex items-center gap-6">
-            <Link href="#features" className="text-sm font-medium hover:text-primary transition-colors">
-              Features
-            </Link>
-            <Link href="#how-it-works" className="text-sm font-medium hover:text-primary transition-colors">
-              How It Works
-            </Link>
-            <Link href="#about" className="text-sm font-medium hover:text-primary transition-colors">
-              About
-            </Link>
-          </nav>
-        </div>
+            <header className="px-4 lg:px-6 h-14 flex items-center border-b">
+        <Link className="flex items-center justify-center" href="/">
+          <Briefcase className="h-6 w-6 mr-2" />
+          <span className="font-bold">{getContent("app.name", locale)}</span>
+        </Link>
+        <nav className={`${dir === 'rtl' ? 'mr-auto' : 'ml-auto'} flex gap-4 sm:gap-6 items-center`}>
+          <LanguageSwitcher currentLocale={locale} />
+        </nav>
       </header>
 
       {/* Hero Section */}
@@ -50,16 +46,15 @@ export default async function Home() {
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
                   </span>
-                  Now Hiring
+                  {getContent("landing.hero.badge", locale)}
                 </span>
               </div>
               <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
-                Find Your Dream Job
-                <span className="text-primary"> Today</span>
+                {getContent("landing.hero.title", locale)}
+                <span className="text-primary"> {getContent("landing.hero.titleHighlight", locale)}</span>
               </h1>
               <p className="text-lg text-muted-foreground md:text-xl">
-                Connect with top employers and discover opportunities that match your skills and aspirations. 
-                Your next career move starts here.
+                {getContent("landing.hero.description", locale)}
               </p>
               
               {/* Features List */}
@@ -67,29 +62,29 @@ export default async function Home() {
                 <div className="flex items-start gap-3">
                   <CheckCircle className="h-5 w-5 text-primary shrink-0 mt-0.5" />
                   <div>
-                    <h3 className="font-semibold">Smart Matching</h3>
-                    <p className="text-sm text-muted-foreground">AI-powered job recommendations</p>
+                    <h3 className="font-semibold">{getContent("landing.hero.features.smartMatching.title", locale)}</h3>
+                    <p className="text-sm text-muted-foreground">{getContent("landing.hero.features.smartMatching.description", locale)}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <Users className="h-5 w-5 text-primary shrink-0 mt-0.5" />
                   <div>
-                    <h3 className="font-semibold">Top Employers</h3>
-                    <p className="text-sm text-muted-foreground">Connect with leading companies</p>
+                    <h3 className="font-semibold">{getContent("landing.hero.features.topEmployers.title", locale)}</h3>
+                    <p className="text-sm text-muted-foreground">{getContent("landing.hero.features.topEmployers.description", locale)}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <TrendingUp className="h-5 w-5 text-primary shrink-0 mt-0.5" />
                   <div>
-                    <h3 className="font-semibold">Career Growth</h3>
-                    <p className="text-sm text-muted-foreground">Track your progress and grow</p>
+                    <h3 className="font-semibold">{getContent("landing.hero.features.careerGrowth.title", locale)}</h3>
+                    <p className="text-sm text-muted-foreground">{getContent("landing.hero.features.careerGrowth.description", locale)}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <Briefcase className="h-5 w-5 text-primary shrink-0 mt-0.5" />
                   <div>
-                    <h3 className="font-semibold">Quick Apply</h3>
-                    <p className="text-sm text-muted-foreground">Apply to jobs in seconds</p>
+                    <h3 className="font-semibold">{getContent("landing.hero.features.quickApply.title", locale)}</h3>
+                    <p className="text-sm text-muted-foreground">{getContent("landing.hero.features.quickApply.description", locale)}</p>
                   </div>
                 </div>
               </div>
@@ -99,41 +94,41 @@ export default async function Home() {
             <div className="flex justify-center lg:justify-end">
               <Card className="w-full max-w-md">
                 <CardHeader>
-                  <CardTitle>Welcome Back</CardTitle>
+                  <CardTitle>{getContent("landing.auth.card.title", locale)}</CardTitle>
                   <CardDescription>
-                    Sign in to your account to continue your job search
+                    {getContent("landing.auth.card.description", locale)}
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <form className="space-y-4">
+                  <div className="space-y-4">
                     <div className="space-y-2">
-                      <Label htmlFor="email">Email</Label>
+                      <Label htmlFor="email">{getContent("landing.auth.form.emailLabel", locale)}</Label>
                       <Input
                         id="email"
                         type="email"
-                        placeholder="you@example.com"
+                        placeholder={getContent("landing.auth.form.emailPlaceholder", locale)}
                         required
                       />
                     </div>
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
-                        <Label htmlFor="password">Password</Label>
+                        <Label htmlFor="password">{getContent("landing.auth.form.passwordLabel", locale)}</Label>
                         <Link
                           href="/forgot-password"
                           className="text-sm text-muted-foreground hover:text-primary transition-colors"
                         >
-                          Forgot password?
+                          {getContent("landing.auth.form.forgotPassword", locale)}
                         </Link>
                       </div>
                       <Input
                         id="password"
                         type="password"
-                        placeholder="••••••••"
+                        placeholder={getContent("landing.auth.form.passwordPlaceholder", locale)}
                         required
                       />
                     </div>
                     <Button type="submit" className="w-full">
-                      Sign In
+                      {getContent("landing.auth.form.signInButton", locale)}
                     </Button>
                     <div className="relative">
                       <div className="absolute inset-0 flex items-center">
@@ -141,7 +136,7 @@ export default async function Home() {
                       </div>
                       <div className="relative flex justify-center text-xs uppercase">
                         <span className="bg-card px-2 text-muted-foreground">
-                          Or continue with
+                          {getContent("landing.auth.form.orContinueWith", locale)}
                         </span>
                       </div>
                     </div>
@@ -171,7 +166,7 @@ export default async function Home() {
                               fill="#EA4335"
                             />
                           </svg>
-                          Google
+                          {getContent("landing.auth.form.googleButton", locale)}
                         </Button>
                       </form>
                       <form
@@ -184,20 +179,20 @@ export default async function Home() {
                           <svg className="mr-2 h-4 w-4" fill="#0A66C2" viewBox="0 0 24 24">
                             <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
                           </svg>
-                          LinkedIn
+                          {getContent("landing.auth.form.linkedinButton", locale)}
                         </Button>
                       </form>
                     </div>
                     <div className="text-center text-sm text-muted-foreground">
-                      Don&apos;t have an account?{" "}
+                      {getContent("landing.auth.form.noAccount", locale)}{" "}
                       <Link
                         href="/signup"
                         className="font-medium text-primary hover:underline"
                       >
-                        Sign up
+                        {getContent("landing.auth.form.signUpLink", locale)}
                       </Link>
                     </div>
-                  </form>
+                  </div>
                 </CardContent>
               </Card>
             </div>
@@ -211,20 +206,20 @@ export default async function Home() {
           <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
             <div className="flex items-center gap-2">
               <Briefcase className="h-5 w-5" />
-              <span className="text-sm font-semibold">Hireable</span>
+              <span className="text-sm font-semibold">{getContent("app.name", locale)}</span>
             </div>
             <p className="text-center text-sm text-muted-foreground">
-              © 2025 Hireable. All rights reserved.
+              {getContent("landing.footer.copyright", locale)}
             </p>
             <div className="flex gap-4">
               <Link href="/privacy" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                Privacy
+                {getContent("landing.footer.links.privacy", locale)}
               </Link>
               <Link href="/terms" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                Terms
+                {getContent("landing.footer.links.terms", locale)}
               </Link>
               <Link href="/contact" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                Contact
+                {getContent("landing.footer.links.contact", locale)}
               </Link>
             </div>
           </div>

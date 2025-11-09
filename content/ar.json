@@ -1,0 +1,108 @@
+{
+  "app": {
+    "name": "Hireable",
+    "tagline": "اعثر على وظيفة أحلامك اليوم"
+  },
+  "landing": {
+    "header": {
+      "nav": {
+        "features": "المميزات",
+        "howItWorks": "كيف يعمل",
+        "about": "حول"
+      }
+    },
+    "hero": {
+      "badge": "التوظيف الآن",
+      "title": "اعثر على وظيفة أحلامك",
+      "titleHighlight": "اليوم",
+      "description": "تواصل مع أفضل أصحاب العمل واكتشف الفرص التي تتناسب مع مهاراتك وطموحاتك. خطوتك المهنية التالية تبدأ من هنا.",
+      "features": {
+        "smartMatching": {
+          "title": "مطابقة ذكية",
+          "description": "توصيات وظائف مدعومة بالذكاء الاصطناعي"
+        },
+        "topEmployers": {
+          "title": "أفضل أصحاب العمل",
+          "description": "تواصل مع الشركات الرائدة"
+        },
+        "careerGrowth": {
+          "title": "النمو المهني",
+          "description": "تتبع تقدمك وانمو"
+        },
+        "quickApply": {
+          "title": "تقديم سريع",
+          "description": "تقدم للوظائف في ثوانٍ"
+        }
+      }
+    },
+    "auth": {
+      "card": {
+        "title": "مرحباً بعودتك",
+        "description": "سجل الدخول إلى حسابك لمتابعة البحث عن وظيفة"
+      },
+      "form": {
+        "emailLabel": "البريد الإلكتروني",
+        "emailPlaceholder": "you@example.com",
+        "passwordLabel": "كلمة المرور",
+        "passwordPlaceholder": "••••••••",
+        "forgotPassword": "هل نسيت كلمة المرور؟",
+        "signInButton": "تسجيل الدخول",
+        "orContinueWith": "أو تابع مع",
+        "googleButton": "جوجل",
+        "linkedinButton": "لينكد إن",
+        "noAccount": "ليس لديك حساب؟",
+        "signUpLink": "سجل الآن"
+      }
+    },
+    "footer": {
+      "copyright": "© 2025 Hireable. جميع الحقوق محفوظة.",
+      "links": {
+        "privacy": "الخصوصية",
+        "terms": "الشروط",
+        "contact": "اتصل بنا"
+      }
+    }
+  },
+  "dashboard": {
+    "header": {
+      "signOutButton": "تسجيل الخروج"
+    },
+    "welcome": {
+      "title": "مرحباً بعودتك، {name}!",
+      "subtitle": "إليك لوحة تحكم البحث عن وظيفة"
+    },
+    "stats": {
+      "appliedJobs": {
+        "title": "الوظائف المقدمة",
+        "description": "تتبع طلباتك",
+        "emptyState": "لا توجد طلبات بعد"
+      },
+      "savedJobs": {
+        "title": "الوظائف المحفوظة",
+        "description": "المناصب المحفوظة لديك",
+        "emptyState": "ابدأ بحفظ الوظائف التي تعجبك"
+      },
+      "profileViews": {
+        "title": "مشاهدات الملف الشخصي",
+        "description": "اهتمام أصحاب العمل",
+        "emptyState": "أكمل ملفك الشخصي للحصول على الاهتمام"
+      }
+    },
+    "gettingStarted": {
+      "title": "البدء",
+      "description": "أكمل هذه الخطوات لتحسين بحثك عن وظيفة",
+      "steps": {
+        "completeProfile": "أكمل ملفك الشخصي",
+        "uploadResume": "حمّل سيرتك الذاتية",
+        "addSkills": "أضف مهاراتك",
+        "startApplying": "ابدأ التقديم على الوظائف"
+      }
+    }
+  },
+  "common": {
+    "loading": "جاري التحميل...",
+    "error": "حدث خطأ",
+    "retry": "أعد المحاولة",
+    "switchLanguage": "Switch to English"
+  }
+}

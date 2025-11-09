@@ -1,0 +1,108 @@
+{
+  "app": {
+    "name": "Hireable",
+    "tagline": "Find Your Dream Job Today"
+  },
+  "landing": {
+    "header": {
+      "nav": {
+        "features": "Features",
+        "howItWorks": "How It Works",
+        "about": "About"
+      }
+    },
+    "hero": {
+      "badge": "Now Hiring",
+      "title": "Find Your Dream Job",
+      "titleHighlight": "Today",
+      "description": "Connect with top employers and discover opportunities that match your skills and aspirations. Your next career move starts here.",
+      "features": {
+        "smartMatching": {
+          "title": "Smart Matching",
+          "description": "AI-powered job recommendations"
+        },
+        "topEmployers": {
+          "title": "Top Employers",
+          "description": "Connect with leading companies"
+        },
+        "careerGrowth": {
+          "title": "Career Growth",
+          "description": "Track your progress and grow"
+        },
+        "quickApply": {
+          "title": "Quick Apply",
+          "description": "Apply to jobs in seconds"
+        }
+      }
+    },
+    "auth": {
+      "card": {
+        "title": "Welcome Back",
+        "description": "Sign in to your account to continue your job search"
+      },
+      "form": {
+        "emailLabel": "Email",
+        "emailPlaceholder": "you@example.com",
+        "passwordLabel": "Password",
+        "passwordPlaceholder": "••••••••",
+        "forgotPassword": "Forgot password?",
+        "signInButton": "Sign In",
+        "orContinueWith": "Or continue with",
+        "googleButton": "Google",
+        "linkedinButton": "LinkedIn",
+        "noAccount": "Don't have an account?",
+        "signUpLink": "Sign up"
+      }
+    },
+    "footer": {
+      "copyright": "© 2025 Hireable. All rights reserved.",
+      "links": {
+        "privacy": "Privacy",
+        "terms": "Terms",
+        "contact": "Contact"
+      }
+    }
+  },
+  "dashboard": {
+    "header": {
+      "signOutButton": "Sign Out"
+    },
+    "welcome": {
+      "title": "Welcome back, {name}!",
+      "subtitle": "Here's your job search dashboard"
+    },
+    "stats": {
+      "appliedJobs": {
+        "title": "Applied Jobs",
+        "description": "Track your applications",
+        "emptyState": "No applications yet"
+      },
+      "savedJobs": {
+        "title": "Saved Jobs",
+        "description": "Your bookmarked positions",
+        "emptyState": "Start saving jobs you like"
+      },
+      "profileViews": {
+        "title": "Profile Views",
+        "description": "Employer interest",
+        "emptyState": "Complete your profile to get noticed"
+      }
+    },
+    "gettingStarted": {
+      "title": "Getting Started",
+      "description": "Complete these steps to improve your job search",
+      "steps": {
+        "completeProfile": "Complete your profile",
+        "uploadResume": "Upload your resume",
+        "addSkills": "Add your skills",
+        "startApplying": "Start applying to jobs"
+      }
+    }
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "retry": "Retry",
+    "switchLanguage": "التبديل إلى العربية"
+  }
+}
