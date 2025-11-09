@@ -1,0 +1,24 @@
+import { DashboardHeader } from "@/components/dashboard-header";
+import { auth } from "@/auth";
+import { redirect } from "next/navigation";
+
+export default async function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const session = await auth();
+
+  if (!session?.user) {
+    redirect("/");
+  }
+
+  return (
+    <>
+      <DashboardHeader session={session} />
+      <main className="flex-1">
+        {children}
+      </main>
+    </>
+  );
+}

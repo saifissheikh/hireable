@@ -3,37 +3,23 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Briefcase, CheckCircle, Users, TrendingUp } from "lucide-react";
+import { CheckCircle, Users, TrendingUp, Briefcase } from "lucide-react";
 import { auth } from "@/auth";
 import { signIn } from "@/auth";
 import { redirect } from "next/navigation";
 import { getContent } from "@/lib/content";
 import { getLocale } from "@/lib/get-locale";
-import { getDirection } from "@/lib/i18n-config";
-import { LanguageSwitcher } from "@/components/language-switcher";
 
 export default async function Home() {
   const session = await auth();
   const locale = await getLocale();
-  const dir = getDirection(locale);
   
   // If user is already logged in, redirect to dashboard
   if (session?.user) {
     redirect("/dashboard");
   }
   return (
-    <div className="flex min-h-screen flex-col" dir={dir}>
-      {/* Header */}
-            <header className="px-4 lg:px-6 h-14 flex items-center border-b">
-        <Link className="flex items-center justify-center" href="/">
-          <Briefcase className="h-6 w-6 mr-2" />
-          <span className="font-bold">{getContent("app.name", locale)}</span>
-        </Link>
-        <nav className={`${dir === 'rtl' ? 'mr-auto' : 'ml-auto'} flex gap-4 sm:gap-6 items-center`}>
-          <LanguageSwitcher currentLocale={locale} />
-        </nav>
-      </header>
-
+    <>
       {/* Hero Section */}
       <section className="flex-1">
         <div className="container mx-auto px-4 py-16 md:py-24">
@@ -199,32 +185,6 @@ export default async function Home() {
           </div>
         </div>
       </section>
-
-      {/* Footer */}
-      <footer className="border-t bg-muted/40">
-        <div className="container mx-auto px-4 py-6">
-          <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
-            <div className="flex items-center gap-2">
-              <Briefcase className="h-5 w-5" />
-              <span className="text-sm font-semibold">{getContent("app.name", locale)}</span>
-            </div>
-            <p className="text-center text-sm text-muted-foreground">
-              {getContent("landing.footer.copyright", locale)}
-            </p>
-            <div className="flex gap-4">
-              <Link href="/privacy" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                {getContent("landing.footer.links.privacy", locale)}
-              </Link>
-              <Link href="/terms" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                {getContent("landing.footer.links.terms", locale)}
-              </Link>
-              <Link href="/contact" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                {getContent("landing.footer.links.contact", locale)}
-              </Link>
-            </div>
-          </div>
-        </div>
-      </footer>
-    </div>
+    </>
   );
 }
