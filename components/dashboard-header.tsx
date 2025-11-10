@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { getContent } from "@/lib/content";
 import { getLocale } from "@/lib/get-locale";
 import { LanguageSwitcher } from "@/components/language-switcher";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { signOut } from "@/auth";
 import { Session } from "next-auth";
 
@@ -23,6 +24,7 @@ export async function DashboardHeader({ session }: DashboardHeaderProps) {
           <span className="text-xl font-bold">{getContent("app.name", locale)}</span>
         </Link>
         <div className="flex items-center gap-4">
+          <ThemeToggle />
           <LanguageSwitcher currentLocale={locale} />
           <div className="flex items-center gap-2">
             {session.user?.image && (

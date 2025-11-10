@@ -99,6 +99,71 @@
       }
     }
   },
+  "onboarding": {
+    "progress": {
+      "step1": {
+        "title": "Basic Information",
+        "description": "Tell us about yourself"
+      },
+      "step2": {
+        "title": "Professional Details",
+        "description": "Your experience & skills"
+      },
+      "step3": {
+        "title": "Resume Upload",
+        "description": "Upload your resume"
+      }
+    },
+    "step1": {
+      "title": "Let's get started!",
+      "description": "We need some basic information to create your profile",
+      "fullName": "Full Name",
+      "age": "Age",
+      "nationality": "Nationality",
+      "nationalityPlaceholder": "e.g., American, Indian, etc.",
+      "location": "Current Location",
+      "locationPlaceholder": "City, Country",
+      "phone": "Phone Number",
+      "phonePlaceholder": "+1 (555) 123-4567",
+      "required": "* Required fields"
+    },
+    "step2": {
+      "title": "Professional Background",
+      "description": "Tell us about your professional experience",
+      "yearsOfExperience": "Years of Experience",
+      "yearsPlaceholder": "3",
+      "yearsHint": "Enter 0 if you're a fresh graduate",
+      "skills": "Skills",
+      "skillsPlaceholder": "e.g., React, Python, Marketing...",
+      "skillsHint": "Add at least 3 skills. Press Enter or click Add.",
+      "addButton": "Add",
+      "bio": "Professional Bio",
+      "bioPlaceholder": "Tell employers about yourself, your experience, and what you're looking for...",
+      "bioHint": "{count}/500 characters (minimum 50)",
+      "required": "* Required fields"
+    },
+    "step3": {
+      "title": "Upload Your Resume",
+      "description": "Upload your resume to complete your profile",
+      "label": "Resume / CV",
+      "dropzone": {
+        "title": "Drop your resume here, or click to browse",
+        "subtitle": "PDF, DOC, or DOCX (max 5MB)",
+        "button": "Choose File"
+      },
+      "hint": "Your resume will be visible to employers. Make sure it's up to date!",
+      "uploaded": "Uploaded successfully"
+    },
+    "navigation": {
+      "back": "Back",
+      "continue": "Continue",
+      "submit": "Complete Profile",
+      "submitting": "Submitting..."
+    },
+    "validation": {
+      "invalidFile": "Please upload a PDF, DOC, or DOCX file (max 5MB)"
+    }
+  },
   "common": {
     "loading": "Loading...",
     "error": "An error occurred",

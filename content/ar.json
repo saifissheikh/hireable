@@ -99,6 +99,71 @@
       }
     }
   },
+  "onboarding": {
+    "progress": {
+      "step1": {
+        "title": "المعلومات الأساسية",
+        "description": "أخبرنا عن نفسك"
+      },
+      "step2": {
+        "title": "التفاصيل المهنية",
+        "description": "خبرتك ومهاراتك"
+      },
+      "step3": {
+        "title": "تحميل السيرة الذاتية",
+        "description": "قم بتحميل سيرتك الذاتية"
+      }
+    },
+    "step1": {
+      "title": "لنبدأ!",
+      "description": "نحتاج بعض المعلومات الأساسية لإنشاء ملفك الشخصي",
+      "fullName": "الاسم الكامل",
+      "age": "العمر",
+      "nationality": "الجنسية",
+      "nationalityPlaceholder": "مثال: أمريكي، هندي، إلخ",
+      "location": "الموقع الحالي",
+      "locationPlaceholder": "المدينة، البلد",
+      "phone": "رقم الهاتف",
+      "phonePlaceholder": "+966 50 123 4567",
+      "required": "* الحقول المطلوبة"
+    },
+    "step2": {
+      "title": "الخلفية المهنية",
+      "description": "أخبرنا عن خبرتك المهنية",
+      "yearsOfExperience": "سنوات الخبرة",
+      "yearsPlaceholder": "3",
+      "yearsHint": "أدخل 0 إذا كنت خريجاً جديداً",
+      "skills": "المهارات",
+      "skillsPlaceholder": "مثال: React، Python، التسويق...",
+      "skillsHint": "أضف 3 مهارات على الأقل. اضغط Enter أو انقر على إضافة.",
+      "addButton": "إضافة",
+      "bio": "النبذة المهنية",
+      "bioPlaceholder": "أخبر أصحاب العمل عن نفسك وخبرتك وما تبحث عنه...",
+      "bioHint": "{count}/500 حرف (الحد الأدنى 50)",
+      "required": "* الحقول المطلوبة"
+    },
+    "step3": {
+      "title": "تحميل سيرتك الذاتية",
+      "description": "قم بتحميل سيرتك الذاتية لإكمال ملفك الشخصي",
+      "label": "السيرة الذاتية",
+      "dropzone": {
+        "title": "اسحب سيرتك الذاتية هنا، أو انقر للتصفح",
+        "subtitle": "PDF أو DOC أو DOCX (حد أقصى 5 ميجابايت)",
+        "button": "اختر ملف"
+      },
+      "hint": "سيكون ملفك الشخصي مرئياً لأصحاب العمل. تأكد من أنه محدث!",
+      "uploaded": "تم التحميل بنجاح"
+    },
+    "navigation": {
+      "back": "رجوع",
+      "continue": "متابعة",
+      "submit": "إكمال الملف الشخصي",
+      "submitting": "جاري الإرسال..."
+    },
+    "validation": {
+      "invalidFile": "يرجى تحميل ملف PDF أو DOC أو DOCX (حد أقصى 5 ميجابايت)"
+    }
+  },
   "common": {
     "loading": "جاري التحميل...",
     "error": "حدث خطأ",
