@@ -69,34 +69,7 @@
     },
     "welcome": {
       "title": "Welcome back, {name}!",
-      "subtitle": "Here's your job search dashboard"
-    },
-    "stats": {
-      "appliedJobs": {
-        "title": "Applied Jobs",
-        "description": "Track your applications",
-        "emptyState": "No applications yet"
-      },
-      "savedJobs": {
-        "title": "Saved Jobs",
-        "description": "Your bookmarked positions",
-        "emptyState": "Start saving jobs you like"
-      },
-      "profileViews": {
-        "title": "Profile Views",
-        "description": "Employer interest",
-        "emptyState": "Complete your profile to get noticed"
-      }
-    },
-    "gettingStarted": {
-      "title": "Getting Started",
-      "description": "Complete these steps to improve your job search",
-      "steps": {
-        "completeProfile": "Complete your profile",
-        "uploadResume": "Upload your resume",
-        "addSkills": "Add your skills",
-        "startApplying": "Start applying to jobs"
-      }
+      "subtitle": "Let's complete your profile to get started"
     }
   },
   "onboarding": {

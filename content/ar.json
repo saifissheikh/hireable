@@ -69,34 +69,7 @@
     },
     "welcome": {
       "title": "مرحباً بعودتك، {name}!",
-      "subtitle": "إليك لوحة تحكم البحث عن وظيفة"
-    },
-    "stats": {
-      "appliedJobs": {
-        "title": "الوظائف المقدمة",
-        "description": "تتبع طلباتك",
-        "emptyState": "لا توجد طلبات بعد"
-      },
-      "savedJobs": {
-        "title": "الوظائف المحفوظة",
-        "description": "المناصب المحفوظة لديك",
-        "emptyState": "ابدأ بحفظ الوظائف التي تعجبك"
-      },
-      "profileViews": {
-        "title": "مشاهدات الملف الشخصي",
-        "description": "اهتمام أصحاب العمل",
-        "emptyState": "أكمل ملفك الشخصي للحصول على الاهتمام"
-      }
-    },
-    "gettingStarted": {
-      "title": "البدء",
-      "description": "أكمل هذه الخطوات لتحسين بحثك عن وظيفة",
-      "steps": {
-        "completeProfile": "أكمل ملفك الشخصي",
-        "uploadResume": "حمّل سيرتك الذاتية",
-        "addSkills": "أضف مهاراتك",
-        "startApplying": "ابدأ التقديم على الوظائف"
-      }
+      "subtitle": "دعنا نكمل ملفك الشخصي للبدء"
     }
   },
   "onboarding": {

@@ -1,7 +1,15 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { getContent } from "@/lib/content";
 import type { Locale } from "@/lib/i18n-config";
+import { countries } from "@/lib/countries";
 
 interface BasicInfoStepProps {
   formData: {
@@ -46,13 +54,24 @@ export function BasicInfoStep({ formData, updateFormData, locale }: BasicInfoSte
 
         <div className="space-y-2">
           <Label htmlFor="nationality">{getContent("onboarding.step1.nationality", locale)} *</Label>
-          <Input
-            id="nationality"
-            placeholder={getContent("onboarding.step1.nationalityPlaceholder", locale)}
+          <Select
             value={formData.nationality}
-            onChange={(e) => updateFormData({ nationality: e.target.value })}
-            required
-          />
+            onValueChange={(value) => updateFormData({ nationality: value })}
+          >
+            <SelectTrigger id="nationality">
+              <SelectValue placeholder={getContent("onboarding.step1.nationalityPlaceholder", locale)} />
+            </SelectTrigger>
+            <SelectContent>
+              {countries.map((country) => (
+                <SelectItem key={country.code} value={country.name}>
+                  <span className="flex items-center gap-2">
+                    <span className="text-lg">{country.flag}</span>
+                    <span>{country.name}</span>
+                  </span>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
         <div className="space-y-2">
