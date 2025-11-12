@@ -9,17 +9,17 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { signOut } from "@/auth";
 import { Session } from "next-auth";
 
-interface DashboardHeaderProps {
+interface ProfileHeaderProps {
   session: Session;
 }
 
-export async function DashboardHeader({ session }: DashboardHeaderProps) {
+export async function ProfileHeader({ session }: ProfileHeaderProps) {
   const locale = await getLocale();
 
   return (
     <header className="border-b bg-background sticky top-0 z-50">
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
-        <Link href="/dashboard" className="flex items-center gap-2">
+        <Link href="/profile" className="flex items-center gap-2">
           <Briefcase className="h-6 w-6" />
           <span className="text-xl font-bold">{getContent("app.name", locale)}</span>
         </Link>
@@ -45,7 +45,7 @@ export async function DashboardHeader({ session }: DashboardHeaderProps) {
             }}
           >
             <Button variant="outline" type="submit">
-              {getContent("dashboard.header.signOutButton", locale)}
+              {getContent("app.header.signOutButton", locale)}
             </Button>
           </form>
         </div>

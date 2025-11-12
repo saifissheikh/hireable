@@ -109,7 +109,7 @@ export function ProfessionalInfoStep({ formData, updateFormData, locale }: Profe
         </p>
       </div>
 
-      <p className="text-sm text-muted-foreground">{getContent("onboarding.step1.requiredFields", locale)}</p>
+      <p className="text-sm text-muted-foreground">{getContent("onboarding.step2.required", locale)}</p>
     </div>
   );
 }

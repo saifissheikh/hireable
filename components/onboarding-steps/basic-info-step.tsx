@@ -10,6 +10,7 @@ import {
 import { getContent } from "@/lib/content";
 import type { Locale } from "@/lib/i18n-config";
 import { countries } from "@/lib/countries";
+import { useState } from "react";
 
 interface BasicInfoStepProps {
   formData: {
@@ -24,6 +25,73 @@ interface BasicInfoStepProps {
 }
 
 export function BasicInfoStep({ formData, updateFormData, locale }: BasicInfoStepProps) {
+  const [errors, setErrors] = useState({
+    fullName: "",
+    age: "",
+    phone: "",
+  });
+
+  const validateFullName = (value: string) => {
+    // Only allow letters, spaces, hyphens, and apostrophes
+    const nameRegex = /^[a-zA-Z\s\-']+$/;
+    if (!value.trim()) {
+      setErrors(prev => ({ ...prev, fullName: getContent("onboarding.validation.nameRequired", locale) }));
+      return false;
+    }
+    if (!nameRegex.test(value)) {
+      setErrors(prev => ({ ...prev, fullName: getContent("onboarding.validation.nameInvalid", locale) }));
+      return false;
+    }
+    setErrors(prev => ({ ...prev, fullName: "" }));
+    return true;
+  };
+
+  const validateAge = (value: string) => {
+    const ageNum = parseInt(value);
+    if (!value) {
+      setErrors(prev => ({ ...prev, age: getContent("onboarding.validation.ageRequired", locale) }));
+      return false;
+    }
+    if (isNaN(ageNum) || ageNum < 12 || ageNum > 99) {
+      setErrors(prev => ({ ...prev, age: getContent("onboarding.validation.ageRange", locale) }));
+      return false;
+    }
+    setErrors(prev => ({ ...prev, age: "" }));
+    return true;
+  };
+
+  const validatePhone = (value: string) => {
+    // Allow international phone formats: +, digits, spaces, hyphens, parentheses
+    const phoneRegex = /^[\+]?[(]?[0-9]{1,4}[)]?[-\s\.]?[(]?[0-9]{1,4}[)]?[-\s\.]?[0-9]{1,9}$/;
+    if (!value.trim()) {
+      setErrors(prev => ({ ...prev, phone: getContent("onboarding.validation.phoneRequired", locale) }));
+      return false;
+    }
+    if (!phoneRegex.test(value.replace(/\s/g, ''))) {
+      setErrors(prev => ({ ...prev, phone: getContent("onboarding.validation.phoneInvalid", locale) }));
+      return false;
+    }
+    setErrors(prev => ({ ...prev, phone: "" }));
+    return true;
+  };
+
+  const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    updateFormData({ fullName: value });
+    if (value) validateFullName(value);
+  };
+
+  const handleAgeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    updateFormData({ age: value });
+    if (value) validateAge(value);
+  };
+
+  const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    updateFormData({ phone: value });
+    if (value) validatePhone(value);
+  };
   return (
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2">
@@ -33,9 +101,14 @@ export function BasicInfoStep({ formData, updateFormData, locale }: BasicInfoSte
             id="fullName"
             placeholder="John Doe"
             value={formData.fullName}
-            onChange={(e) => updateFormData({ fullName: e.target.value })}
+            onChange={handleNameChange}
+            onBlur={() => formData.fullName && validateFullName(formData.fullName)}
             required
+            className={errors.fullName ? "border-red-500" : ""}
           />
+          {errors.fullName && (
+            <p className="text-sm text-red-500">{errors.fullName}</p>
+          )}
         </div>
 
         <div className="space-y-2">
@@ -45,11 +118,16 @@ export function BasicInfoStep({ formData, updateFormData, locale }: BasicInfoSte
             type="number"
             placeholder="25"
             value={formData.age}
-            onChange={(e) => updateFormData({ age: e.target.value })}
-            min="18"
-            max="100"
+            onChange={handleAgeChange}
+            onBlur={() => formData.age && validateAge(formData.age)}
+            min="12"
+            max="99"
             required
+            className={errors.age ? "border-red-500" : ""}
           />
+          {errors.age && (
+            <p className="text-sm text-red-500">{errors.age}</p>
+          )}
         </div>
 
         <div className="space-y-2">
@@ -92,9 +170,14 @@ export function BasicInfoStep({ formData, updateFormData, locale }: BasicInfoSte
             type="tel"
             placeholder={getContent("onboarding.step1.phonePlaceholder", locale)}
             value={formData.phone}
-            onChange={(e) => updateFormData({ phone: e.target.value })}
+            onChange={handlePhoneChange}
+            onBlur={() => formData.phone && validatePhone(formData.phone)}
             required
+            className={errors.phone ? "border-red-500" : ""}
           />
+          {errors.phone && (
+            <p className="text-sm text-red-500">{errors.phone}</p>
+          )}
         </div>
       </div>
 
