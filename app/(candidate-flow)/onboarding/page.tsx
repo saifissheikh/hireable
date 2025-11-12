@@ -16,17 +16,17 @@ export default async function OnboardingPage() {
   }
 
   // TODO: Check if user already completed onboarding
-  // If completed, redirect to dashboard
+  // If completed, redirect to profile
 
   return (
     <div className="min-h-screen bg-linear-to-br from-background via-muted/30 to-background p-4 md:p-8" dir={dir}>
       <div className="container mx-auto max-w-4xl">
         <div className="mb-8 text-center">
           <h1 className="text-3xl md:text-4xl font-bold mb-2">
-            {getContent("dashboard.welcome.title", locale, { name: session.user.name || "User" })}
+            {getContent("app.welcome.title", locale, { name: session.user.name || "User" })}
           </h1>
           <p className="text-muted-foreground text-lg">
-            {getContent("dashboard.welcome.subtitle", locale)}
+            {getContent("app.welcome.subtitle", locale)}
           </p>
         </div>
         <OnboardingForm user={session.user} locale={locale} />

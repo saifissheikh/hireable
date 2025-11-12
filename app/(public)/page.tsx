@@ -14,9 +14,9 @@ export default async function Home() {
   const session = await auth();
   const locale = await getLocale();
   
-  // If user is already logged in, redirect to dashboard
-  if (session?.user) {
-    redirect("/dashboard");
+    // If user is already logged in, redirect to profile
+  if (session) {
+    redirect("/profile");
   }
   return (
     <>
@@ -130,7 +130,7 @@ export default async function Home() {
                       <form
                         action={async () => {
                           "use server";
-                          await signIn("google", { redirectTo: "/dashboard" });
+                          await signIn("google", { redirectTo: "/profile" });
                         }}
                       >
                         <Button variant="outline" type="submit" className="w-full">
@@ -158,7 +158,7 @@ export default async function Home() {
                       <form
                         action={async () => {
                           "use server";
-                          await signIn("linkedin", { redirectTo: "/dashboard" });
+                          await signIn("linkedin", { redirectTo: "/profile" });
                         }}
                       >
                         <Button variant="outline" type="submit" className="w-full">
