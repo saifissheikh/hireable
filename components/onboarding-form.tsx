@@ -187,48 +187,56 @@ export function OnboardingForm({ user, locale }: OnboardingFormProps) {
   ];
 
   return (
-    <div className="w-full max-w-3xl">
+    <div className="w-full mx-auto">
       {/* Progress Steps */}
-      <div className="mb-8">
-        <div className="flex items-center justify-between mb-4">
+      <div className="mb-10">
+        <div className="flex items-start justify-between mb-6 relative">
           {steps.map((step, index) => (
-            <div key={step.number} className="flex items-center flex-1">
-              <div className="flex flex-col items-center flex-1">
-                <div
-                  className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold transition-colors ${
-                    currentStep > step.number
-                      ? "bg-primary text-primary-foreground"
-                      : currentStep === step.number
-                      ? "bg-primary text-primary-foreground ring-4 ring-primary/20"
-                      : "bg-muted text-muted-foreground"
-                  }`}
-                >
-                  {currentStep > step.number ? (
-                    <CheckCircle className="h-5 w-5" />
-                  ) : (
-                    step.number
-                  )}
-                </div>
-                <div className="text-center mt-2">
-                  <p className="text-sm font-medium">{step.title}</p>
-                  <p className="text-xs text-muted-foreground hidden sm:block">
-                    {step.description}
-                  </p>
-                </div>
-              </div>
+            <div key={step.number} className="flex flex-col items-center relative" style={{ flex: index === 1 ? '0 0 auto' : '1' }}>
+              {/* Connector Line */}
               {index < steps.length - 1 && (
-                <div className="h-[2px] flex-1 mx-2 mt-[-40px]">
+                <div className="absolute top-5 left-[calc(50%+20px)] w-[calc(100%+40px)] h-0.5 -z-10">
                   <div
-                    className={`h-full transition-colors ${
+                    className={`h-full transition-all duration-300 ${
                       currentStep > step.number ? "bg-primary" : "bg-muted"
                     }`}
                   />
                 </div>
               )}
+              
+              {/* Step Circle */}
+              <div
+                className={`w-11 h-11 rounded-full flex items-center justify-center text-sm font-semibold transition-all duration-300 mb-3 ${
+                  currentStep > step.number
+                    ? "bg-primary text-primary-foreground"
+                    : currentStep === step.number
+                    ? "bg-primary text-primary-foreground ring-4 ring-primary/20 shadow-lg"
+                    : "bg-muted text-muted-foreground"
+                }`}
+              >
+                {currentStep > step.number ? (
+                  <CheckCircle className="h-5 w-5" />
+                ) : (
+                  step.number
+                )}
+              </div>
+              
+              {/* Step Info */}
+              <div className="text-center max-w-[120px]">
+                <p className={`text-sm font-medium mb-1 ${currentStep >= step.number ? "text-foreground" : "text-muted-foreground"}`}>
+                  {step.title}
+                </p>
+                <p className="text-xs text-muted-foreground hidden md:block">
+                  {step.description}
+                </p>
+              </div>
             </div>
           ))}
         </div>
-        <Progress value={progress} className="h-2" />
+        <Progress value={progress} className="h-2 mb-2" />
+        <p className="text-xs text-center text-muted-foreground">
+          Step {currentStep} of {totalSteps}
+        </p>
       </div>
 
       {/* Form Card */}

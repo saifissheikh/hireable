@@ -19,10 +19,10 @@ export default async function OnboardingPage() {
   // If completed, redirect to profile
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-background via-muted/30 to-background p-4 md:p-8" dir={dir}>
-      <div className="container mx-auto max-w-4xl">
-        <div className="mb-8 text-center">
-          <h1 className="text-3xl md:text-4xl font-bold mb-2">
+    <div className="min-h-screen bg-linear-to-br from-background via-muted/30 to-background py-8 px-4" dir={dir}>
+      <div className="container mx-auto max-w-3xl">
+        <div className="mb-12 text-center">
+          <h1 className="text-3xl md:text-4xl font-bold mb-3">
             {getContent("app.welcome.title", locale, { name: session.user.name || "User" })}
           </h1>
           <p className="text-muted-foreground text-lg">
