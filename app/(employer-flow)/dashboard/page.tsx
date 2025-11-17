@@ -1,33 +1,33 @@
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
+import { Rocket } from "lucide-react";
 
-export default async function EmployerDashboardPage() {
+export default async function EmployerDashboard() {
   const session = await auth();
 
-  if (!session?.user) {
-    redirect("/");
+  if (!session) {
+    redirect("/recruiters");
   }
 
-  // TODO: Implement employer dashboard
-  // - Browse candidates
-  // - Filter by skills, experience, location
-  // - View candidate profiles and resumes
-
   return (
-    <div className="container mx-auto p-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2">
-          Employer Dashboard
-        </h1>
-        <p className="text-muted-foreground">
-          Browse and connect with talented candidates
-        </p>
-      </div>
-      
-      <div className="text-center py-12">
-        <p className="text-lg text-muted-foreground">
-          Employer dashboard coming soon...
-        </p>
+    <div className="min-h-screen bg-linear-to-br from-primary/10 via-background to-primary/5 flex items-center justify-center p-4">
+      <div className="text-center space-y-8 max-w-2xl">
+        {/* Animated Rocket */}
+        <div className="relative">
+          <div className="mx-auto w-32 h-32 rounded-full bg-primary/20 flex items-center justify-center animate-pulse">
+            <Rocket className="w-16 h-16 text-primary animate-bounce" />
+          </div>
+        </div>
+
+        {/* Coming Soon Text */}
+        <div className="space-y-4">
+          <h1 className="text-4xl md:text-6xl font-extrabold bg-linear-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+            Coming Soon
+          </h1>
+          <p className="text-xl md:text-2xl text-muted-foreground">
+            Employer Dashboard
+          </p>
+        </div>
       </div>
     </div>
   );

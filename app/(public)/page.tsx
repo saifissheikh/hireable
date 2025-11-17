@@ -1,9 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { CheckCircle, Users, TrendingUp, Briefcase } from "lucide-react";
+import { CheckCircle, Users, TrendingUp, Eye, Briefcase } from "lucide-react";
 import { auth } from "@/auth";
 import { signIn } from "@/auth";
 import { redirect } from "next/navigation";
@@ -20,6 +18,29 @@ export default async function Home() {
   }
   return (
     <>
+      {/* Recruiter CTA Banner */}
+      <div className="border-b bg-linear-to-r from-primary/5 via-primary/10 to-primary/5">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-3 text-center sm:text-left">
+              <div className="hidden sm:flex w-12 h-12 rounded-full bg-primary/10 items-center justify-center shrink-0">
+                <Briefcase className="w-6 h-6 text-primary" />
+              </div>
+              <div>
+                <p className="font-semibold text-base sm:text-lg">{getContent("landing.recruiterBanner.title", locale)}</p>
+                <p className="text-sm text-muted-foreground">{getContent("landing.recruiterBanner.description", locale)}</p>
+              </div>
+            </div>
+            <Link href="/recruiters">
+              <Button className="w-full sm:w-auto whitespace-nowrap">
+                <Briefcase className="w-4 h-4 mr-2" />
+                {getContent("landing.recruiterBanner.button", locale)}
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </div>
+
       {/* Hero Section */}
       <section className="flex-1">
         <div className="container mx-auto px-4 py-16 md:py-24">
@@ -67,10 +88,10 @@ export default async function Home() {
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <Briefcase className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+                  <Eye className="h-5 w-5 text-primary shrink-0 mt-0.5" />
                   <div>
-                    <h3 className="font-semibold">{getContent("landing.hero.features.quickApply.title", locale)}</h3>
-                    <p className="text-sm text-muted-foreground">{getContent("landing.hero.features.quickApply.description", locale)}</p>
+                    <h3 className="font-semibold">{getContent("landing.hero.features.profileVisibility.title", locale)}</h3>
+                    <p className="text-sm text-muted-foreground">{getContent("landing.hero.features.profileVisibility.description", locale)}</p>
                   </div>
                 </div>
               </div>
@@ -79,62 +100,24 @@ export default async function Home() {
             {/* Right Column - Login Card */}
             <div className="flex justify-center lg:justify-end">
               <Card className="w-full max-w-md">
-                <CardHeader>
-                  <CardTitle>{getContent("landing.auth.card.title", locale)}</CardTitle>
-                  <CardDescription>
+                <CardHeader className="text-center pb-4">
+                  <CardTitle className="text-2xl">{getContent("landing.auth.card.title", locale)}</CardTitle>
+                  <CardDescription className="text-base">
                     {getContent("landing.auth.card.description", locale)}
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="email">{getContent("landing.auth.form.emailLabel", locale)}</Label>
-                      <Input
-                        id="email"
-                        type="email"
-                        placeholder={getContent("landing.auth.form.emailPlaceholder", locale)}
-                        required
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between">
-                        <Label htmlFor="password">{getContent("landing.auth.form.passwordLabel", locale)}</Label>
-                        <Link
-                          href="/forgot-password"
-                          className="text-sm text-muted-foreground hover:text-primary transition-colors"
-                        >
-                          {getContent("landing.auth.form.forgotPassword", locale)}
-                        </Link>
-                      </div>
-                      <Input
-                        id="password"
-                        type="password"
-                        placeholder={getContent("landing.auth.form.passwordPlaceholder", locale)}
-                        required
-                      />
-                    </div>
-                    <Button type="submit" className="w-full">
-                      {getContent("landing.auth.form.signInButton", locale)}
-                    </Button>
-                    <div className="relative">
-                      <div className="absolute inset-0 flex items-center">
-                        <span className="w-full border-t" />
-                      </div>
-                      <div className="relative flex justify-center text-xs uppercase">
-                        <span className="bg-card px-2 text-muted-foreground">
-                          {getContent("landing.auth.form.orContinueWith", locale)}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
+                    {/* OAuth Buttons */}
+                    <div className="space-y-3">
                       <form
                         action={async () => {
                           "use server";
                           await signIn("google", { redirectTo: "/profile" });
                         }}
                       >
-                        <Button variant="outline" type="submit" className="w-full">
-                          <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
+                        <Button variant="outline" type="submit" className="w-full h-11 text-base">
+                          <svg className="mr-2 h-5 w-5" viewBox="0 0 24 24">
                             <path
                               d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
                               fill="#4285F4"
@@ -161,22 +144,20 @@ export default async function Home() {
                           await signIn("linkedin", { redirectTo: "/profile" });
                         }}
                       >
-                        <Button variant="outline" type="submit" className="w-full">
-                          <svg className="mr-2 h-4 w-4" fill="#0A66C2" viewBox="0 0 24 24">
+                        <Button variant="outline" type="submit" className="w-full h-11 text-base">
+                          <svg className="mr-2 h-5 w-5" fill="#0A66C2" viewBox="0 0 24 24">
                             <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
                           </svg>
                           {getContent("landing.auth.form.linkedinButton", locale)}
                         </Button>
                       </form>
                     </div>
-                    <div className="text-center text-sm text-muted-foreground">
-                      {getContent("landing.auth.form.noAccount", locale)}{" "}
-                      <Link
-                        href="/signup"
-                        className="font-medium text-primary hover:underline"
-                      >
-                        {getContent("landing.auth.form.signUpLink", locale)}
-                      </Link>
+
+                    {/* Info Text */}
+                    <div className="pt-4 border-t">
+                      <p className="text-sm text-center text-muted-foreground leading-relaxed">
+                        {getContent("landing.auth.form.secureNote", locale)}
+                      </p>
                     </div>
                   </div>
                 </CardContent>

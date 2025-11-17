@@ -151,18 +151,44 @@ export function OnboardingForm({ user, locale }: OnboardingFormProps) {
     }
 
     setIsSubmitting(true);
+    setValidationError("");
+    
     try {
-      // TODO: Submit form data to API
-      console.log("Submitting:", formData);
+      // Prepare form data for submission
+      const submitData = new FormData();
+      submitData.append('fullName', formData.fullName);
+      submitData.append('age', formData.age);
+      submitData.append('nationality', formData.nationality);
+      submitData.append('location', formData.location);
+      submitData.append('phone', formData.phone);
+      submitData.append('yearsOfExperience', formData.yearsOfExperience);
+      submitData.append('skills', formData.skills.join(','));
+      submitData.append('bio', formData.bio);
       
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      
+      if (formData.resumeFile) {
+        submitData.append('resume', formData.resumeFile);
+      }
+
+      // Submit to API
+      const response = await fetch('/api/candidates', {
+        method: 'POST',
+        body: submitData,
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to submit form');
+      }
+
       // Redirect to thank you page
       window.location.href = "/onboarding/complete";
     } catch (error) {
       console.error("Error submitting form:", error);
-      setValidationError("Failed to submit form. Please try again.");
+      setValidationError(
+        error instanceof Error 
+          ? error.message 
+          : "Failed to submit form. Please try again."
+      );
     } finally {
       setIsSubmitting(false);
     }

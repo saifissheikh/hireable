@@ -2,10 +2,11 @@ import { auth, signOut } from "@/auth";
 import { redirect } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { CheckCircle, Sparkles, Eye, TrendingUp } from "lucide-react";
+import { CheckCircle, Eye, TrendingUp, User } from "lucide-react";
 import { getContent } from "@/lib/content";
 import { getLocale } from "@/lib/get-locale";
 import { getDirection } from "@/lib/i18n-config";
+import Link from "next/link";
 
 export default async function OnboardingCompletePage() {
   const session = await auth();
@@ -67,7 +68,13 @@ export default async function OnboardingCompletePage() {
             </div>
 
             {/* Action Button */}
-            <div className="flex justify-center">
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Button size="lg" asChild className="px-8">
+                <Link href="/profile">
+                  <User className="h-5 w-5 mr-2" />
+                  {getContent("onboardingComplete.viewProfile", locale)}
+                </Link>
+              </Button>
               <form
                 action={async () => {
                   "use server";

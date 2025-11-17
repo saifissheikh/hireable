@@ -1,5 +1,10 @@
 {
   "landing": {
+    "recruiterBanner": {
+      "title": "توظيف؟ اعثر على أفضل المواهب هنا",
+      "description": "احصل على وصول لمجموعة المواهب المنتقاة من المحترفين المعتمدين",
+      "button": "تسجيل دخول صاحب العمل"
+    },
     "header": {
       "nav": {
         "features": "المميزات",
@@ -25,29 +30,21 @@
           "title": "النمو المهني",
           "description": "تتبع تقدمك وانمو"
         },
-        "quickApply": {
-          "title": "تقديم سريع",
-          "description": "تقدم للوظائف في ثوانٍ"
+        "profileVisibility": {
+          "title": "ظهور الملف الشخصي",
+          "description": "كن مرئياً على مدار الساعة لأفضل أصحاب العمل"
         }
       }
     },
     "auth": {
       "card": {
-        "title": "مرحباً بعودتك",
-        "description": "سجل الدخول إلى حسابك لمتابعة البحث عن وظيفة"
+        "title": "ابدأ الآن",
+        "description": "سجل الدخول باستخدام حسابك المفضل لإنشاء ملفك الشخصي"
       },
       "form": {
-        "emailLabel": "البريد الإلكتروني",
-        "emailPlaceholder": "you@example.com",
-        "passwordLabel": "كلمة المرور",
-        "passwordPlaceholder": "••••••••",
-        "forgotPassword": "هل نسيت كلمة المرور؟",
-        "signInButton": "تسجيل الدخول",
-        "orContinueWith": "أو تابع مع",
-        "googleButton": "جوجل",
-        "linkedinButton": "لينكد إن",
-        "noAccount": "ليس لديك حساب؟",
-        "signUpLink": "سجل الآن"
+        "googleButton": "المتابعة مع جوجل",
+        "linkedinButton": "المتابعة مع لينكد إن",
+        "secureNote": "معلوماتك آمنة ولن تتم مشاركتها إلا مع أصحاب العمل الذين تختارهم."
       }
     },
     "footer": {
@@ -56,6 +53,65 @@
         "privacy": "الخصوصية",
         "terms": "الشروط",
         "contact": "اتصل بنا"
+      }
+    }
+  },
+  "recruiter": {
+    "landing": {
+      "topBar": {
+        "forRecruiters": "لمسؤولي التوظيف وأصحاب العمل",
+        "candidateButton": "هل أنت مرشح؟"
+      },
+      "backToCandidate": "العودة إلى تسجيل دخول المرشح",
+      "candidateRedirect": "هل أنت مرشح؟",
+      "stats": {
+        "candidates": "مرشح",
+        "skills": "مهارة",
+        "access": "وصول"
+      },
+      "pills": {
+        "instant": "وصول فوري",
+        "verified": "ملفات موثقة",
+        "quality": "مواهب عالية الجودة"
+      },
+      "features": {
+        "title": "كل ما تحتاجه للتوظيف الأفضل",
+        "subtitle": "أدوات قوية مصممة خصيصاً لمسؤولي التوظيف ومديري التوظيف الحديثين"
+      },
+      "hero": {
+        "badge": "لأصحاب العمل",
+        "title": "ابحث عن أفضل المواهب",
+        "titleHighlight": "بسرعة",
+        "description": "احصل على وصول لمجموعة المواهب المنتقاة من المحترفين المعتمدين. تواصل مباشرة مع المرشحين الذين يتطابقون مع متطلباتك.",
+        "features": {
+          "advancedSearch": {
+            "title": "بحث متقدم",
+            "description": "تصفية حسب المهارات والخبرة والموقع"
+          },
+          "talentPool": {
+            "title": "مجموعة مواهب عالية الجودة",
+            "description": "مرشحون تم فحصهم والتحقق منهم مسبقاً"
+          },
+          "verified": {
+            "title": "ملفات شخصية موثقة",
+            "description": "جميع المرشحين لديهم ملفات شخصية كاملة"
+          },
+          "directContact": {
+            "title": "تواصل مباشر",
+            "description": "تواصل مع المرشحين فوراً"
+          }
+        }
+      },
+      "auth": {
+        "card": {
+          "title": "تسجيل دخول صاحب العمل",
+          "description": "احصل على وصول لمجموعة المواهب وابحث عن موظفك القادم"
+        },
+        "form": {
+          "googleButton": "المتابعة مع جوجل",
+          "linkedinButton": "المتابعة مع لينكد إن",
+          "secureNote": "انضم إلى مئات الشركات التي تجد المواهب على Hireable."
+        }
       }
     }
   },
@@ -155,7 +211,27 @@
     "feature2": "احصل على مطابقة مع أفضل الشركات",
     "encouragement": "حظاً موفقاً في بحثك عن عمل!",
     "wishMessage": "نحن متحمسون لمساعدتك في العثور على الفرصة المثالية. وظيفة أحلامك قريبة جداً.",
+    "viewProfile": "عرض ملفي الشخصي",
     "signOut": "تسجيل الخروج"
+  },
+  "profile": {
+    "editProfile": "تعديل الملف الشخصي",
+    "about": "نبذة عني",
+    "skills": "المهارات",
+    "resume": "السيرة الذاتية",
+    "download": "تحميل",
+    "contactInformation": "معلومات الاتصال",
+    "email": "البريد الإلكتروني",
+    "phone": "الهاتف",
+    "location": "الموقع",
+    "personalDetails": "التفاصيل الشخصية",
+    "age": "العمر",
+    "yearsOld": "سنة",
+    "nationality": "الجنسية",
+    "experience": "الخبرة",
+    "year": "سنة",
+    "years": "سنوات",
+    "pdfDocument": "مستند PDF"
   },
   "common": {
     "loading": "جاري التحميل...",

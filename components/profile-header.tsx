@@ -18,15 +18,23 @@ export async function ProfileHeader({ session }: ProfileHeaderProps) {
 
   return (
     <header className="border-b bg-background sticky top-0 z-50">
-      <div className="container mx-auto flex h-16 items-center justify-between px-4">
-        <Link href="/profile" className="flex items-center gap-2">
-          <Briefcase className="h-6 w-6" />
-          <span className="text-xl font-bold">{getContent("app.name", locale)}</span>
+      <div className="container mx-auto flex h-16 items-center justify-between px-4 gap-2">
+        {/* Logo */}
+        <Link href="/profile" className="flex items-center gap-2 shrink-0">
+          <Briefcase className="h-5 w-5 md:h-6 md:w-6" />
+          <span className="text-lg md:text-xl font-bold hidden xs:inline">{getContent("app.name", locale)}</span>
         </Link>
-        <div className="flex items-center gap-4">
-          <ThemeToggle />
-          <LanguageSwitcher currentLocale={locale} />
-          <div className="flex items-center gap-2">
+
+        {/* Right Side Controls */}
+        <div className="flex items-center gap-1.5 sm:gap-3 md:gap-4">
+          {/* Theme and Language Toggles */}
+          <div className="flex items-center gap-1 sm:gap-2">
+            <ThemeToggle />
+            <LanguageSwitcher currentLocale={locale} />
+          </div>
+
+          {/* User Info - Hidden on mobile */}
+          <div className="hidden sm:flex items-center gap-2">
             {session.user?.image && (
               <Image
                 src={session.user.image}
@@ -36,16 +44,19 @@ export async function ProfileHeader({ session }: ProfileHeaderProps) {
                 className="rounded-full"
               />
             )}
-            <span className="text-sm font-medium">{session.user?.name}</span>
+            <span className="text-sm font-medium max-w-[120px] truncate">{session.user?.name}</span>
           </div>
+
+          {/* Sign Out Button */}
           <form
             action={async () => {
               "use server";
               await signOut({ redirectTo: "/" });
             }}
           >
-            <Button variant="outline" type="submit">
-              {getContent("app.header.signOutButton", locale)}
+            <Button variant="outline" type="submit" size="sm" className="text-xs sm:text-sm">
+              <span className="hidden sm:inline">{getContent("app.header.signOutButton", locale)}</span>
+              <span className="sm:hidden">Sign Out</span>
             </Button>
           </form>
         </div>
