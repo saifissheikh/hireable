@@ -32,8 +32,9 @@ interface FormData {
   skills: string[];
   bio: string;
   
-  // Resume
+  // Resume & Profile Picture
   resumeFile: File | null;
+  profilePicture: File | null;
 }
 
 export function OnboardingForm({ user, locale }: OnboardingFormProps) {
@@ -50,6 +51,7 @@ export function OnboardingForm({ user, locale }: OnboardingFormProps) {
     skills: [],
     bio: "",
     resumeFile: null,
+    profilePicture: null,
   });
 
   const totalSteps = 3;
@@ -120,6 +122,10 @@ export function OnboardingForm({ user, locale }: OnboardingFormProps) {
       setValidationError(getContent("onboarding.validation.resumeRequired", locale));
       return false;
     }
+    if (!formData.profilePicture) {
+      setValidationError("Profile picture is required");
+      return false;
+    }
     setValidationError("");
     return true;
   };
@@ -167,6 +173,10 @@ export function OnboardingForm({ user, locale }: OnboardingFormProps) {
       
       if (formData.resumeFile) {
         submitData.append('resume', formData.resumeFile);
+      }
+      
+      if (formData.profilePicture) {
+        submitData.append('profilePicture', formData.profilePicture);
       }
 
       // Submit to API

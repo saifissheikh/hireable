@@ -32,9 +32,41 @@ export async function POST(request: NextRequest) {
     const skills = skillsString ? skillsString.split(',').map(s => s.trim()) : [];
     const bio = formData.get('bio') as string;
     const resumeFile = formData.get('resume') as File | null;
+    const profilePictureFile = formData.get('profilePicture') as File | null;
 
     let resumeUrl = null;
     let resumeFilename = null;
+    let profilePictureUrl = null;
+
+    // Upload profile picture to Supabase Storage if provided
+    if (profilePictureFile) {
+      const fileExt = profilePictureFile.name.split('.').pop();
+      const fileName = `${session.user.email}-${Date.now()}.${fileExt}`;
+      
+      const { error: uploadError } = await supabaseAdmin
+        .storage
+        .from('profile-pictures')
+        .upload(fileName, profilePictureFile, {
+          contentType: profilePictureFile.type,
+          upsert: true,
+        });
+
+      if (uploadError) {
+        console.error('Profile picture upload error:', uploadError);
+        return NextResponse.json(
+          { error: 'Failed to upload profile picture' },
+          { status: 500 }
+        );
+      }
+
+      // Get public URL for the uploaded profile picture
+      const { data: urlData } = supabaseAdmin
+        .storage
+        .from('profile-pictures')
+        .getPublicUrl(fileName);
+
+      profilePictureUrl = urlData.publicUrl;
+    }
 
     // Upload resume to Supabase Storage if provided
     if (resumeFile) {
@@ -83,6 +115,7 @@ export async function POST(request: NextRequest) {
         bio,
         resume_url: resumeUrl,
         resume_filename: resumeFilename,
+        profile_picture_url: profilePictureUrl,
       })
       .select()
       .single();

@@ -15,6 +15,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "**.licdn.com",
       },
+      {
+        protocol: "https",
+        hostname: "tlorcmzchooirsysjtyw.supabase.co",
+      },
     ],
   },
 };

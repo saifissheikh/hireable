@@ -33,6 +33,7 @@ interface Candidate {
   bio: string;
   resume_url: string | null;
   resume_filename: string | null;
+  profile_picture_url: string | null;
   created_at: string;
 }
 
@@ -55,17 +56,27 @@ export function ProfileView({ candidate, user, locale }: ProfileViewProps) {
           {/* Profile Image and Name */}
           <div className="flex flex-col sm:flex-row sm:items-start gap-4">
             <div className="flex items-center gap-4 flex-1 min-w-0">
-              {user.image ? (
-                <Image 
-                  src={user.image} 
-                  alt={candidate.full_name}
-                  width={80}
-                  height={80}
-                  className="rounded-full shrink-0"
-                />
+              {candidate.profile_picture_url ? (
+                <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-full border-4 border-primary/20 shrink-0 overflow-hidden bg-muted">
+                  <Image 
+                    src={candidate.profile_picture_url} 
+                    alt={candidate.full_name}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+              ) : user.image ? (
+                <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-full border-4 border-primary/20 shrink-0 overflow-hidden">
+                  <Image 
+                    src={user.image} 
+                    alt={candidate.full_name}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
               ) : (
-                <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                  <User className="w-8 h-8 sm:w-10 sm:h-10 text-primary" />
+                <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-primary/10 flex items-center justify-center shrink-0 border-4 border-primary/20">
+                  <User className="w-12 h-12 text-primary" />
                 </div>
               )}
               <div className="min-w-0 flex-1">

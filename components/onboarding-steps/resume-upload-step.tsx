@@ -1,54 +1,107 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Label } from "@/components/ui/label";
-import { Upload, File, X, CheckCircle } from "lucide-react";
+import { Upload, File, X, CheckCircle, User } from "lucide-react";
 import { getContent } from "@/lib/content";
 import { Locale } from "@/lib/i18n-config";
+import Image from "next/image";
 
 interface ResumeUploadStepProps {
   formData: {
     resumeFile: File | null;
+    profilePicture: File | null;
   };
-  updateFormData: (data: { resumeFile: File | null }) => void;
+  updateFormData: (data: { resumeFile?: File | null; profilePicture?: File | null }) => void;
   locale: Locale;
 }
 
 export function ResumeUploadStep({ formData, updateFormData, locale }: ResumeUploadStepProps) {
-  const [isDragging, setIsDragging] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isDraggingResume, setIsDraggingResume] = useState(false);
+  const [isDraggingImage, setIsDraggingImage] = useState(false);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const resumeInputRef = useRef<HTMLInputElement>(null);
+  const imageInputRef = useRef<HTMLInputElement>(null);
 
-  const handleDragOver = (e: React.DragEvent) => {
+  // Generate image preview when profile picture changes
+  useEffect(() => {
+    if (formData.profilePicture) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(formData.profilePicture);
+    }
+    return () => {
+      if (!formData.profilePicture) {
+        setImagePreview(null);
+      }
+    };
+  }, [formData.profilePicture]);
+
+  // Resume handlers
+  const handleResumeDragOver = (e: React.DragEvent) => {
     e.preventDefault();
-    setIsDragging(true);
+    setIsDraggingResume(true);
   };
 
-  const handleDragLeave = () => {
-    setIsDragging(false);
+  const handleResumeDragLeave = () => {
+    setIsDraggingResume(false);
   };
 
-  const handleDrop = (e: React.DragEvent) => {
+  const handleResumeDrop = (e: React.DragEvent) => {
     e.preventDefault();
-    setIsDragging(false);
+    setIsDraggingResume(false);
 
     const file = e.dataTransfer.files[0];
-    if (file && isValidFile(file)) {
+    if (file && isValidResumeFile(file)) {
       updateFormData({ resumeFile: file });
     } else {
       alert(getContent("onboarding.validation.invalidFile", locale));
     }
   };
 
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleResumeSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file && isValidFile(file)) {
+    if (file && isValidResumeFile(file)) {
       updateFormData({ resumeFile: file });
     } else {
       alert(getContent("onboarding.validation.invalidFile", locale));
     }
   };
 
-  const isValidFile = (file: File) => {
+  // Profile picture handlers
+  const handleImageDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDraggingImage(true);
+  };
+
+  const handleImageDragLeave = () => {
+    setIsDraggingImage(false);
+  };
+
+  const handleImageDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDraggingImage(false);
+
+    const file = e.dataTransfer.files[0];
+    if (file && isValidImageFile(file)) {
+      updateFormData({ profilePicture: file });
+    } else {
+      alert("Please upload a valid image file (JPG, PNG, max 2MB)");
+    }
+  };
+
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file && isValidImageFile(file)) {
+      updateFormData({ profilePicture: file });
+    } else {
+      alert("Please upload a valid image file (JPG, PNG, max 2MB)");
+    }
+  };
+
+  const isValidResumeFile = (file: File) => {
     const validTypes = [
       "application/pdf",
       "application/msword",
@@ -59,31 +112,124 @@ export function ResumeUploadStep({ formData, updateFormData, locale }: ResumeUpl
     return validTypes.includes(file.type) && file.size <= maxSize;
   };
 
+  const isValidImageFile = (file: File) => {
+    const validTypes = ["image/jpeg", "image/jpg", "image/png"];
+    const maxSize = 2 * 1024 * 1024; // 2MB
+
+    return validTypes.includes(file.type) && file.size <= maxSize;
+  };
+
   const formatFileSize = (bytes: number) => {
     if (bytes < 1024) return bytes + " B";
     if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
     return (bytes / (1024 * 1024)).toFixed(1) + " MB";
   };
 
-  const removeFile = () => {
+  const removeResume = () => {
     updateFormData({ resumeFile: null });
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
+    if (resumeInputRef.current) {
+      resumeInputRef.current.value = "";
+    }
+  };
+
+  const removeImage = () => {
+    updateFormData({ profilePicture: null });
+    if (imageInputRef.current) {
+      imageInputRef.current.value = "";
     }
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
+      {/* Profile Picture Upload */}
       <div className="space-y-2">
-        <Label>{getContent("onboarding.step3.resume", locale)}</Label>
+        <Label className="text-base">Profile Picture *</Label>
+        
+        {!formData.profilePicture ? (
+          <div
+            onDragOver={handleImageDragOver}
+            onDragLeave={handleImageDragLeave}
+            onDrop={handleImageDrop}
+            className={`border-2 border-dashed rounded-lg p-6 text-center transition-colors ${
+              isDraggingImage
+                ? "border-primary bg-primary/5"
+                : "border-muted-foreground/25 hover:border-muted-foreground/50"
+            }`}
+          >
+            <div className="flex flex-col items-center justify-center space-y-3">
+              <div className="p-3 rounded-full bg-muted">
+                <User className="h-6 w-6 text-muted-foreground" />
+              </div>
+              <div>
+                <p className="font-medium">Upload your profile picture</p>
+                <p className="text-sm text-muted-foreground mt-1">
+                  JPG or PNG (max 2MB)
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => imageInputRef.current?.click()}
+                className="px-6 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
+              >
+                Choose Photo
+              </button>
+            </div>
+            <input
+              ref={imageInputRef}
+              type="file"
+              accept="image/jpeg,image/jpg,image/png"
+              onChange={handleImageSelect}
+              className="hidden"
+            />
+          </div>
+        ) : (
+          <div className="border rounded-lg p-4 bg-muted/30">
+            <div className="flex items-center gap-4">
+              {imagePreview && (
+                <div className="relative w-20 h-20 rounded-full overflow-hidden bg-muted shrink-0">
+                  <Image
+                    src={imagePreview}
+                    alt="Profile preview"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+              )}
+              <div className="flex-1 min-w-0">
+                <p className="font-medium truncate">{formData.profilePicture.name}</p>
+                <p className="text-sm text-muted-foreground">
+                  {formatFileSize(formData.profilePicture.size)}
+                </p>
+              </div>
+              <div className="flex items-center space-x-2">
+                <CheckCircle className="h-5 w-5 text-green-600" />
+                <button
+                  type="button"
+                  onClick={removeImage}
+                  className="p-1 hover:bg-destructive/10 rounded transition-colors"
+                >
+                  <X className="h-5 w-5 text-destructive" />
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+        <p className="text-xs text-muted-foreground">
+          This will be shown on your profile and to recruiters
+        </p>
+      </div>
+
+      {/* Resume Upload */}
+      <div className="space-y-2">
+        <Label className="text-base">{getContent("onboarding.step3.resume", locale)}</Label>
         
         {!formData.resumeFile ? (
           <div
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
+            onDragOver={handleResumeDragOver}
+            onDragLeave={handleResumeDragLeave}
+            onDrop={handleResumeDrop}
             className={`border-2 border-dashed rounded-lg p-8 text-center transition-colors ${
-              isDragging
+              isDraggingResume
                 ? "border-primary bg-primary/5"
                 : "border-muted-foreground/25 hover:border-muted-foreground/50"
             }`}
@@ -100,17 +246,17 @@ export function ResumeUploadStep({ formData, updateFormData, locale }: ResumeUpl
               </div>
               <button
                 type="button"
-                onClick={() => fileInputRef.current?.click()}
+                onClick={() => resumeInputRef.current?.click()}
                 className="px-6 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
               >
                 {getContent("onboarding.step3.chooseFile", locale)}
               </button>
             </div>
             <input
-              ref={fileInputRef}
+              ref={resumeInputRef}
               type="file"
               accept=".pdf,.doc,.docx"
-              onChange={handleFileSelect}
+              onChange={handleResumeSelect}
               className="hidden"
             />
           </div>
@@ -132,7 +278,7 @@ export function ResumeUploadStep({ formData, updateFormData, locale }: ResumeUpl
                 <CheckCircle className="h-5 w-5 text-green-600" />
                 <button
                   type="button"
-                  onClick={removeFile}
+                  onClick={removeResume}
                   className="p-1 hover:bg-destructive/10 rounded transition-colors"
                 >
                   <X className="h-5 w-5 text-destructive" />
