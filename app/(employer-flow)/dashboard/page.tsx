@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { createClient } from '@supabase/supabase-js';
+import Image from "next/image";
 
 // Create a Supabase client
 const supabaseAdmin = createClient(
@@ -161,9 +162,20 @@ export default async function EmployerDashboard() {
               <CardHeader className="pb-4">
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-4">
-                    <div className="w-16 h-16 rounded-full bg-linear-to-br from-primary to-primary/60 flex items-center justify-center text-primary-foreground font-bold text-xl">
-                      {candidate.full_name.split(" ").map((n: string) => n[0]).join("")}
-                    </div>
+                    {candidate.profile_picture_url ? (
+                      <div className="relative w-16 h-16 rounded-full overflow-hidden border-2 border-primary/20 shrink-0">
+                        <Image
+                          src={candidate.profile_picture_url}
+                          alt={candidate.full_name}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                    ) : (
+                      <div className="w-16 h-16 rounded-full bg-linear-to-br from-primary to-primary/60 flex items-center justify-center text-primary-foreground font-bold text-xl">
+                        {candidate.full_name.split(" ").map((n: string) => n[0]).join("")}
+                      </div>
+                    )}
                     <div>
                       <h3 className="text-xl font-bold">{candidate.full_name}</h3>
                       <div className="flex items-center gap-2 mt-1">
