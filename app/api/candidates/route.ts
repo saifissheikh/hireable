@@ -180,3 +180,99 @@ export async function GET() {
     );
   }
 }
+
+export async function PATCH(request: NextRequest) {
+  try {
+    // Verify user is authenticated
+    const session = await auth();
+    if (!session?.user?.email) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      );
+    }
+
+    const formData = await request.formData();
+    
+    // Extract editable fields
+    const bio = formData.get('bio') as string;
+    const skillsString = formData.get('skills') as string;
+    const skills = skillsString ? skillsString.split(',').map(s => s.trim()).filter(Boolean) : [];
+    const phone = formData.get('phone') as string;
+    const location = formData.get('location') as string;
+    const yearsOfExperience = formData.get('yearsOfExperience') as string;
+    const resumeFile = formData.get('resume') as File | null;
+
+    // Prepare update object
+    const updateData: {
+      bio: string;
+      skills: string[];
+      phone: string;
+      location: string;
+      years_of_experience: number;
+      resume_url?: string;
+      resume_filename?: string;
+    } = {
+      bio,
+      skills,
+      phone,
+      location,
+      years_of_experience: parseInt(yearsOfExperience),
+    };
+
+    // Handle resume upload if new file provided
+    if (resumeFile && resumeFile.size > 0) {
+      const fileExt = resumeFile.name.split('.').pop();
+      const fileName = `${session.user.email}-${Date.now()}.${fileExt}`;
+      
+      const { error: uploadError } = await supabaseAdmin
+        .storage
+        .from('resumes')
+        .upload(fileName, resumeFile, {
+          contentType: resumeFile.type,
+          upsert: true,
+        });
+
+      if (uploadError) {
+        console.error('Storage upload error:', uploadError);
+        return NextResponse.json(
+          { error: 'Failed to upload resume' },
+          { status: 500 }
+        );
+      }
+
+      // Get public URL for the uploaded file
+      const { data: urlData } = supabaseAdmin
+        .storage
+        .from('resumes')
+        .getPublicUrl(fileName);
+
+      updateData.resume_url = urlData.publicUrl;
+      updateData.resume_filename = resumeFile.name;
+    }
+
+    // Update candidate data in database
+    const { data, error } = await supabaseAdmin
+      .from('candidates')
+      .update(updateData)
+      .eq('user_id', session.user.email)
+      .select()
+      .single();
+
+    if (error) {
+      console.error('Database update error:', error);
+      return NextResponse.json(
+        { error: 'Failed to update candidate data' },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json({ success: true, data }, { status: 200 });
+  } catch (error) {
+    console.error('API error:', error);
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    );
+  }
+}

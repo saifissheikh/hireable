@@ -1,10 +1,14 @@
 "use client";
 
+import { useState, useRef } from "react";
 import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { SkillsInput } from "@/components/skills-input";
 import { getContent } from "@/lib/content";
 import type { Locale } from "@/lib/i18n-config";
 import { 
@@ -17,8 +21,12 @@ import {
   FileText,
   Download,
   Edit,
-  Globe
+  Globe,
+  Save,
+  X,
+  Upload
 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 interface Candidate {
   id: string;
@@ -48,6 +56,78 @@ interface ProfileViewProps {
 }
 
 export function ProfileView({ candidate, user, locale }: ProfileViewProps) {
+  const router = useRouter();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  
+  // Edit mode state
+  const [isEditing, setIsEditing] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
+  
+  // Form state
+  const [formData, setFormData] = useState({
+    bio: candidate.bio,
+    skills: candidate.skills,
+    phone: candidate.phone,
+    location: candidate.location,
+    yearsOfExperience: candidate.years_of_experience,
+    resume: null as File | null,
+  });
+
+  const handleCancel = () => {
+    // Reset form data to original values
+    setFormData({
+      bio: candidate.bio,
+      skills: candidate.skills,
+      phone: candidate.phone,
+      location: candidate.location,
+      yearsOfExperience: candidate.years_of_experience,
+      resume: null,
+    });
+    setIsEditing(false);
+  };
+
+  const handleSave = async () => {
+    setIsSaving(true);
+    try {
+      const formDataToSend = new FormData();
+      formDataToSend.append('bio', formData.bio);
+      formDataToSend.append('skills', formData.skills.join(','));
+      formDataToSend.append('phone', formData.phone);
+      formDataToSend.append('location', formData.location);
+      formDataToSend.append('yearsOfExperience', formData.yearsOfExperience.toString());
+      
+      if (formData.resume) {
+        formDataToSend.append('resume', formData.resume);
+      }
+
+      const response = await fetch('/api/candidates', {
+        method: 'PATCH',
+        body: formDataToSend,
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update profile');
+      }
+
+      // Refresh the page to show updated data
+      router.refresh();
+      setIsEditing(false);
+      setFormData(prev => ({ ...prev, resume: null }));
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      alert('Failed to update profile. Please try again.');
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setFormData(prev => ({ ...prev, resume: file }));
+    }
+  };
+
   return (
     <div className="max-w-5xl mx-auto space-y-4 md:space-y-6 px-4 md:px-0">
       {/* Header Card */}
@@ -93,11 +173,40 @@ export function ProfileView({ candidate, user, locale }: ProfileViewProps) {
                 </div>
               </div>
             </div>
-            {/* Edit Button */}
-            <Button variant="outline" size="sm" className="w-full sm:w-auto shrink-0">
-              <Edit className="w-4 h-4 mr-2" />
-              {getContent("profile.editProfile", locale)}
-            </Button>
+            {/* Edit/Save/Cancel Buttons */}
+            {!isEditing ? (
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="w-full sm:w-auto shrink-0"
+                onClick={() => setIsEditing(true)}
+              >
+                <Edit className="w-4 h-4 mr-2" />
+                {getContent("profile.editProfile", locale)}
+              </Button>
+            ) : (
+              <div className="flex gap-2 w-full sm:w-auto">
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={handleCancel}
+                  disabled={isSaving}
+                  className="flex-1 sm:flex-none"
+                >
+                  <X className="w-4 h-4 mr-2" />
+                  Cancel
+                </Button>
+                <Button 
+                  size="sm"
+                  onClick={handleSave}
+                  disabled={isSaving}
+                  className="flex-1 sm:flex-none"
+                >
+                  <Save className="w-4 h-4 mr-2" />
+                  {isSaving ? 'Saving...' : 'Save'}
+                </Button>
+              </div>
+            )}
           </div>
         </CardHeader>
       </Card>
@@ -111,9 +220,18 @@ export function ProfileView({ candidate, user, locale }: ProfileViewProps) {
               <CardTitle className="text-xl">{getContent("profile.about", locale)}</CardTitle>
             </CardHeader>
             <CardContent>
-              <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
-                {candidate.bio}
-              </p>
+              {isEditing ? (
+                <Textarea 
+                  value={formData.bio}
+                  onChange={(e) => setFormData(prev => ({ ...prev, bio: e.target.value }))}
+                  placeholder="Tell us about yourself..."
+                  className="min-h-[120px]"
+                />
+              ) : (
+                <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
+                  {candidate.bio}
+                </p>
+              )}
             </CardContent>
           </Card>
 
@@ -123,40 +241,96 @@ export function ProfileView({ candidate, user, locale }: ProfileViewProps) {
               <CardTitle className="text-xl">{getContent("profile.skills", locale)}</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="flex flex-wrap gap-2">
-                {candidate.skills.map((skill, index) => (
-                  <Badge key={index} variant="secondary" className="text-sm px-3 py-1">
-                    {skill}
-                  </Badge>
-                ))}
-              </div>
+              {isEditing ? (
+                <SkillsInput 
+                  skills={formData.skills}
+                  onChange={(skills) => setFormData(prev => ({ ...prev, skills }))}
+                  placeholder="Type a skill and press Enter..."
+                />
+              ) : (
+                <div className="flex flex-wrap gap-2">
+                  {candidate.skills.map((skill, index) => (
+                    <Badge key={index} variant="secondary" className="text-sm px-3 py-1">
+                      {skill}
+                    </Badge>
+                  ))}
+                </div>
+              )}
             </CardContent>
           </Card>
 
           {/* Resume Section */}
-          {candidate.resume_url && (
+          {(candidate.resume_url || isEditing) && (
             <Card>
               <CardHeader>
                 <CardTitle className="text-xl">{getContent("profile.resume", locale)}</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-4 border rounded-lg bg-muted/50">
-                  <div className="flex items-center gap-3 min-w-0">
-                    <div className="w-10 h-10 rounded bg-primary/10 flex items-center justify-center shrink-0">
-                      <FileText className="w-5 h-5 text-primary" />
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <p className="font-medium truncate">{candidate.resume_filename}</p>
-                      <p className="text-xs text-muted-foreground">{getContent("profile.pdfDocument", locale)}</p>
+                {isEditing ? (
+                  <div className="space-y-4">
+                    {/* Current Resume Display */}
+                    {candidate.resume_url && (
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-4 border rounded-lg bg-muted/30">
+                        <div className="flex items-center gap-3 min-w-0">
+                          <div className="w-10 h-10 rounded bg-primary/10 flex items-center justify-center shrink-0">
+                            <FileText className="w-5 h-5 text-primary" />
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <p className="font-medium truncate text-sm">Current: {candidate.resume_filename}</p>
+                            <p className="text-xs text-muted-foreground">{getContent("profile.pdfDocument", locale)}</p>
+                          </div>
+                        </div>
+                        <Button variant="ghost" size="sm" asChild className="w-full sm:w-auto shrink-0">
+                          <a href={candidate.resume_url} target="_blank" rel="noopener noreferrer">
+                            <Download className="w-4 h-4 mr-2" />
+                            View
+                          </a>
+                        </Button>
+                      </div>
+                    )}
+                    
+                    {/* Upload New Resume */}
+                    <div>
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept=".pdf,.doc,.docx"
+                        onChange={handleFileChange}
+                        className="hidden"
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => fileInputRef.current?.click()}
+                        className="w-full"
+                      >
+                        <Upload className="w-4 h-4 mr-2" />
+                        {formData.resume ? `Selected: ${formData.resume.name}` : 'Upload New Resume'}
+                      </Button>
+                      <p className="text-xs text-muted-foreground mt-2">
+                        {formData.resume ? 'New resume will be uploaded when you save' : 'PDF, DOC, or DOCX (Max 5MB)'}
+                      </p>
                     </div>
                   </div>
-                  <Button variant="outline" size="sm" asChild className="w-full sm:w-auto shrink-0">
-                    <a href={candidate.resume_url} target="_blank" rel="noopener noreferrer">
-                      <Download className="w-4 h-4 mr-2" />
-                      {getContent("profile.download", locale)}
-                    </a>
-                  </Button>
-                </div>
+                ) : candidate.resume_url ? (
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-4 border rounded-lg bg-muted/50">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <div className="w-10 h-10 rounded bg-primary/10 flex items-center justify-center shrink-0">
+                        <FileText className="w-5 h-5 text-primary" />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="font-medium truncate">{candidate.resume_filename}</p>
+                        <p className="text-xs text-muted-foreground">{getContent("profile.pdfDocument", locale)}</p>
+                      </div>
+                    </div>
+                    <Button variant="outline" size="sm" asChild className="w-full sm:w-auto shrink-0">
+                      <a href={candidate.resume_url} target="_blank" rel="noopener noreferrer">
+                        <Download className="w-4 h-4 mr-2" />
+                        {getContent("profile.download", locale)}
+                      </a>
+                    </Button>
+                  </div>
+                ) : null}
               </CardContent>
             </Card>
           )}
@@ -184,7 +358,16 @@ export function ProfileView({ candidate, user, locale }: ProfileViewProps) {
                 <Phone className="w-5 h-5 text-muted-foreground mt-0.5 shrink-0" />
                 <div className="flex-1 min-w-0">
                   <p className="text-sm text-muted-foreground mb-1">{getContent("profile.phone", locale)}</p>
-                  <p className="font-medium text-sm md:text-base">{candidate.phone}</p>
+                  {isEditing ? (
+                    <Input 
+                      value={formData.phone}
+                      onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
+                      placeholder="Phone number"
+                      className="text-sm md:text-base"
+                    />
+                  ) : (
+                    <p className="font-medium text-sm md:text-base">{candidate.phone}</p>
+                  )}
                 </div>
               </div>
               
@@ -194,7 +377,16 @@ export function ProfileView({ candidate, user, locale }: ProfileViewProps) {
                 <MapPin className="w-5 h-5 text-muted-foreground mt-0.5 shrink-0" />
                 <div className="flex-1 min-w-0">
                   <p className="text-sm text-muted-foreground mb-1">{getContent("profile.location", locale)}</p>
-                  <p className="font-medium text-sm md:text-base">{candidate.location}</p>
+                  {isEditing ? (
+                    <Input 
+                      value={formData.location}
+                      onChange={(e) => setFormData(prev => ({ ...prev, location: e.target.value }))}
+                      placeholder="Location"
+                      className="text-sm md:text-base"
+                    />
+                  ) : (
+                    <p className="font-medium text-sm md:text-base">{candidate.location}</p>
+                  )}
                 </div>
               </div>
             </CardContent>
@@ -230,9 +422,20 @@ export function ProfileView({ candidate, user, locale }: ProfileViewProps) {
                 <Briefcase className="w-5 h-5 text-muted-foreground mt-0.5 shrink-0" />
                 <div className="flex-1">
                   <p className="text-sm text-muted-foreground mb-1">{getContent("profile.experience", locale)}</p>
-                  <p className="font-medium text-sm md:text-base">
-                    {candidate.years_of_experience} {candidate.years_of_experience === 1 ? getContent("profile.year", locale) : getContent("profile.years", locale)}
-                  </p>
+                  {isEditing ? (
+                    <Input 
+                      type="number"
+                      min="0"
+                      max="50"
+                      value={formData.yearsOfExperience}
+                      onChange={(e) => setFormData(prev => ({ ...prev, yearsOfExperience: parseInt(e.target.value) || 0 }))}
+                      className="text-sm md:text-base"
+                    />
+                  ) : (
+                    <p className="font-medium text-sm md:text-base">
+                      {candidate.years_of_experience} {candidate.years_of_experience === 1 ? getContent("profile.year", locale) : getContent("profile.years", locale)}
+                    </p>
+                  )}
                 </div>
               </div>
             </CardContent>
