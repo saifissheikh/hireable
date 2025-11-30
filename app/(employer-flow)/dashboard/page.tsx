@@ -14,6 +14,13 @@ import {
   Users
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { createClient } from '@supabase/supabase-js';
+
+// Create a Supabase client
+const supabaseAdmin = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+);
 
 export default async function EmployerDashboard() {
   const session = await auth();
@@ -22,69 +29,26 @@ export default async function EmployerDashboard() {
     redirect("/recruiters");
   }
 
-  // Mock data - will replace with Supabase later
-  const mockCandidates = [
-    {
-      id: 1,
-      name: "Sarah Ahmed",
-      bio: "Full-stack developer with 5+ years of experience in React, Node.js, and cloud technologies.",
-      skills: ["React", "Node.js", "TypeScript", "AWS", "MongoDB"],
-      experience: 5,
-      location: "Dubai, UAE",
-      age: 28,
-      nationality: "Emirati"
-    },
-    {
-      id: 2,
-      name: "Mohammed Ali",
-      bio: "Senior frontend developer specializing in modern web applications and user experiences.",
-      skills: ["Vue.js", "JavaScript", "CSS", "Tailwind", "Figma"],
-      experience: 4,
-      location: "Abu Dhabi, UAE",
-      age: 30,
-      nationality: "Egyptian"
-    },
-    {
-      id: 3,
-      name: "Lisa Chen",
-      bio: "Data scientist with expertise in machine learning and AI-driven solutions.",
-      skills: ["Python", "TensorFlow", "SQL", "R", "Machine Learning"],
-      experience: 6,
-      location: "Dubai, UAE",
-      age: 32,
-      nationality: "Chinese"
-    },
-    {
-      id: 4,
-      name: "Omar Hassan",
-      bio: "DevOps engineer passionate about automation, CI/CD, and cloud infrastructure.",
-      skills: ["Docker", "Kubernetes", "AWS", "Jenkins", "Linux"],
-      experience: 3,
-      location: "Sharjah, UAE",
-      age: 27,
-      nationality: "Jordanian"
-    },
-    {
-      id: 5,
-      name: "Emma Wilson",
-      bio: "UX/UI designer focused on creating intuitive and beautiful digital experiences.",
-      skills: ["Figma", "Adobe XD", "Sketch", "Design Systems", "Prototyping"],
-      experience: 4,
-      location: "Dubai, UAE",
-      age: 29,
-      nationality: "British"
-    },
-    {
-      id: 6,
-      name: "Ahmed Ibrahim",
-      bio: "Backend engineer with strong experience in microservices and distributed systems.",
-      skills: ["Java", "Spring Boot", "Microservices", "Redis", "PostgreSQL"],
-      experience: 7,
-      location: "Dubai, UAE",
-      age: 34,
-      nationality: "Saudi Arabian"
-    }
-  ];
+  // Fetch real candidates from Supabase
+  const { data: candidates, error } = await supabaseAdmin
+    .from('candidates')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error('Error fetching candidates:', error);
+  }
+
+  const candidatesList = candidates || [];
+  const totalCandidates = candidatesList.length;
+  
+  // Calculate unique skills count
+  const allSkills = new Set(candidatesList.flatMap(c => c.skills || []));
+  const totalSkills = allSkills.size;
+  
+  // Calculate unique locations count
+  const allLocations = new Set(candidatesList.map(c => c.location).filter(Boolean));
+  const totalLocations = allLocations.size;
 
   return (
     <div className="min-h-screen bg-linear-to-br from-primary/5 via-background to-primary/10">
@@ -111,7 +75,7 @@ export default async function EmployerDashboard() {
             Welcome back, {session.user?.name?.split(" ")[0] || "Recruiter"}! 👋
           </h2>
           <p className="text-muted-foreground text-lg">
-            Browse through our talent pool of {mockCandidates.length} verified candidates
+            Browse through our talent pool of {totalCandidates} verified candidates
           </p>
         </div>
 
@@ -141,7 +105,7 @@ export default async function EmployerDashboard() {
                   <Users className="w-6 h-6 text-primary" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold">{mockCandidates.length}</p>
+                  <p className="text-2xl font-bold">{totalCandidates}</p>
                   <p className="text-sm text-muted-foreground">Total Candidates</p>
                 </div>
               </div>
@@ -154,7 +118,7 @@ export default async function EmployerDashboard() {
                   <Briefcase className="w-6 h-6 text-primary" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold">25+</p>
+                  <p className="text-2xl font-bold">{totalSkills}+</p>
                   <p className="text-sm text-muted-foreground">Skills Available</p>
                 </div>
               </div>
@@ -167,8 +131,8 @@ export default async function EmployerDashboard() {
                   <MapPin className="w-6 h-6 text-primary" />
                 </div>
                 <div>
-                  <p className="text-2xl font-bold">4</p>
-                  <p className="text-sm text-muted-foreground">UAE Locations</p>
+                  <p className="text-2xl font-bold">{totalLocations}</p>
+                  <p className="text-sm text-muted-foreground">Locations</p>
                 </div>
               </div>
             </CardContent>
@@ -176,17 +140,32 @@ export default async function EmployerDashboard() {
         </div>
 
         {/* Candidates Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {mockCandidates.map((candidate) => (
+        {candidatesList.length === 0 ? (
+          <Card className="p-12 text-center">
+            <div className="flex flex-col items-center gap-4">
+              <div className="w-20 h-20 rounded-full bg-muted flex items-center justify-center">
+                <Users className="w-10 h-10 text-muted-foreground" />
+              </div>
+              <div>
+                <h3 className="text-xl font-semibold mb-2">No candidates yet</h3>
+                <p className="text-muted-foreground">
+                  Check back soon as talented candidates complete their profiles!
+                </p>
+              </div>
+            </div>
+          </Card>
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {candidatesList.map((candidate) => (
             <Card key={candidate.id} className="hover:shadow-lg transition-all duration-300 border-2 hover:border-primary/50">
               <CardHeader className="pb-4">
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-4">
                     <div className="w-16 h-16 rounded-full bg-linear-to-br from-primary to-primary/60 flex items-center justify-center text-primary-foreground font-bold text-xl">
-                      {candidate.name.split(" ").map(n => n[0]).join("")}
+                      {candidate.full_name.split(" ").map((n: string) => n[0]).join("")}
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold">{candidate.name}</h3>
+                      <h3 className="text-xl font-bold">{candidate.full_name}</h3>
                       <div className="flex items-center gap-2 mt-1">
                         <MapPin className="w-4 h-4 text-muted-foreground" />
                         <span className="text-sm text-muted-foreground">{candidate.location}</span>
@@ -195,7 +174,7 @@ export default async function EmployerDashboard() {
                   </div>
                   <Badge variant="secondary" className="bg-primary/10 text-primary">
                     <Briefcase className="w-3 h-3 mr-1" />
-                    {candidate.experience} years
+                    {candidate.years_of_experience} years
                   </Badge>
                 </div>
               </CardHeader>
@@ -206,12 +185,12 @@ export default async function EmployerDashboard() {
                 
                 {/* Skills */}
                 <div className="flex flex-wrap gap-2">
-                  {candidate.skills.slice(0, 4).map((skill) => (
+                  {candidate.skills?.slice(0, 4).map((skill: string) => (
                     <Badge key={skill} variant="outline" className="text-xs">
                       {skill}
                     </Badge>
                   ))}
-                  {candidate.skills.length > 4 && (
+                  {candidate.skills && candidate.skills.length > 4 && (
                     <Badge variant="outline" className="text-xs">
                       +{candidate.skills.length - 4} more
                     </Badge>
@@ -231,7 +210,8 @@ export default async function EmployerDashboard() {
               </CardContent>
             </Card>
           ))}
-        </div>
+          </div>
+        )}
       </main>
     </div>
   );
