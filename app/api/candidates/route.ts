@@ -33,10 +33,12 @@ export async function POST(request: NextRequest) {
     const bio = formData.get('bio') as string;
     const resumeFile = formData.get('resume') as File | null;
     const profilePictureFile = formData.get('profilePicture') as File | null;
+    const introductionVideoFile = formData.get('introductionVideo') as File | null;
 
     let resumeUrl = null;
     let resumeFilename = null;
     let profilePictureUrl = null;
+    let introductionVideoUrl = null;
 
     // Upload profile picture to Supabase Storage if provided
     if (profilePictureFile) {
@@ -99,6 +101,36 @@ export async function POST(request: NextRequest) {
       resumeFilename = resumeFile.name;
     }
 
+    // Upload introduction video to Supabase Storage if provided
+    if (introductionVideoFile && introductionVideoFile.size > 0) {
+      const fileExt = 'webm'; // Browser records in WebM format
+      const fileName = `${session.user.email}-${Date.now()}.${fileExt}`;
+      
+      const { error: uploadError } = await supabaseAdmin
+        .storage
+        .from('introduction-videos')
+        .upload(fileName, introductionVideoFile, {
+          contentType: 'video/webm',
+          upsert: true,
+        });
+
+      if (uploadError) {
+        console.error('Video upload error:', uploadError);
+        return NextResponse.json(
+          { error: 'Failed to upload introduction video' },
+          { status: 500 }
+        );
+      }
+
+      // Get public URL for the uploaded video
+      const { data: urlData } = supabaseAdmin
+        .storage
+        .from('introduction-videos')
+        .getPublicUrl(fileName);
+
+      introductionVideoUrl = urlData.publicUrl;
+    }
+
     // Insert candidate data into database
     const { data, error } = await supabaseAdmin
       .from('candidates')
@@ -116,6 +148,7 @@ export async function POST(request: NextRequest) {
         resume_url: resumeUrl,
         resume_filename: resumeFilename,
         profile_picture_url: profilePictureUrl,
+        introduction_video_url: introductionVideoUrl,
       })
       .select()
       .single();

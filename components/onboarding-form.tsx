@@ -32,9 +32,10 @@ interface FormData {
   skills: string[];
   bio: string;
   
-  // Resume & Profile Picture
+  // Resume, Profile Picture & Video
   resumeFile: File | null;
   profilePicture: File | null;
+  introductionVideo: Blob | null;
 }
 
 export function OnboardingForm({ user, locale }: OnboardingFormProps) {
@@ -52,6 +53,7 @@ export function OnboardingForm({ user, locale }: OnboardingFormProps) {
     bio: "",
     resumeFile: null,
     profilePicture: null,
+    introductionVideo: null,
   });
 
   const totalSteps = 3;
@@ -177,6 +179,10 @@ export function OnboardingForm({ user, locale }: OnboardingFormProps) {
       
       if (formData.profilePicture) {
         submitData.append('profilePicture', formData.profilePicture);
+      }
+
+      if (formData.introductionVideo) {
+        submitData.append('introductionVideo', formData.introductionVideo, 'introduction.webm');
       }
 
       // Submit to API

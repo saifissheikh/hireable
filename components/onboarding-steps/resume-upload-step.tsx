@@ -6,13 +6,15 @@ import { Upload, File, X, CheckCircle, User } from "lucide-react";
 import { getContent } from "@/lib/content";
 import { Locale } from "@/lib/i18n-config";
 import Image from "next/image";
+import { VideoRecorder } from "@/components/video-recorder";
 
 interface ResumeUploadStepProps {
   formData: {
     resumeFile: File | null;
     profilePicture: File | null;
+    introductionVideo: Blob | null;
   };
-  updateFormData: (data: { resumeFile?: File | null; profilePicture?: File | null }) => void;
+  updateFormData: (data: { resumeFile?: File | null; profilePicture?: File | null; introductionVideo?: Blob | null }) => void;
   locale: Locale;
 }
 
@@ -290,6 +292,24 @@ export function ResumeUploadStep({ formData, updateFormData, locale }: ResumeUpl
 
         <p className="text-xs text-muted-foreground">
           {getContent("onboarding.step3.hint", locale)}
+        </p>
+      </div>
+
+      {/* Video Introduction (Optional) */}
+      <div className="space-y-2">
+        <div className="flex items-center gap-2">
+          <Label className="text-base">Video Introduction</Label>
+          <span className="text-xs text-muted-foreground">(Optional)</span>
+        </div>
+        
+        <VideoRecorder
+          onVideoRecorded={(videoBlob) => updateFormData({ introductionVideo: videoBlob })}
+          onVideoRemoved={() => updateFormData({ introductionVideo: null })}
+          existingVideo={formData.introductionVideo}
+        />
+        
+        <p className="text-xs text-muted-foreground">
+          Record a 1-minute video introducing yourself to potential employers. This is optional but highly recommended!
         </p>
       </div>
     </div>

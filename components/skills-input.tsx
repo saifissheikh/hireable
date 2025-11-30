@@ -4,14 +4,17 @@ import { useState, KeyboardEvent } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { X } from "lucide-react";
+import { getContent } from "@/lib/content";
+import type { Locale } from "@/lib/i18n-config";
 
 interface SkillsInputProps {
   skills: string[];
   onChange: (skills: string[]) => void;
   placeholder?: string;
+  locale?: Locale;
 }
 
-export function SkillsInput({ skills, onChange, placeholder = "Add a skill..." }: SkillsInputProps) {
+export function SkillsInput({ skills, onChange, placeholder, locale = "en" }: SkillsInputProps) {
   const [inputValue, setInputValue] = useState("");
 
   const handleAddSkill = () => {
@@ -48,7 +51,7 @@ export function SkillsInput({ skills, onChange, placeholder = "Add a skill..." }
           onClick={handleAddSkill}
           className="px-4 py-2 bg-primary text-primary-foreground rounded-md text-sm font-medium hover:bg-primary/90 transition-colors"
         >
-          Add
+          {getContent("profile.addSkill", locale)}
         </button>
       </div>
       
@@ -72,7 +75,7 @@ export function SkillsInput({ skills, onChange, placeholder = "Add a skill..." }
       </div>
       
       {skills.length === 0 && (
-        <p className="text-sm text-muted-foreground">No skills added yet. Type and press Enter or click Add.</p>
+        <p className="text-sm text-muted-foreground">{getContent("profile.noSkillsMessage", locale)}</p>
       )}
     </div>
   );

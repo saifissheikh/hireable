@@ -194,7 +194,7 @@ export function ProfileView({ candidate, user, locale }: ProfileViewProps) {
                   className="flex-1 sm:flex-none"
                 >
                   <X className="w-4 h-4 mr-2" />
-                  Cancel
+                  {getContent("profile.cancel", locale)}
                 </Button>
                 <Button 
                   size="sm"
@@ -203,7 +203,7 @@ export function ProfileView({ candidate, user, locale }: ProfileViewProps) {
                   className="flex-1 sm:flex-none"
                 >
                   <Save className="w-4 h-4 mr-2" />
-                  {isSaving ? 'Saving...' : 'Save'}
+                  {isSaving ? getContent("profile.saving", locale) : getContent("profile.save", locale)}
                 </Button>
               </div>
             )}
@@ -224,7 +224,7 @@ export function ProfileView({ candidate, user, locale }: ProfileViewProps) {
                 <Textarea 
                   value={formData.bio}
                   onChange={(e) => setFormData(prev => ({ ...prev, bio: e.target.value }))}
-                  placeholder="Tell us about yourself..."
+                  placeholder={getContent("profile.bioPlaceholder", locale)}
                   className="min-h-[120px]"
                 />
               ) : (
@@ -245,7 +245,8 @@ export function ProfileView({ candidate, user, locale }: ProfileViewProps) {
                 <SkillsInput 
                   skills={formData.skills}
                   onChange={(skills) => setFormData(prev => ({ ...prev, skills }))}
-                  placeholder="Type a skill and press Enter..."
+                  placeholder={getContent("profile.skillsPlaceholder", locale)}
+                  locale={locale}
                 />
               ) : (
                 <div className="flex flex-wrap gap-2">
@@ -276,14 +277,14 @@ export function ProfileView({ candidate, user, locale }: ProfileViewProps) {
                             <FileText className="w-5 h-5 text-primary" />
                           </div>
                           <div className="min-w-0 flex-1">
-                            <p className="font-medium truncate text-sm">Current: {candidate.resume_filename}</p>
+                            <p className="font-medium truncate text-sm">{getContent("profile.currentResume", locale)} {candidate.resume_filename}</p>
                             <p className="text-xs text-muted-foreground">{getContent("profile.pdfDocument", locale)}</p>
                           </div>
                         </div>
                         <Button variant="ghost" size="sm" asChild className="w-full sm:w-auto shrink-0">
                           <a href={candidate.resume_url} target="_blank" rel="noopener noreferrer">
                             <Download className="w-4 h-4 mr-2" />
-                            View
+                            {getContent("profile.view", locale)}
                           </a>
                         </Button>
                       </div>
@@ -305,10 +306,10 @@ export function ProfileView({ candidate, user, locale }: ProfileViewProps) {
                         className="w-full"
                       >
                         <Upload className="w-4 h-4 mr-2" />
-                        {formData.resume ? `Selected: ${formData.resume.name}` : 'Upload New Resume'}
+                        {formData.resume ? `${getContent("profile.selected", locale)} ${formData.resume.name}` : getContent("profile.uploadNewResume", locale)}
                       </Button>
                       <p className="text-xs text-muted-foreground mt-2">
-                        {formData.resume ? 'New resume will be uploaded when you save' : 'PDF, DOC, or DOCX (Max 5MB)'}
+                        {formData.resume ? getContent("profile.resumeWillUpload", locale) : getContent("profile.resumeFileTypes", locale)}
                       </p>
                     </div>
                   </div>
@@ -362,7 +363,7 @@ export function ProfileView({ candidate, user, locale }: ProfileViewProps) {
                     <Input 
                       value={formData.phone}
                       onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
-                      placeholder="Phone number"
+                      placeholder={getContent("profile.phonePlaceholder", locale)}
                       className="text-sm md:text-base"
                     />
                   ) : (
@@ -381,7 +382,7 @@ export function ProfileView({ candidate, user, locale }: ProfileViewProps) {
                     <Input 
                       value={formData.location}
                       onChange={(e) => setFormData(prev => ({ ...prev, location: e.target.value }))}
-                      placeholder="Location"
+                      placeholder={getContent("profile.locationPlaceholder", locale)}
                       className="text-sm md:text-base"
                     />
                   ) : (
