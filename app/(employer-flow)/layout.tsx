@@ -18,7 +18,7 @@ export default async function EmployerLayout({
 
   return (
     <>
-      <ProfileHeader session={session} />
+      <ProfileHeader session={session} homeUrl="/dashboard" />
       <main className="flex-1">
         {children}
       </main>
