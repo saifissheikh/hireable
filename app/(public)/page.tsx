@@ -3,18 +3,24 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { CheckCircle, Users, TrendingUp, Eye, Briefcase } from "lucide-react";
 import { auth } from "@/auth";
-import { signIn } from "@/auth";
 import { redirect } from "next/navigation";
 import { getContent } from "@/lib/content";
 import { getLocale } from "@/lib/get-locale";
+import { signInAsCandidate } from "./actions";
+import { getUserRole } from "@/lib/user-role";
 
 export default async function Home() {
   const session = await auth();
   const locale = await getLocale();
   
-    // If user is already logged in, redirect to profile
+  // If user is already logged in, redirect based on their role
   if (session) {
-    redirect("/profile");
+    const userRole = await getUserRole();
+    if (userRole === "recruiter") {
+      redirect("/dashboard");
+    } else if (userRole === "candidate") {
+      redirect("/profile");
+    }
   }
   return (
     <>
@@ -113,7 +119,7 @@ export default async function Home() {
                       <form
                         action={async () => {
                           "use server";
-                          await signIn("google", { redirectTo: "/profile" });
+                          await signInAsCandidate("google");
                         }}
                       >
                         <Button variant="outline" type="submit" className="w-full h-11 text-base">
@@ -141,7 +147,7 @@ export default async function Home() {
                       <form
                         action={async () => {
                           "use server";
-                          await signIn("linkedin", { redirectTo: "/profile" });
+                          await signInAsCandidate("linkedin");
                         }}
                       >
                         <Button variant="outline" type="submit" className="w-full h-11 text-base">

@@ -18,7 +18,7 @@ export default async function OnboardingCompletePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-muted/30 to-background flex items-center justify-center p-4" dir={dir}>
+    <div className="min-h-screen bg-linear-to-br from-background via-muted/30 to-background flex items-center justify-center p-4" dir={dir}>
       <div className="w-full max-w-2xl">
         <Card className="border-2">
           <CardContent className="pt-12 pb-8 px-6 md:px-12">
@@ -58,7 +58,7 @@ export default async function OnboardingCompletePage() {
             </div>
 
             {/* Encouraging Message */}
-            <div className="text-center mb-8 p-6 bg-gradient-to-r from-primary/10 via-primary/5 to-primary/10 rounded-lg">
+            <div className="text-center mb-8 p-6 bg-linear-to-r from-primary/10 via-primary/5 to-primary/10 rounded-lg">
               <p className="text-lg font-medium mb-2">
                 {getContent("onboardingComplete.encouragement", locale)}
               </p>

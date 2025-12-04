@@ -3,18 +3,25 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle, Users, Search, Star, Sparkles, UserCircle, TrendingUp, Shield } from "lucide-react";
-import { auth, signIn } from "@/auth";
+import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { getContent } from "@/lib/content";
 import { getLocale } from "@/lib/get-locale";
+import { signInAsRecruiter } from "../actions";
+import { getUserRole } from "@/lib/user-role";
 
 export default async function RecruitersPage() {
   const session = await auth();
   const locale = await getLocale();
   
-  // If user is already logged in, redirect to employer dashboard
+  // If user is already logged in, redirect based on their role
   if (session) {
-    redirect("/dashboard");
+    const userRole = await getUserRole();
+    if (userRole === "recruiter") {
+      redirect("/dashboard");
+    } else if (userRole === "candidate") {
+      redirect("/profile");
+    }
   }
 
   return (
@@ -141,7 +148,7 @@ export default async function RecruitersPage() {
           <form
             action={async () => {
             "use server";
-            await signIn("google", { redirectTo: "/dashboard" });
+            await signInAsRecruiter("google");
             }}
           >
             <Button type="submit" className="w-full h-11 font-medium shadow-md hover:shadow-lg transition-all cursor-pointer">
@@ -169,7 +176,7 @@ export default async function RecruitersPage() {
           <form
             action={async () => {
             "use server";
-            await signIn("linkedin", { redirectTo: "/dashboard" });
+            await signInAsRecruiter("linkedin");
             }}
           >
             <Button type="submit" className="w-full h-11 font-medium shadow-md hover:shadow-lg transition-all cursor-pointer">
