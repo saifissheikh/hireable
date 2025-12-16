@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { MapPin, Briefcase, Download, Eye } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 
 interface Candidate {
   id: string;
@@ -78,10 +79,12 @@ export function CandidateCard({ candidate }: CandidateCardProps) {
 
         {/* Actions */}
         <div className="flex gap-2 pt-2">
-          <Button className="flex-1 cursor-pointer">
-            <Eye className="w-4 h-4 mr-2" />
-            View Profile
-          </Button>
+          <Link href={`/dashboard/candidate/${candidate.id}`} className="flex-1">
+            <Button className="w-full cursor-pointer">
+              <Eye className="w-4 h-4 mr-2" />
+              View Profile
+            </Button>
+          </Link>
           <Button variant="outline" className="cursor-pointer">
             <Download className="w-4 h-4" />
           </Button>

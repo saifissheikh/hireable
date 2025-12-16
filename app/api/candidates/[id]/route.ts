@@ -1,0 +1,38 @@
+import { NextRequest, NextResponse } from "next/server";
+import { createClient } from "@supabase/supabase-js";
+
+const supabaseAdmin = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+);
+
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  try {
+    const { id } = await params;
+
+    const { data: candidate, error } = await supabaseAdmin
+      .from("candidates")
+      .select("*")
+      .eq("id", id)
+      .single();
+
+    if (error) {
+      console.error("Error fetching candidate:", error);
+      return NextResponse.json(
+        { error: "Candidate not found" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json({ candidate });
+  } catch (error) {
+    console.error("Error in candidate detail API:", error);
+    return NextResponse.json(
+      { error: "Internal server error" },
+      { status: 500 }
+    );
+  }
+}
