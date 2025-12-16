@@ -1,7 +1,6 @@
 import NextAuth from "next-auth";
 import Google from "next-auth/providers/google";
 import LinkedIn from "next-auth/providers/linkedin";
-import { createUserWithRole, getUserRole } from "@/lib/user-role";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   providers: [
@@ -21,16 +20,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async signIn({ user }) {
       if (!user.email) return false;
 
-      // Check if user already has a role
-      const existingRole = await getUserRole(user.email);
-
-      if (!existingRole) {
-        // New user - default to candidate role
-        // The actual role will be determined by which page they're signing in from
-        // This is handled in the signin page action
-        await createUserWithRole(user.email, user.name || "", "candidate");
-      }
-
+      // Allow sign in - role assignment will be handled by the role-handler route
+      // based on which page the user is signing in from
       return true;
     },
     authorized: async ({ auth }) => {

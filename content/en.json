@@ -253,5 +253,19 @@
     "error": "An error occurred",
     "retry": "Retry",
     "switchLanguage": "التبديل إلى العربية"
+  },
+  "unauthorized": {
+    "recruiterOnly": {
+      "title": "Access Denied",
+      "message": "This page is only accessible to recruiters. You are currently logged in as a candidate.",
+      "goToProfile": "Go to My Profile",
+      "goToHome": "Go to Home"
+    },
+    "candidateOnly": {
+      "title": "Access Denied",
+      "message": "This page is only accessible to candidates. You are currently logged in as a recruiter.",
+      "goToDashboard": "Go to Dashboard",
+      "goToHome": "Go to Home"
+    }
   }
 }

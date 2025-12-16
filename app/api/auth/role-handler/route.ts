@@ -5,7 +5,7 @@ import { NextRequest } from "next/server";
 
 export async function GET(request: NextRequest) {
   const session = await auth();
-  
+
   if (!session?.user?.email) {
     return redirect("/");
   }
@@ -19,7 +19,11 @@ export async function GET(request: NextRequest) {
 
   if (!existingRole && intendedRole) {
     // First time signing in - assign the role based on which page they came from
-    await createUserWithRole(session.user.email, session.user.name || "", intendedRole);
+    await createUserWithRole(
+      session.user.email,
+      session.user.name || "",
+      intendedRole
+    );
     return redirect(redirectUrl);
   }
 
