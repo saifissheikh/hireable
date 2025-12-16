@@ -79,7 +79,10 @@ export function CandidateCard({ candidate }: CandidateCardProps) {
 
         {/* Actions */}
         <div className="flex gap-2 pt-2">
-          <Link href={`/dashboard/candidate/${candidate.id}`} className="flex-1">
+          <Link
+            href={`/dashboard/candidate/${candidate.id}`}
+            className="flex-1"
+          >
             <Button className="w-full cursor-pointer">
               <Eye className="w-4 h-4 mr-2" />
               View Profile

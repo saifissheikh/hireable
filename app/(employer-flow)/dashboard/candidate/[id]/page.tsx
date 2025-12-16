@@ -1,6 +1,18 @@
 import { notFound } from "next/navigation";
 import { createClient } from "@supabase/supabase-js";
-import { ArrowLeft, MapPin, Briefcase, Phone, Mail, Download, Calendar, Globe, Video, FileText } from "lucide-react";
+import {
+  ArrowLeft,
+  MapPin,
+  Briefcase,
+  Phone,
+  Mail,
+  Download,
+  Calendar,
+  Globe,
+  Video,
+  FileText,
+  Eye,
+} from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -35,7 +47,7 @@ export default async function CandidateProfilePage({ params }: PageProps) {
       <div className="border-b sticky top-0 z-10 bg-background/95 backdrop-blur">
         <div className="container mx-auto px-4 py-3">
           <Link href="/dashboard">
-            <Button variant="ghost" size="sm" className="gap-2">
+            <Button variant="ghost" size="sm" className="gap-2 cursor-pointer">
               <ArrowLeft className="w-4 h-4" />
               Back to Dashboard
             </Button>
@@ -60,7 +72,10 @@ export default async function CandidateProfilePage({ params }: PageProps) {
                 </div>
               ) : (
                 <div className="w-40 h-40 rounded-2xl bg-linear-to-br from-primary to-primary/60 flex items-center justify-center text-primary-foreground font-bold text-5xl shadow-xl border-4 border-background">
-                  {candidate.full_name.split(" ").map((n: string) => n[0]).join("")}
+                  {candidate.full_name
+                    .split(" ")
+                    .map((n: string) => n[0])
+                    .join("")}
                 </div>
               )}
             </div>
@@ -68,7 +83,9 @@ export default async function CandidateProfilePage({ params }: PageProps) {
             {/* Right: Info & Actions */}
             <div className="flex-1 space-y-6">
               <div>
-                <h1 className="text-4xl font-bold mb-3">{candidate.full_name}</h1>
+                <h1 className="text-4xl font-bold mb-3">
+                  {candidate.full_name}
+                </h1>
                 <div className="flex flex-wrap gap-4 text-lg text-muted-foreground mb-6">
                   <div className="flex items-center gap-2">
                     <MapPin className="w-5 h-5 text-primary" />
@@ -76,7 +93,9 @@ export default async function CandidateProfilePage({ params }: PageProps) {
                   </div>
                   <div className="flex items-center gap-2">
                     <Briefcase className="w-5 h-5 text-primary" />
-                    <span>{candidate.years_of_experience} years experience</span>
+                    <span>
+                      {candidate.years_of_experience} years experience
+                    </span>
                   </div>
                   {candidate.nationality && (
                     <div className="flex items-center gap-2">
@@ -90,20 +109,28 @@ export default async function CandidateProfilePage({ params }: PageProps) {
               {/* Action Buttons */}
               <div className="flex flex-wrap gap-3">
                 <a href={`tel:${candidate.phone}`}>
-                  <Button size="lg" className="gap-2 shadow-lg">
+                  <Button size="lg" className="gap-2 shadow-lg cursor-pointer">
                     <Phone className="w-4 h-4" />
                     {candidate.phone}
                   </Button>
                 </a>
                 <a href={`mailto:${candidate.email}`}>
-                  <Button size="lg" variant="outline" className="gap-2">
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="gap-2 cursor-pointer"
+                  >
                     <Mail className="w-4 h-4" />
                     Send Email
                   </Button>
                 </a>
                 {candidate.resume_url && (
                   <a href={candidate.resume_url} download>
-                    <Button size="lg" variant="outline" className="gap-2">
+                    <Button
+                      size="lg"
+                      variant="outline"
+                      className="gap-2 cursor-pointer"
+                    >
                       <Download className="w-4 h-4" />
                       Download Resume
                     </Button>
@@ -121,24 +148,30 @@ export default async function CandidateProfilePage({ params }: PageProps) {
           {/* Left Column - Main Info */}
           <div className="lg:col-span-2 space-y-6">
             {/* About */}
-            <Card>
+            <Card className="order-1">
               <CardHeader>
                 <CardTitle className="text-2xl">About</CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-muted-foreground leading-relaxed text-lg">{candidate.bio}</p>
+                <p className="text-muted-foreground leading-relaxed text-lg">
+                  {candidate.bio}
+                </p>
               </CardContent>
             </Card>
 
             {/* Skills */}
-            <Card>
+            <Card className="order-2">
               <CardHeader>
                 <CardTitle className="text-2xl">Skills & Expertise</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="flex flex-wrap gap-3">
                   {candidate.skills?.map((skill: string) => (
-                    <Badge key={skill} variant="secondary" className="text-base py-2 px-4 font-medium">
+                    <Badge
+                      key={skill}
+                      variant="secondary"
+                      className="text-base py-2 px-4 font-medium"
+                    >
                       {skill}
                     </Badge>
                   ))}
@@ -148,7 +181,7 @@ export default async function CandidateProfilePage({ params }: PageProps) {
 
             {/* Video Introduction - Only if exists */}
             {candidate.introduction_video_url && (
-              <Card>
+              <Card className="order-3">
                 <CardHeader>
                   <CardTitle className="text-2xl flex items-center gap-2">
                     <Video className="w-6 h-6 text-primary" />
@@ -156,18 +189,19 @@ export default async function CandidateProfilePage({ params }: PageProps) {
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="aspect-video bg-black rounded-lg overflow-hidden shadow-lg">
+                  <div className="aspect-[4/3] max-w-2xl bg-black rounded-lg overflow-hidden shadow-lg">
                     <video
                       src={candidate.introduction_video_url}
                       controls
-                      className="w-full h-full"
+                      className="w-full h-full object-contain"
                       preload="metadata"
                     >
                       Your browser does not support the video tag.
                     </video>
                   </div>
                   <p className="text-sm text-muted-foreground mt-3">
-                    Watch {candidate.full_name.split(" ")[0]}'s 1-minute introduction
+                    Watch {candidate.full_name.split(" ")[0]}'s 1-minute
+                    introduction
                   </p>
                 </CardContent>
               </Card>
@@ -175,7 +209,7 @@ export default async function CandidateProfilePage({ params }: PageProps) {
 
             {/* Resume Preview - Only if exists */}
             {candidate.resume_url && (
-              <Card>
+              <Card className="order-5 lg:order-4">
                 <CardHeader>
                   <CardTitle className="text-2xl flex items-center gap-2">
                     <FileText className="w-6 h-6 text-primary" />
@@ -183,14 +217,24 @@ export default async function CandidateProfilePage({ params }: PageProps) {
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="flex gap-3">
-                    <a href={candidate.resume_url} target="_blank" rel="noopener noreferrer" className="flex-1">
-                      <Button variant="outline" size="lg" className="w-full gap-2">
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <a
+                      href={candidate.resume_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1"
+                    >
+                      <Button
+                        variant="outline"
+                        size="lg"
+                        className="w-full gap-2 cursor-pointer"
+                      >
+                        <Eye className="w-4 h-4" />
                         Open in New Tab
                       </Button>
                     </a>
-                    <a href={candidate.resume_url} download>
-                      <Button size="lg" className="gap-2">
+                    <a href={candidate.resume_url} download className="flex-1">
+                      <Button size="lg" className="w-full gap-2 cursor-pointer">
                         <Download className="w-4 h-4" />
                         Download
                       </Button>
@@ -209,7 +253,7 @@ export default async function CandidateProfilePage({ params }: PageProps) {
           </div>
 
           {/* Right Column - Quick Info */}
-          <div className="space-y-6">
+          <div className="space-y-6 order-4 lg:order-none">
             {/* Contact Info */}
             <Card>
               <CardHeader>
@@ -218,13 +262,19 @@ export default async function CandidateProfilePage({ params }: PageProps) {
               <CardContent className="space-y-4">
                 <div>
                   <p className="text-sm text-muted-foreground mb-1">Email</p>
-                  <a href={`mailto:${candidate.email}`} className="text-primary hover:underline">
+                  <a
+                    href={`mailto:${candidate.email}`}
+                    className="text-primary hover:underline"
+                  >
                     {candidate.email}
                   </a>
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground mb-1">Phone</p>
-                  <a href={`tel:${candidate.phone}`} className="text-primary hover:underline">
+                  <a
+                    href={`tel:${candidate.phone}`}
+                    className="text-primary hover:underline"
+                  >
                     {candidate.phone}
                   </a>
                 </div>
@@ -242,38 +292,54 @@ export default async function CandidateProfilePage({ params }: PageProps) {
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
-                  <p className="text-sm text-muted-foreground mb-1">Experience</p>
-                  <p className="text-2xl font-bold text-primary">{candidate.years_of_experience} years</p>
+                  <p className="text-sm text-muted-foreground mb-1">
+                    Experience
+                  </p>
+                  <p className="text-2xl font-bold text-primary">
+                    {candidate.years_of_experience} years
+                  </p>
                 </div>
                 {candidate.nationality && (
                   <div>
-                    <p className="text-sm text-muted-foreground mb-1">Nationality</p>
+                    <p className="text-sm text-muted-foreground mb-1">
+                      Nationality
+                    </p>
                     <p className="font-medium">{candidate.nationality}</p>
                   </div>
                 )}
                 {candidate.date_of_birth && (
                   <div>
-                    <p className="text-sm text-muted-foreground mb-1">Date of Birth</p>
+                    <p className="text-sm text-muted-foreground mb-1">
+                      Date of Birth
+                    </p>
                     <div className="flex items-center gap-2">
                       <Calendar className="w-4 h-4 text-muted-foreground" />
                       <p className="font-medium">
-                        {new Date(candidate.date_of_birth).toLocaleDateString("en-US", {
-                          year: "numeric",
-                          month: "long",
-                          day: "numeric"
-                        })}
+                        {new Date(candidate.date_of_birth).toLocaleDateString(
+                          "en-US",
+                          {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                          }
+                        )}
                       </p>
                     </div>
                   </div>
                 )}
                 <div>
-                  <p className="text-sm text-muted-foreground mb-1">Profile Created</p>
+                  <p className="text-sm text-muted-foreground mb-1">
+                    Profile Created
+                  </p>
                   <p className="font-medium">
-                    {new Date(candidate.created_at).toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric"
-                    })}
+                    {new Date(candidate.created_at).toLocaleDateString(
+                      "en-US",
+                      {
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                      }
+                    )}
                   </p>
                 </div>
               </CardContent>
@@ -286,20 +352,29 @@ export default async function CandidateProfilePage({ params }: PageProps) {
               </CardHeader>
               <CardContent className="space-y-3">
                 <a href={`tel:${candidate.phone}`} className="block">
-                  <Button variant="outline" className="w-full justify-start gap-2">
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start gap-2"
+                  >
                     <Phone className="w-4 h-4" />
                     Call Candidate
                   </Button>
                 </a>
                 <a href={`mailto:${candidate.email}`} className="block">
-                  <Button variant="outline" className="w-full justify-start gap-2">
+                  <Button
+                    variant="outline"
+                    className="w-full justify-start gap-2"
+                  >
                     <Mail className="w-4 h-4" />
                     Send Email
                   </Button>
                 </a>
                 {candidate.resume_url && (
                   <a href={candidate.resume_url} download className="block">
-                    <Button variant="outline" className="w-full justify-start gap-2">
+                    <Button
+                      variant="outline"
+                      className="w-full justify-start gap-2"
+                    >
                       <Download className="w-4 h-4" />
                       Download Resume
                     </Button>
@@ -313,4 +388,3 @@ export default async function CandidateProfilePage({ params }: PageProps) {
     </div>
   );
 }
-
