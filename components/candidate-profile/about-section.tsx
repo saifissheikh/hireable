@@ -11,11 +11,13 @@ interface AboutSectionProps {
 
 export function AboutSection({ bio, className }: AboutSectionProps) {
   const locale = useLocale();
-  
+
   return (
     <Card className={className}>
       <CardHeader>
-        <CardTitle className="text-2xl">{getContent("profile.view.about", locale)}</CardTitle>
+        <CardTitle className="text-2xl">
+          {getContent("profile.view.about", locale)}
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <p className="text-muted-foreground leading-relaxed text-lg">{bio}</p>

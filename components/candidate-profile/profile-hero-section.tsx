@@ -23,7 +23,7 @@ interface ProfileHeroSectionProps {
 
 export function ProfileHeroSection({ candidate }: ProfileHeroSectionProps) {
   const locale = useLocale();
-  
+
   return (
     <div className="bg-linear-to-r from-primary/10 via-primary/5 to-background border-b">
       <div className="container mx-auto px-4 py-12">
@@ -60,7 +60,10 @@ export function ProfileHeroSection({ candidate }: ProfileHeroSectionProps) {
                 </div>
                 <div className="flex items-center gap-2">
                   <Briefcase className="w-5 h-5 text-primary" />
-                  <span>{candidate.years_of_experience} {getContent("profile.view.yearsExperience", locale)}</span>
+                  <span>
+                    {candidate.years_of_experience}{" "}
+                    {getContent("profile.view.yearsExperience", locale)}
+                  </span>
                 </div>
                 {candidate.nationality && (
                   <div className="flex items-center gap-2">

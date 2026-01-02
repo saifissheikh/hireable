@@ -18,11 +18,13 @@ export function QuickActionsCard({
   resumeUrl,
 }: QuickActionsCardProps) {
   const locale = useLocale();
-  
+
   return (
     <Card className="bg-primary/5 border-primary/20">
       <CardHeader>
-        <CardTitle className="text-lg">{getContent("profile.view.quickActions", locale)}</CardTitle>
+        <CardTitle className="text-lg">
+          {getContent("profile.view.quickActions", locale)}
+        </CardTitle>
       </CardHeader>
       <CardContent className="space-y-3">
         <a href={`tel:${phone}`} className="block">

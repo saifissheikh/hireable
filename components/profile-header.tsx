@@ -14,7 +14,10 @@ interface ProfileHeaderProps {
   homeUrl?: string;
 }
 
-export async function ProfileHeader({ session, homeUrl = "/profile" }: ProfileHeaderProps) {
+export async function ProfileHeader({
+  session,
+  homeUrl = "/profile",
+}: ProfileHeaderProps) {
   const locale = await getLocale();
 
   return (
@@ -23,7 +26,9 @@ export async function ProfileHeader({ session, homeUrl = "/profile" }: ProfileHe
         {/* Logo */}
         <Link href={homeUrl} className="flex items-center gap-2 shrink-0">
           <Briefcase className="h-5 w-5 md:h-6 md:w-6" />
-          <span className="text-lg md:text-xl font-bold">{getContent("app.name", locale)}</span>
+          <span className="text-lg md:text-xl font-bold">
+            {getContent("app.name", locale)}
+          </span>
         </Link>
 
         {/* Right Side Controls */}
@@ -45,7 +50,9 @@ export async function ProfileHeader({ session, homeUrl = "/profile" }: ProfileHe
                 className="rounded-full"
               />
             )}
-            <span className="text-sm font-medium max-w-[120px] truncate">{session.user?.name}</span>
+            <span className="text-sm font-medium max-w-[120px] truncate">
+              {session.user?.name}
+            </span>
           </div>
 
           {/* Sign Out Button */}
@@ -55,8 +62,15 @@ export async function ProfileHeader({ session, homeUrl = "/profile" }: ProfileHe
               await signOut({ redirectTo: "/" });
             }}
           >
-            <Button variant="outline" type="submit" size="sm" className="text-xs sm:text-sm">
-              <span className="hidden sm:inline">{getContent("app.header.signOutButton", locale)}</span>
+            <Button
+              variant="outline"
+              type="submit"
+              size="sm"
+              className="text-xs sm:text-sm"
+            >
+              <span className="hidden sm:inline">
+                {getContent("app.header.signOutButton", locale)}
+              </span>
               <span className="sm:hidden">Sign Out</span>
             </Button>
           </form>

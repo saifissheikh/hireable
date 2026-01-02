@@ -18,7 +18,7 @@ export function VideoSection({
 }: VideoSectionProps) {
   const locale = useLocale();
   console.log("video url", videoUrl);
-  
+
   return (
     <Card className={className}>
       <CardHeader>
@@ -39,7 +39,9 @@ export function VideoSection({
           </video>
         </div>
         <p className="text-sm text-muted-foreground mt-3">
-          {getContent("profile.view.watchIntro", locale, { name: candidateName.split(" ")[0] })}
+          {getContent("profile.view.watchIntro", locale, {
+            name: candidateName.split(" ")[0],
+          })}
         </p>
       </CardContent>
     </Card>

@@ -12,11 +12,13 @@ interface SkillsSectionProps {
 
 export function SkillsSection({ skills, className }: SkillsSectionProps) {
   const locale = useLocale();
-  
+
   return (
     <Card className={className}>
       <CardHeader>
-        <CardTitle className="text-2xl">{getContent("profile.view.skillsExpertise", locale)}</CardTitle>
+        <CardTitle className="text-2xl">
+          {getContent("profile.view.skillsExpertise", locale)}
+        </CardTitle>
       </CardHeader>
       <CardContent>
         <div className="flex flex-wrap gap-3">
