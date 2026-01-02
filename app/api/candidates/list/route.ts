@@ -12,13 +12,16 @@ export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const offset = parseInt(searchParams.get("offset") || "0");
   const searchQuery = searchParams.get("search") || "";
+  const locationFilter = searchParams.get("location") || "";
+  const nationalityFilter = searchParams.get("nationality") || "";
+  const experienceFilter = searchParams.get("experience") || "";
 
   try {
     // Build query with optimized field selection
     let query = supabaseAdmin
       .from("candidates")
       .select(
-        "id, full_name, bio, location, years_of_experience, skills, profile_picture_url",
+        "id, full_name, bio, location, nationality, years_of_experience, skills, profile_picture_url",
         { count: "exact" }
       )
       .order("created_at", { ascending: false })
@@ -29,6 +32,29 @@ export async function GET(request: NextRequest) {
       query = query.or(
         `full_name.ilike.%${searchQuery}%,location.ilike.%${searchQuery}%,skills.cs.{${searchQuery}}`
       );
+    }
+
+    // Location filter
+    if (locationFilter) {
+      query = query.eq("location", locationFilter);
+    }
+
+    // Nationality filter
+    if (nationalityFilter) {
+      query = query.eq("nationality", nationalityFilter);
+    }
+
+    // Experience filter
+    if (experienceFilter) {
+      const [min, max] = experienceFilter.split("-").map(Number);
+      if (max) {
+        query = query
+          .gte("years_of_experience", min)
+          .lte("years_of_experience", max);
+      } else {
+        // 13+ case
+        query = query.gte("years_of_experience", min);
+      }
     }
 
     const { data: candidates, error, count } = await query;

@@ -17,9 +17,22 @@ interface Candidate {
 
 interface CandidateCardProps {
   candidate: Candidate;
+  isPublicView?: boolean;
+  onPublicClick?: () => void;
 }
 
-export function CandidateCard({ candidate }: CandidateCardProps) {
+export function CandidateCard({
+  candidate,
+  isPublicView = false,
+  onPublicClick,
+}: CandidateCardProps) {
+  const handleClick = (e: React.MouseEvent) => {
+    if (isPublicView) {
+      e.preventDefault();
+      onPublicClick?.();
+    }
+  };
+
   return (
     <Card className="hover:shadow-lg transition-all duration-300 border-2 hover:border-primary/50">
       <CardHeader className="pb-4">
@@ -79,18 +92,27 @@ export function CandidateCard({ candidate }: CandidateCardProps) {
 
         {/* Actions */}
         <div className="flex gap-2 pt-2">
-          <Link
-            href={`/dashboard/candidate/${candidate.id}`}
-            className="flex-1"
-          >
-            <Button className="w-full cursor-pointer">
+          {isPublicView ? (
+            <Button className="w-full cursor-pointer" onClick={handleClick}>
               <Eye className="w-4 h-4 mr-2" />
               View Profile
             </Button>
-          </Link>
-          <Button variant="outline" className="cursor-pointer">
-            <Download className="w-4 h-4" />
-          </Button>
+          ) : (
+            <>
+              <Link
+                href={`/dashboard/candidate/${candidate.id}`}
+                className="flex-1"
+              >
+                <Button className="w-full cursor-pointer">
+                  <Eye className="w-4 h-4 mr-2" />
+                  View Profile
+                </Button>
+              </Link>
+              <Button variant="outline" className="cursor-pointer">
+                <Download className="w-4 h-4" />
+              </Button>
+            </>
+          )}
         </div>
       </CardContent>
     </Card>
