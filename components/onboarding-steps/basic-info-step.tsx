@@ -20,11 +20,15 @@ interface BasicInfoStepProps {
     location: string;
     phone: string;
   };
-  updateFormData: (data: Partial<BasicInfoStepProps['formData']>) => void;
+  updateFormData: (data: Partial<BasicInfoStepProps["formData"]>) => void;
   locale: Locale;
 }
 
-export function BasicInfoStep({ formData, updateFormData, locale }: BasicInfoStepProps) {
+export function BasicInfoStep({
+  formData,
+  updateFormData,
+  locale,
+}: BasicInfoStepProps) {
   const [errors, setErrors] = useState({
     fullName: "",
     age: "",
@@ -35,43 +39,62 @@ export function BasicInfoStep({ formData, updateFormData, locale }: BasicInfoSte
     // Only allow letters, spaces, hyphens, and apostrophes
     const nameRegex = /^[a-zA-Z\s\-']+$/;
     if (!value.trim()) {
-      setErrors(prev => ({ ...prev, fullName: getContent("onboarding.validation.nameRequired", locale) }));
+      setErrors((prev) => ({
+        ...prev,
+        fullName: getContent("onboarding.validation.nameRequired", locale),
+      }));
       return false;
     }
     if (!nameRegex.test(value)) {
-      setErrors(prev => ({ ...prev, fullName: getContent("onboarding.validation.nameInvalid", locale) }));
+      setErrors((prev) => ({
+        ...prev,
+        fullName: getContent("onboarding.validation.nameInvalid", locale),
+      }));
       return false;
     }
-    setErrors(prev => ({ ...prev, fullName: "" }));
+    setErrors((prev) => ({ ...prev, fullName: "" }));
     return true;
   };
 
   const validateAge = (value: string) => {
     const ageNum = parseInt(value);
     if (!value) {
-      setErrors(prev => ({ ...prev, age: getContent("onboarding.validation.ageRequired", locale) }));
+      setErrors((prev) => ({
+        ...prev,
+        age: getContent("onboarding.validation.ageRequired", locale),
+      }));
       return false;
     }
     if (isNaN(ageNum) || ageNum < 12 || ageNum > 99) {
-      setErrors(prev => ({ ...prev, age: getContent("onboarding.validation.ageRange", locale) }));
+      setErrors((prev) => ({
+        ...prev,
+        age: getContent("onboarding.validation.ageRange", locale),
+      }));
       return false;
     }
-    setErrors(prev => ({ ...prev, age: "" }));
+    setErrors((prev) => ({ ...prev, age: "" }));
     return true;
   };
 
   const validatePhone = (value: string) => {
     // Allow international phone formats: +, digits, spaces, hyphens, parentheses
-    const phoneRegex = /^[\+]?[(]?[0-9]{1,4}[)]?[-\s\.]?[(]?[0-9]{1,4}[)]?[-\s\.]?[0-9]{1,9}$/;
+    const phoneRegex =
+      /^[\+]?[(]?[0-9]{1,4}[)]?[-\s\.]?[(]?[0-9]{1,4}[)]?[-\s\.]?[0-9]{1,9}$/;
     if (!value.trim()) {
-      setErrors(prev => ({ ...prev, phone: getContent("onboarding.validation.phoneRequired", locale) }));
+      setErrors((prev) => ({
+        ...prev,
+        phone: getContent("onboarding.validation.phoneRequired", locale),
+      }));
       return false;
     }
-    if (!phoneRegex.test(value.replace(/\s/g, ''))) {
-      setErrors(prev => ({ ...prev, phone: getContent("onboarding.validation.phoneInvalid", locale) }));
+    if (!phoneRegex.test(value.replace(/\s/g, ""))) {
+      setErrors((prev) => ({
+        ...prev,
+        phone: getContent("onboarding.validation.phoneInvalid", locale),
+      }));
       return false;
     }
-    setErrors(prev => ({ ...prev, phone: "" }));
+    setErrors((prev) => ({ ...prev, phone: "" }));
     return true;
   };
 
@@ -92,17 +115,26 @@ export function BasicInfoStep({ formData, updateFormData, locale }: BasicInfoSte
     updateFormData({ phone: value });
     if (value) validatePhone(value);
   };
+
+  const handleEmirateChange = (value: string) => {
+    updateFormData({ location: value });
+  };
+
   return (
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-1 md:grid-cols-2">
         <div className="space-y-2">
-          <Label htmlFor="fullName">{getContent("onboarding.step1.fullName", locale)} *</Label>
+          <Label htmlFor="fullName">
+            {getContent("onboarding.step1.fullName", locale)} *
+          </Label>
           <Input
             id="fullName"
             placeholder="John Doe"
             value={formData.fullName}
             onChange={handleNameChange}
-            onBlur={() => formData.fullName && validateFullName(formData.fullName)}
+            onBlur={() =>
+              formData.fullName && validateFullName(formData.fullName)
+            }
             required
             className={errors.fullName ? "border-red-500" : ""}
           />
@@ -112,7 +144,9 @@ export function BasicInfoStep({ formData, updateFormData, locale }: BasicInfoSte
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="age">{getContent("onboarding.step1.age", locale)} *</Label>
+          <Label htmlFor="age">
+            {getContent("onboarding.step1.age", locale)} *
+          </Label>
           <Input
             id="age"
             type="number"
@@ -125,19 +159,24 @@ export function BasicInfoStep({ formData, updateFormData, locale }: BasicInfoSte
             required
             className={errors.age ? "border-red-500" : ""}
           />
-          {errors.age && (
-            <p className="text-sm text-red-500">{errors.age}</p>
-          )}
+          {errors.age && <p className="text-sm text-red-500">{errors.age}</p>}
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="nationality">{getContent("onboarding.step1.nationality", locale)} *</Label>
+          <Label htmlFor="nationality">
+            {getContent("onboarding.step1.nationality", locale)} *
+          </Label>
           <Select
             value={formData.nationality}
             onValueChange={(value) => updateFormData({ nationality: value })}
           >
             <SelectTrigger id="nationality">
-              <SelectValue placeholder={getContent("onboarding.step1.nationalityPlaceholder", locale)} />
+              <SelectValue
+                placeholder={getContent(
+                  "onboarding.step1.nationalityPlaceholder",
+                  locale
+                )}
+              />
             </SelectTrigger>
             <SelectContent>
               {countries.map((country) => (
@@ -153,22 +192,36 @@ export function BasicInfoStep({ formData, updateFormData, locale }: BasicInfoSte
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="location">{getContent("onboarding.step1.location", locale)} *</Label>
-          <Input
-            id="location"
-            placeholder={getContent("onboarding.step1.locationPlaceholder", locale)}
-            value={formData.location}
-            onChange={(e) => updateFormData({ location: e.target.value })}
-            required
-          />
+          <Label htmlFor="location">
+            {getContent("onboarding.step1.location", locale)} *
+          </Label>
+          <Select value={formData.location} onValueChange={handleEmirateChange}>
+            <SelectTrigger id="location">
+              <SelectValue placeholder="Select Emirate" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="Abu Dhabi">Abu Dhabi</SelectItem>
+              <SelectItem value="Dubai">Dubai</SelectItem>
+              <SelectItem value="Sharjah">Sharjah</SelectItem>
+              <SelectItem value="Ajman">Ajman</SelectItem>
+              <SelectItem value="Umm Al Quwain">Umm Al Quwain</SelectItem>
+              <SelectItem value="Ras Al Khaimah">Ras Al Khaimah</SelectItem>
+              <SelectItem value="Fujairah">Fujairah</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
 
         <div className="space-y-2 md:col-span-2">
-          <Label htmlFor="phone">{getContent("onboarding.step1.phone", locale)} *</Label>
+          <Label htmlFor="phone">
+            {getContent("onboarding.step1.phone", locale)} *
+          </Label>
           <Input
             id="phone"
             type="tel"
-            placeholder={getContent("onboarding.step1.phonePlaceholder", locale)}
+            placeholder={getContent(
+              "onboarding.step1.phonePlaceholder",
+              locale
+            )}
             value={formData.phone}
             onChange={handlePhoneChange}
             onBlur={() => formData.phone && validatePhone(formData.phone)}
@@ -181,7 +234,9 @@ export function BasicInfoStep({ formData, updateFormData, locale }: BasicInfoSte
         </div>
       </div>
 
-      <p className="text-sm text-muted-foreground">{getContent("onboarding.step1.required", locale)}</p>
+      <p className="text-sm text-muted-foreground">
+        {getContent("onboarding.step1.required", locale)}
+      </p>
     </div>
   );
 }
