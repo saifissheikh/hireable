@@ -1,7 +1,6 @@
 import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { createClient } from "@supabase/supabase-js";
-import { DashboardHeader } from "@/components/dashboard/dashboard-header";
 import { WelcomeSection } from "@/components/dashboard/welcome-section";
 import { StatsCards } from "@/components/dashboard/stats-cards";
 import { CandidatesGrid } from "@/components/dashboard/candidates-grid";
@@ -105,8 +104,6 @@ export default async function EmployerDashboard({ searchParams }: PageProps) {
 
   return (
     <div className="min-h-screen bg-linear-to-br from-primary/5 via-background to-primary/10">
-      <DashboardHeader />
-
       <main className="container mx-auto px-4 py-8">
         <WelcomeSection
           userName={session.user?.name?.split(" ")[0] || "Recruiter"}

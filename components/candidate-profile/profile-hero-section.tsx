@@ -1,6 +1,10 @@
+"use client";
+
 import { MapPin, Briefcase, Phone, Mail, Download, Globe } from "lucide-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import { getContent } from "@/lib/content";
+import { useLocale } from "@/lib/use-locale";
 
 interface Candidate {
   full_name: string;
@@ -18,6 +22,8 @@ interface ProfileHeroSectionProps {
 }
 
 export function ProfileHeroSection({ candidate }: ProfileHeroSectionProps) {
+  const locale = useLocale();
+  
   return (
     <div className="bg-linear-to-r from-primary/10 via-primary/5 to-background border-b">
       <div className="container mx-auto px-4 py-12">
@@ -54,7 +60,7 @@ export function ProfileHeroSection({ candidate }: ProfileHeroSectionProps) {
                 </div>
                 <div className="flex items-center gap-2">
                   <Briefcase className="w-5 h-5 text-primary" />
-                  <span>{candidate.years_of_experience} years experience</span>
+                  <span>{candidate.years_of_experience} {getContent("profile.view.yearsExperience", locale)}</span>
                 </div>
                 {candidate.nationality && (
                   <div className="flex items-center gap-2">
@@ -80,7 +86,7 @@ export function ProfileHeroSection({ candidate }: ProfileHeroSectionProps) {
                   className="gap-2 cursor-pointer"
                 >
                   <Mail className="w-4 h-4" />
-                  Send Email
+                  {getContent("profile.view.sendEmail", locale)}
                 </Button>
               </a>
               {candidate.resume_url && (
@@ -91,7 +97,7 @@ export function ProfileHeroSection({ candidate }: ProfileHeroSectionProps) {
                     className="gap-2 cursor-pointer"
                   >
                     <Download className="w-4 h-4" />
-                    Download Resume
+                    {getContent("profile.view.downloadResume", locale)}
                   </Button>
                 </a>
               )}

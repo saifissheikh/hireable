@@ -1,5 +1,9 @@
+"use client";
+
 import { Video } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { getContent } from "@/lib/content";
+import { useLocale } from "@/lib/use-locale";
 
 interface VideoSectionProps {
   videoUrl: string;
@@ -12,13 +16,15 @@ export function VideoSection({
   candidateName,
   className,
 }: VideoSectionProps) {
+  const locale = useLocale();
   console.log("video url", videoUrl);
+  
   return (
     <Card className={className}>
       <CardHeader>
         <CardTitle className="text-2xl flex items-center gap-2">
           <Video className="w-6 h-6 text-primary" />
-          Video Introduction
+          {getContent("profile.view.videoIntroduction", locale)}
         </CardTitle>
       </CardHeader>
       <CardContent>
@@ -29,11 +35,11 @@ export function VideoSection({
             className="w-full h-full object-contain"
             preload="metadata"
           >
-            Your browser does not support the video tag.
+            {getContent("profile.view.videoNotSupported", locale)}
           </video>
         </div>
         <p className="text-sm text-muted-foreground mt-3">
-          Watch {candidateName.split(" ")[0]}'s 1-minute introduction
+          {getContent("profile.view.watchIntro", locale, { name: candidateName.split(" ")[0] })}
         </p>
       </CardContent>
     </Card>

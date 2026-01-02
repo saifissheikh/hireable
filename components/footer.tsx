@@ -15,7 +15,9 @@ export async function Footer() {
           <div className="space-y-4">
             <Link className="flex items-center gap-2" href="/">
               <Briefcase className="h-6 w-6" />
-              <span className="font-bold text-lg">{getContent("app.name", locale)}</span>
+              <span className="font-bold text-lg">
+                {getContent("app.name", locale)}
+              </span>
             </Link>
             <p className="text-sm text-muted-foreground">
               {getContent("app.tagline", locale)}
@@ -24,21 +26,32 @@ export async function Footer() {
 
           {/* Product Links */}
           <div className="space-y-4">
-            <h3 className="font-semibold">Product</h3>
+            <h3 className="font-semibold">
+              {getContent("footer.product.title", locale)}
+            </h3>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
-                <Link href="#features" className="hover:text-foreground transition-colors">
-                  Features
+                <Link
+                  href="#features"
+                  className="hover:text-foreground transition-colors"
+                >
+                  {getContent("footer.product.features", locale)}
                 </Link>
               </li>
               <li>
-                <Link href="#pricing" className="hover:text-foreground transition-colors">
-                  Pricing
+                <Link
+                  href="#pricing"
+                  className="hover:text-foreground transition-colors"
+                >
+                  {getContent("footer.product.pricing", locale)}
                 </Link>
               </li>
               <li>
-                <Link href="#testimonials" className="hover:text-foreground transition-colors">
-                  Testimonials
+                <Link
+                  href="#testimonials"
+                  className="hover:text-foreground transition-colors"
+                >
+                  {getContent("footer.product.testimonials", locale)}
                 </Link>
               </li>
             </ul>
@@ -46,21 +59,32 @@ export async function Footer() {
 
           {/* Company Links */}
           <div className="space-y-4">
-            <h3 className="font-semibold">Company</h3>
+            <h3 className="font-semibold">
+              {getContent("footer.company.title", locale)}
+            </h3>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
-                <Link href="#about" className="hover:text-foreground transition-colors">
-                  About
+                <Link
+                  href="#about"
+                  className="hover:text-foreground transition-colors"
+                >
+                  {getContent("footer.company.about", locale)}
                 </Link>
               </li>
               <li>
-                <Link href="#careers" className="hover:text-foreground transition-colors">
-                  Careers
+                <Link
+                  href="#careers"
+                  className="hover:text-foreground transition-colors"
+                >
+                  {getContent("footer.company.careers", locale)}
                 </Link>
               </li>
               <li>
-                <Link href="#contact" className="hover:text-foreground transition-colors">
-                  Contact
+                <Link
+                  href="#contact"
+                  className="hover:text-foreground transition-colors"
+                >
+                  {getContent("footer.company.contact", locale)}
                 </Link>
               </li>
             </ul>
@@ -68,21 +92,32 @@ export async function Footer() {
 
           {/* Legal Links */}
           <div className="space-y-4">
-            <h3 className="font-semibold">Legal</h3>
+            <h3 className="font-semibold">
+              {getContent("footer.legal.title", locale)}
+            </h3>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
-                <Link href="#privacy" className="hover:text-foreground transition-colors">
-                  Privacy Policy
+                <Link
+                  href="#privacy"
+                  className="hover:text-foreground transition-colors"
+                >
+                  {getContent("footer.legal.privacy", locale)}
                 </Link>
               </li>
               <li>
-                <Link href="#terms" className="hover:text-foreground transition-colors">
-                  Terms of Service
+                <Link
+                  href="#terms"
+                  className="hover:text-foreground transition-colors"
+                >
+                  {getContent("footer.legal.terms", locale)}
                 </Link>
               </li>
               <li>
-                <Link href="#cookies" className="hover:text-foreground transition-colors">
-                  Cookie Policy
+                <Link
+                  href="#cookies"
+                  className="hover:text-foreground transition-colors"
+                >
+                  {getContent("footer.legal.cookies", locale)}
                 </Link>
               </li>
             </ul>
@@ -92,7 +127,8 @@ export async function Footer() {
         {/* Bottom Bar */}
         <div className="mt-8 pt-8 border-t">
           <p className="text-center text-sm text-muted-foreground">
-            © {currentYear} {getContent("app.name", locale)}. All rights reserved.
+            © {currentYear} {getContent("app.name", locale)}.{" "}
+            {getContent("footer.copyright", locale)}
           </p>
         </div>
       </div>

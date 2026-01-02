@@ -1,5 +1,9 @@
+"use client";
+
 import { Card, CardContent } from "@/components/ui/card";
 import { Users, Briefcase, MapPin } from "lucide-react";
+import { getContent } from "@/lib/content";
+import { useLocale } from "@/lib/use-locale";
 
 interface StatsCardsProps {
   totalCandidates: number;
@@ -12,6 +16,8 @@ export function StatsCards({
   totalSkills,
   totalLocations,
 }: StatsCardsProps) {
+  const locale = useLocale();
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
       <Card className="border-2">
@@ -22,7 +28,9 @@ export function StatsCards({
             </div>
             <div>
               <p className="text-2xl font-bold">{totalCandidates}</p>
-              <p className="text-sm text-muted-foreground">Total Candidates</p>
+              <p className="text-sm text-muted-foreground">
+                {getContent("dashboard.stats.totalCandidates", locale)}
+              </p>
             </div>
           </div>
         </CardContent>
@@ -35,7 +43,9 @@ export function StatsCards({
             </div>
             <div>
               <p className="text-2xl font-bold">{totalSkills}+</p>
-              <p className="text-sm text-muted-foreground">Skills Available</p>
+              <p className="text-sm text-muted-foreground">
+                {getContent("dashboard.stats.skillsAvailable", locale)}
+              </p>
             </div>
           </div>
         </CardContent>
@@ -48,7 +58,9 @@ export function StatsCards({
             </div>
             <div>
               <p className="text-2xl font-bold">{totalLocations}</p>
-              <p className="text-sm text-muted-foreground">Locations</p>
+              <p className="text-sm text-muted-foreground">
+                {getContent("dashboard.stats.locations", locale)}
+              </p>
             </div>
           </div>
         </CardContent>

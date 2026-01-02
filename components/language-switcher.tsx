@@ -22,7 +22,12 @@ export function LanguageSwitcher({ currentLocale }: LanguageSwitcherProps) {
   const switchLocale = (newLocale: Locale) => {
     // Set cookie to persist language preference
     Cookies.set("NEXT_LOCALE", newLocale, { expires: 365 });
-    
+
+    // Dispatch custom event for client components
+    window.dispatchEvent(
+      new CustomEvent("localeChange", { detail: newLocale })
+    );
+
     // Update the page
     router.refresh();
   };

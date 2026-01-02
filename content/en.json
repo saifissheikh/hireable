@@ -246,7 +246,132 @@
     "experience": "Experience",
     "year": "year",
     "years": "years",
-    "pdfDocument": "PDF Document"
+    "pdfDocument": "PDF Document",
+    "view": {
+      "backToDashboard": "Back to Dashboard",
+      "yearsExperience": "years experience",
+      "sendEmail": "Send Email",
+      "downloadResume": "Download Resume",
+      "about": "About",
+      "skillsExpertise": "Skills & Expertise",
+      "videoIntroduction": "Video Introduction",
+      "watchIntro": "Watch {name}'s 1-minute introduction",
+      "videoNotSupported": "Your browser does not support the video tag.",
+      "resume": "Resume",
+      "viewDownloadResume": "View or download the candidate's resume",
+      "viewResume": "View Resume",
+      "download": "Download",
+      "resumePreview": "Resume Preview",
+      "openInNewTab": "Open in New Tab",
+      "contactInformation": "Contact Information",
+      "email": "Email",
+      "phone": "Phone",
+      "location": "Location",
+      "professionalDetails": "Professional Details",
+      "experience": "Experience",
+      "years": "years",
+      "nationality": "Nationality",
+      "dateOfBirth": "Date of Birth",
+      "profileCreated": "Profile Created",
+      "quickActions": "Quick Actions",
+      "callCandidate": "Call Candidate"
+    }
+  },
+  "dashboard": {
+    "header": {
+      "title": "Hireable",
+      "subtitle": "Find Your Next Hire"
+    },
+    "welcome": {
+      "title": "Welcome back, {name}! 👋",
+      "subtitle": "Browse through our talent pool of {count} verified candidates"
+    },
+    "stats": {
+      "totalCandidates": "Total Candidates",
+      "skillsAvailable": "Skills Available",
+      "locations": "Locations"
+    },
+    "searchBar": {
+      "searchPlaceholder": "Search by name or skills...",
+      "locationPlaceholder": "Location",
+      "nationalityPlaceholder": "Nationality",
+      "experiencePlaceholder": "Experience",
+      "clearButton": "Clear",
+      "experience": {
+        "0-3": "0-3 years",
+        "4-8": "4-8 years",
+        "8-12": "8-12 years",
+        "13+": "13+ years"
+      }
+    },
+    "candidateCard": {
+      "years": "years",
+      "moreSkills": "+{count} more",
+      "viewProfile": "View Profile"
+    },
+    "candidatesGrid": {
+      "noCandidatesFound": "No candidates found",
+      "noCandidatesYet": "No candidates yet",
+      "adjustSearch": "Try adjusting your search terms",
+      "checkBackSoon": "Check back soon as talented candidates complete their profiles!",
+      "loadingMore": "Loading more candidates...",
+      "endOfList": "You've reached the end of the list",
+      "loadMoreButton": "Load More Candidates",
+      "loginRequired": "Login Required",
+      "loginMessage": "To view full candidate profiles and access contact information, please login as a recruiter.",
+      "continueBrowsing": "Continue Browsing"
+    },
+    "publicLanding": {
+      "activeCandidates": "Active Candidates",
+      "heroTitle": "Find Your Perfect",
+      "heroHighlight": "Candidate",
+      "heroDescription": "Browse through our talented pool of candidates. Login as a recruiter to access full profiles and connect with top talent.",
+      "browseCandidatesTitle": "Browse Candidates",
+      "browseCandidatesDescription": "Preview our talent pool. Login to view full profiles and contact information.",
+      "loginPrompt": "Login to View Full Profile",
+      "loginMessage": "Sign in as a recruiter to view complete candidate profiles and contact information.",
+      "loginButton": "Login as Recruiter"
+    },
+    "chart": {
+      "title": "Candidate Growth",
+      "growth": "+24%",
+      "totalThisWeek": "Total This Week",
+      "dailyAverage": "Daily Average",
+      "days": {
+        "mon": "Mon",
+        "tue": "Tue",
+        "wed": "Wed",
+        "thu": "Thu",
+        "fri": "Fri",
+        "sat": "Sat",
+        "sun": "Sun"
+      }
+    }
+  },
+  "landingCTAs": {
+    "signUpCandidate": "Sign Up as Candidate",
+    "loginRecruiter": "Login as Recruiter"
+  },
+  "footer": {
+    "product": {
+      "title": "Product",
+      "features": "Features",
+      "pricing": "Pricing",
+      "testimonials": "Testimonials"
+    },
+    "company": {
+      "title": "Company",
+      "about": "About",
+      "careers": "Careers",
+      "contact": "Contact"
+    },
+    "legal": {
+      "title": "Legal",
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service",
+      "cookies": "Cookie Policy"
+    },
+    "copyright": "All rights reserved."
   },
   "common": {
     "loading": "Loading...",

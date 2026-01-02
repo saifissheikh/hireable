@@ -11,6 +11,8 @@ import { ResumeSection } from "@/components/candidate-profile/resume-section";
 import { ContactInfoCard } from "@/components/candidate-profile/contact-info-card";
 import { ProfessionalDetailsCard } from "@/components/candidate-profile/professional-details-card";
 import { QuickActionsCard } from "@/components/candidate-profile/quick-actions-card";
+import { getContent } from "@/lib/content";
+import { getLocale } from "@/lib/get-locale";
 
 const supabaseAdmin = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -23,6 +25,7 @@ interface PageProps {
 
 export default async function CandidateProfilePage({ params }: PageProps) {
   const { id } = await params;
+  const locale = getLocale();
 
   const { data: candidate, error } = await supabaseAdmin
     .from("candidates")
@@ -42,7 +45,7 @@ export default async function CandidateProfilePage({ params }: PageProps) {
           <Link href="/dashboard">
             <Button variant="ghost" size="sm" className="gap-2 cursor-pointer">
               <ArrowLeft className="w-4 h-4" />
-              Back to Dashboard
+              {getContent("profile.view.backToDashboard", locale)}
             </Button>
           </Link>
         </div>

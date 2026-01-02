@@ -1,9 +1,13 @@
+"use client";
+
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { MapPin, Briefcase, Download, Eye } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { getContent } from "@/lib/content";
+import { useLocale } from "@/lib/use-locale";
 
 interface Candidate {
   id: string;
@@ -26,6 +30,8 @@ export function CandidateCard({
   isPublicView = false,
   onPublicClick,
 }: CandidateCardProps) {
+  const locale = useLocale();
+
   const handleClick = (e: React.MouseEvent) => {
     if (isPublicView) {
       e.preventDefault();
@@ -67,7 +73,8 @@ export function CandidateCard({
           </div>
           <Badge variant="secondary" className="bg-primary/10 text-primary">
             <Briefcase className="w-3 h-3 mr-1" />
-            {candidate.years_of_experience} years
+            {candidate.years_of_experience}{" "}
+            {getContent("dashboard.candidateCard.years", locale)}
           </Badge>
         </div>
       </CardHeader>
@@ -85,7 +92,9 @@ export function CandidateCard({
           ))}
           {candidate.skills && candidate.skills.length > 4 && (
             <Badge variant="outline" className="text-xs">
-              +{candidate.skills.length - 4} more
+              {getContent("dashboard.candidateCard.moreSkills", locale, {
+                count: String(candidate.skills.length - 4),
+              })}
             </Badge>
           )}
         </div>
@@ -95,7 +104,7 @@ export function CandidateCard({
           {isPublicView ? (
             <Button className="w-full cursor-pointer" onClick={handleClick}>
               <Eye className="w-4 h-4 mr-2" />
-              View Profile
+              {getContent("dashboard.candidateCard.viewProfile", locale)}
             </Button>
           ) : (
             <>
@@ -105,7 +114,7 @@ export function CandidateCard({
               >
                 <Button className="w-full cursor-pointer">
                   <Eye className="w-4 h-4 mr-2" />
-                  View Profile
+                  {getContent("dashboard.candidateCard.viewProfile", locale)}
                 </Button>
               </Link>
               <Button variant="outline" className="cursor-pointer">

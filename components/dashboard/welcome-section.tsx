@@ -1,3 +1,8 @@
+"use client";
+
+import { getContent } from "@/lib/content";
+import { useLocale } from "@/lib/use-locale";
+
 interface WelcomeSectionProps {
   userName: string;
   totalCandidates: number;
@@ -7,11 +12,17 @@ export function WelcomeSection({
   userName,
   totalCandidates,
 }: WelcomeSectionProps) {
+  const locale = useLocale();
+
   return (
     <div className="mb-8">
-      <h2 className="text-3xl font-bold mb-2">Welcome back, {userName}! 👋</h2>
+      <h2 className="text-3xl font-bold mb-2">
+        {getContent("dashboard.welcome.title", locale, { name: userName })}
+      </h2>
       <p className="text-muted-foreground text-lg">
-        Browse through our talent pool of {totalCandidates} verified candidates
+        {getContent("dashboard.welcome.subtitle", locale, {
+          count: String(totalCandidates),
+        })}
       </p>
     </div>
   );

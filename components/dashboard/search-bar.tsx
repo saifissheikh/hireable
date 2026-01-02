@@ -11,6 +11,8 @@ import {
 } from "@/components/ui/select";
 import { Search, X, MapPin, Globe, Briefcase } from "lucide-react";
 import { countries } from "@/lib/countries";
+import { getContent } from "@/lib/content";
+import { useLocale } from "@/lib/use-locale";
 
 const EMIRATES = [
   "Abu Dhabi",
@@ -20,13 +22,6 @@ const EMIRATES = [
   "Umm Al Quwain",
   "Ras Al Khaimah",
   "Fujairah",
-];
-
-const EXPERIENCE_RANGES = [
-  { label: "0-3 years", value: "0-3" },
-  { label: "4-8 years", value: "4-8" },
-  { label: "8-12 years", value: "8-12" },
-  { label: "13+ years", value: "13+" },
 ];
 
 interface SearchBarProps {
@@ -50,6 +45,27 @@ export function SearchBar({
   experienceFilter = "",
   onExperienceChange,
 }: SearchBarProps) {
+  const locale = useLocale();
+
+  const EXPERIENCE_RANGES = [
+    {
+      label: getContent("dashboard.searchBar.experience.0-3", locale),
+      value: "0-3",
+    },
+    {
+      label: getContent("dashboard.searchBar.experience.4-8", locale),
+      value: "4-8",
+    },
+    {
+      label: getContent("dashboard.searchBar.experience.8-12", locale),
+      value: "8-12",
+    },
+    {
+      label: getContent("dashboard.searchBar.experience.13+", locale),
+      value: "13+",
+    },
+  ];
+
   const hasActiveFilters =
     locationFilter || nationalityFilter || experienceFilter;
 
@@ -67,7 +83,10 @@ export function SearchBar({
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
-            placeholder="Search by name or skills..."
+            placeholder={getContent(
+              "dashboard.searchBar.searchPlaceholder",
+              locale
+            )}
             className="pl-9 h-10 border-2"
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
@@ -81,7 +100,12 @@ export function SearchBar({
             <SelectTrigger className="h-10 w-full lg:w-[160px] cursor-pointer border-2">
               <div className="flex items-center gap-2">
                 <MapPin className="w-4 h-4 text-muted-foreground" />
-                <SelectValue placeholder="Location" />
+                <SelectValue
+                  placeholder={getContent(
+                    "dashboard.searchBar.locationPlaceholder",
+                    locale
+                  )}
+                />
               </div>
             </SelectTrigger>
             <SelectContent>
@@ -102,7 +126,12 @@ export function SearchBar({
             <SelectTrigger className="h-10 w-full lg:w-[160px] cursor-pointer border-2">
               <div className="flex items-center gap-2">
                 <Globe className="w-4 h-4 text-muted-foreground" />
-                <SelectValue placeholder="Nationality" />
+                <SelectValue
+                  placeholder={getContent(
+                    "dashboard.searchBar.nationalityPlaceholder",
+                    locale
+                  )}
+                />
               </div>
             </SelectTrigger>
             <SelectContent className="max-h-[300px]">
@@ -126,7 +155,12 @@ export function SearchBar({
             <SelectTrigger className="h-10 w-full lg:w-[160px] cursor-pointer border-2">
               <div className="flex items-center gap-2">
                 <Briefcase className="w-4 h-4 text-muted-foreground" />
-                <SelectValue placeholder="Experience" />
+                <SelectValue
+                  placeholder={getContent(
+                    "dashboard.searchBar.experiencePlaceholder",
+                    locale
+                  )}
+                />
               </div>
             </SelectTrigger>
             <SelectContent>
@@ -151,7 +185,7 @@ export function SearchBar({
               className="h-10 px-3 cursor-pointer border-2 hover:bg-destructive/10 hover:text-destructive hover:border-destructive"
             >
               <X className="w-4 h-4 mr-1" />
-              Clear
+              {getContent("dashboard.searchBar.clearButton", locale)}
             </Button>
           )}
         </div>

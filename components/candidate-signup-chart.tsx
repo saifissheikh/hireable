@@ -2,17 +2,21 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TrendingUp, Users, Calendar, ArrowUpRight } from "lucide-react";
+import { getContent } from "@/lib/content";
+import { useLocale } from "@/lib/use-locale";
 
 export function CandidateSignupChart() {
+  const locale = useLocale();
+
   // Dummy data for the chart - showing last 7 days
   const dummyData = [
-    { day: "Mon", signups: 12 },
-    { day: "Tue", signups: 19 },
-    { day: "Wed", signups: 15 },
-    { day: "Thu", signups: 25 },
-    { day: "Fri", signups: 22 },
-    { day: "Sat", signups: 30 },
-    { day: "Sun", signups: 28 },
+    { dayKey: "mon", signups: 12 },
+    { dayKey: "tue", signups: 19 },
+    { dayKey: "wed", signups: 15 },
+    { dayKey: "thu", signups: 25 },
+    { dayKey: "fri", signups: 22 },
+    { dayKey: "sat", signups: 30 },
+    { dayKey: "sun", signups: 28 },
   ];
 
   const maxSignups = Math.max(...dummyData.map((d) => d.signups));
@@ -69,12 +73,12 @@ export function CandidateSignupChart() {
             <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 text-white flex items-center justify-center shadow-lg shadow-blue-500/30">
               <TrendingUp className="w-5 h-5" />
             </div>
-            <span>Candidate Growth</span>
+            <span>{getContent("dashboard.chart.title", locale)}</span>
           </CardTitle>
           <div className="flex items-center gap-1.5 bg-gradient-to-r from-emerald-100 to-teal-100 dark:from-emerald-900/50 dark:to-teal-900/50 px-3 py-1.5 rounded-full border border-emerald-300 dark:border-emerald-700">
             <ArrowUpRight className="w-4 h-4 text-emerald-700 dark:text-emerald-300" />
             <span className="text-sm font-bold text-emerald-700 dark:text-emerald-300">
-              +24%
+              {getContent("dashboard.chart.growth", locale)}
             </span>
           </div>
         </div>
@@ -155,7 +159,7 @@ export function CandidateSignupChart() {
                 key={index}
                 className="text-xs font-medium text-muted-foreground"
               >
-                {item.day}
+                {getContent(`dashboard.chart.days.${item.dayKey}`, locale)}
               </span>
             ))}
           </div>
@@ -167,7 +171,7 @@ export function CandidateSignupChart() {
             <div className="flex items-center gap-2 mb-1.5">
               <Users className="w-4 h-4 text-blue-600" />
               <p className="text-xs font-medium text-muted-foreground">
-                Total This Week
+                {getContent("dashboard.chart.totalThisWeek", locale)}
               </p>
             </div>
             <p className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
@@ -179,7 +183,7 @@ export function CandidateSignupChart() {
             <div className="flex items-center gap-2 mb-1.5">
               <Calendar className="w-4 h-4 text-purple-600" />
               <p className="text-xs font-medium text-muted-foreground">
-                Daily Average
+                {getContent("dashboard.chart.dailyAverage", locale)}
               </p>
             </div>
             <p className="text-3xl font-bold text-purple-600">{avgDaily}</p>

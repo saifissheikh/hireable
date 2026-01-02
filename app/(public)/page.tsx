@@ -7,6 +7,8 @@ import { CandidatesGrid } from "@/components/dashboard/candidates-grid";
 import { CandidateSignupChart } from "@/components/candidate-signup-chart";
 import { LandingCTAs } from "@/components/landing-ctas";
 import { Users } from "lucide-react";
+import { getLocale } from "@/lib/get-locale";
+import { getContent } from "@/lib/content";
 
 // Create a Supabase client
 const supabaseAdmin = createClient(
@@ -16,6 +18,7 @@ const supabaseAdmin = createClient(
 
 export default async function Home() {
   const session = await auth();
+  const locale = await getLocale();
 
   // If user is already logged in, redirect based on their role
   if (session) {
@@ -59,18 +62,30 @@ export default async function Home() {
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
                   </span>
                   <Users className="w-4 h-4" />
-                  {totalCandidates}+ Active Candidates
+                  {totalCandidates}+{" "}
+                  {getContent(
+                    "dashboard.publicLanding.activeCandidates",
+                    locale
+                  )}
                 </span>
               </div>
 
               <div className="space-y-4">
                 <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
-                  Find Your Perfect
-                  <span className="text-primary"> Candidate</span>
+                  {getContent("dashboard.publicLanding.heroTitle", locale)}
+                  <span className="text-primary">
+                    {" "}
+                    {getContent(
+                      "dashboard.publicLanding.heroHighlight",
+                      locale
+                    )}
+                  </span>
                 </h1>
                 <p className="text-lg text-muted-foreground md:text-xl max-w-2xl">
-                  Browse through our talented pool of candidates. Login as a
-                  recruiter to access full profiles and connect with top talent.
+                  {getContent(
+                    "dashboard.publicLanding.heroDescription",
+                    locale
+                  )}
                 </p>
               </div>
 
@@ -94,11 +109,16 @@ export default async function Home() {
       <main className="container mx-auto px-4 py-12">
         <div className="mb-8">
           <h2 className="text-3xl font-bold tracking-tight mb-2">
-            Browse Candidates
+            {getContent(
+              "dashboard.publicLanding.browseCandidatesTitle",
+              locale
+            )}
           </h2>
           <p className="text-muted-foreground">
-            Preview our talent pool. Login to view full profiles and contact
-            information.
+            {getContent(
+              "dashboard.publicLanding.browseCandidatesDescription",
+              locale
+            )}
           </p>
         </div>
 

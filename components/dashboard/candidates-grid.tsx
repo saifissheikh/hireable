@@ -15,6 +15,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { RecruiterLoginButton } from "../recruiter-login-button";
+import { getContent } from "@/lib/content";
+import { useLocale } from "@/lib/use-locale";
 
 interface Candidate {
   id: string;
@@ -47,6 +49,7 @@ export function CandidatesGrid({
 }: CandidatesGridProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const locale = useLocale();
   const [candidates, setCandidates] = useState<Candidate[]>(initialCandidates);
   const [searchQuery, setSearchQuery] = useState(initialSearchQuery);
   const [locationFilter, setLocationFilter] = useState(initialLocationFilter);
@@ -212,12 +215,23 @@ export function CandidatesGrid({
             </div>
             <div>
               <h3 className="text-xl font-semibold mb-2">
-                {searchQuery ? "No candidates found" : "No candidates yet"}
+                {searchQuery
+                  ? getContent(
+                      "dashboard.candidatesGrid.noCandidatesFound",
+                      locale
+                    )
+                  : getContent(
+                      "dashboard.candidatesGrid.noCandidatesYet",
+                      locale
+                    )}
               </h3>
               <p className="text-muted-foreground">
                 {searchQuery
-                  ? "Try adjusting your search terms"
-                  : "Check back soon as talented candidates complete their profiles!"}
+                  ? getContent("dashboard.candidatesGrid.adjustSearch", locale)
+                  : getContent(
+                      "dashboard.candidatesGrid.checkBackSoon",
+                      locale
+                    )}
               </p>
             </div>
           </div>
@@ -241,12 +255,14 @@ export function CandidatesGrid({
               {isLoading && (
                 <div className="flex items-center gap-2 text-muted-foreground">
                   <Loader2 className="w-5 h-5 animate-spin" />
-                  <span>Loading more candidates...</span>
+                  <span>
+                    {getContent("dashboard.candidatesGrid.loadingMore", locale)}
+                  </span>
                 </div>
               )}
               {!hasMore && candidates.length > 0 && (
                 <p className="text-muted-foreground text-sm">
-                  You've reached the end of the list
+                  {getContent("dashboard.candidatesGrid.endOfList", locale)}
                 </p>
               )}
             </div>
@@ -261,7 +277,7 @@ export function CandidatesGrid({
                 size="lg"
                 className="cursor-pointer"
               >
-                Load More Candidates
+                {getContent("dashboard.candidatesGrid.loadMoreButton", locale)}
               </Button>
             </div>
           )}
@@ -274,11 +290,10 @@ export function CandidatesGrid({
           <DialogHeader>
             <DialogTitle className="text-2xl flex items-center gap-2">
               <Users className="w-6 h-6 text-primary" />
-              Login Required
+              {getContent("dashboard.candidatesGrid.loginRequired", locale)}
             </DialogTitle>
             <DialogDescription className="text-base pt-2">
-              To view full candidate profiles and access contact information,
-              please login as a recruiter.
+              {getContent("dashboard.candidatesGrid.loginMessage", locale)}
             </DialogDescription>
           </DialogHeader>
           <div className="flex flex-col gap-3 pt-4">
@@ -289,7 +304,7 @@ export function CandidatesGrid({
               onClick={() => setShowLoginModal(false)}
               className="cursor-pointer"
             >
-              Continue Browsing
+              {getContent("dashboard.candidatesGrid.continueBrowsing", locale)}
             </Button>
           </div>
         </DialogContent>

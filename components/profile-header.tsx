@@ -23,7 +23,7 @@ export async function ProfileHeader({ session, homeUrl = "/profile" }: ProfileHe
         {/* Logo */}
         <Link href={homeUrl} className="flex items-center gap-2 shrink-0">
           <Briefcase className="h-5 w-5 md:h-6 md:w-6" />
-          <span className="text-lg md:text-xl font-bold hidden xs:inline">{getContent("app.name", locale)}</span>
+          <span className="text-lg md:text-xl font-bold">{getContent("app.name", locale)}</span>
         </Link>
 
         {/* Right Side Controls */}
