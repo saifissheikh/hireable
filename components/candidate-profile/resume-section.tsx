@@ -1,6 +1,6 @@
 "use client";
 
-import { FileText, Eye, Download, X } from "lucide-react";
+import { FileText, Eye, Download } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {

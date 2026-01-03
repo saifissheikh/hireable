@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Users, Loader2 } from "lucide-react";
@@ -48,7 +48,6 @@ export function CandidatesGrid({
   isPublicView = false,
 }: CandidatesGridProps) {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const locale = useLocale();
   const [candidates, setCandidates] = useState<Candidate[]>(initialCandidates);
   const [searchQuery, setSearchQuery] = useState(initialSearchQuery);
@@ -65,15 +64,7 @@ export function CandidatesGrid({
   const observerRef = useRef<IntersectionObserver | null>(null);
   const loadMoreRef = useRef<HTMLDivElement>(null);
   const isLoadingMoreRef = useRef(false);
-  const filterTimeoutRef = useRef<NodeJS.Timeout>();
-
-  // Track filter changes separately to properly manage observer lifecycle
-  const prevFiltersRef = useRef({
-    searchQuery,
-    locationFilter,
-    nationalityFilter,
-    experienceFilter,
-  });
+  const filterTimeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
 
   // Update URL when filters change
   useEffect(() => {
@@ -190,7 +181,7 @@ export function CandidatesGrid({
     return () => {
       observer.disconnect();
     };
-  }, [hasMore, isPublicView, candidates.length]); // Only depend on hasMore, isPublicView, and candidates.length
+  }, [hasMore, isPublicView, candidates.length, loadMore]);
 
   return (
     <>

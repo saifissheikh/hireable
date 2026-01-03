@@ -31,11 +31,7 @@ export default async function Home() {
   }
 
   // Fetch limited candidates for public view
-  const {
-    data: candidates,
-    error,
-    count,
-  } = await supabaseAdmin
+  const { data: candidates, count } = await supabaseAdmin
     .from("candidates")
     .select(
       "id, full_name, bio, location, years_of_experience, skills, profile_picture_url",
