@@ -5,18 +5,19 @@ import Image from "next/image";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { VideoSection } from "@/components/candidate-profile/video-section";
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { SkillsInput } from "@/components/skills-input";
 import { getContent } from "@/lib/content";
 import type { Locale } from "@/lib/i18n-config";
-import { 
-  User, 
-  MapPin, 
-  Phone, 
-  Mail, 
-  Briefcase, 
+import {
+  User,
+  MapPin,
+  Phone,
+  Mail,
+  Briefcase,
   Calendar,
   FileText,
   Download,
@@ -24,7 +25,7 @@ import {
   Globe,
   Save,
   X,
-  Upload
+  Upload,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -42,6 +43,7 @@ interface Candidate {
   resume_url: string | null;
   resume_filename: string | null;
   profile_picture_url: string | null;
+  introduction_video_url: string | null;
   created_at: string;
 }
 
@@ -58,11 +60,11 @@ interface ProfileViewProps {
 export function ProfileView({ candidate, user, locale }: ProfileViewProps) {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  
+
   // Edit mode state
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
-  
+
   // Form state
   const [formData, setFormData] = useState({
     bio: candidate.bio,
@@ -90,32 +92,35 @@ export function ProfileView({ candidate, user, locale }: ProfileViewProps) {
     setIsSaving(true);
     try {
       const formDataToSend = new FormData();
-      formDataToSend.append('bio', formData.bio);
-      formDataToSend.append('skills', formData.skills.join(','));
-      formDataToSend.append('phone', formData.phone);
-      formDataToSend.append('location', formData.location);
-      formDataToSend.append('yearsOfExperience', formData.yearsOfExperience.toString());
-      
+      formDataToSend.append("bio", formData.bio);
+      formDataToSend.append("skills", formData.skills.join(","));
+      formDataToSend.append("phone", formData.phone);
+      formDataToSend.append("location", formData.location);
+      formDataToSend.append(
+        "yearsOfExperience",
+        formData.yearsOfExperience.toString()
+      );
+
       if (formData.resume) {
-        formDataToSend.append('resume', formData.resume);
+        formDataToSend.append("resume", formData.resume);
       }
 
-      const response = await fetch('/api/candidates', {
-        method: 'PATCH',
+      const response = await fetch("/api/candidates", {
+        method: "PATCH",
         body: formDataToSend,
       });
 
       if (!response.ok) {
-        throw new Error('Failed to update profile');
+        throw new Error("Failed to update profile");
       }
 
       // Refresh the page to show updated data
       router.refresh();
       setIsEditing(false);
-      setFormData(prev => ({ ...prev, resume: null }));
+      setFormData((prev) => ({ ...prev, resume: null }));
     } catch (error) {
-      console.error('Error updating profile:', error);
-      alert('Failed to update profile. Please try again.');
+      console.error("Error updating profile:", error);
+      alert("Failed to update profile. Please try again.");
     } finally {
       setIsSaving(false);
     }
@@ -124,7 +129,7 @@ export function ProfileView({ candidate, user, locale }: ProfileViewProps) {
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setFormData(prev => ({ ...prev, resume: file }));
+      setFormData((prev) => ({ ...prev, resume: file }));
     }
   };
 
@@ -138,8 +143,8 @@ export function ProfileView({ candidate, user, locale }: ProfileViewProps) {
             <div className="flex items-center gap-4 flex-1 min-w-0">
               {candidate.profile_picture_url ? (
                 <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-full border-4 border-primary/20 shrink-0 overflow-hidden bg-muted">
-                  <Image 
-                    src={candidate.profile_picture_url} 
+                  <Image
+                    src={candidate.profile_picture_url}
                     alt={candidate.full_name}
                     fill
                     className="object-cover"
@@ -147,8 +152,8 @@ export function ProfileView({ candidate, user, locale }: ProfileViewProps) {
                 </div>
               ) : user.image ? (
                 <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-full border-4 border-primary/20 shrink-0 overflow-hidden">
-                  <Image 
-                    src={user.image} 
+                  <Image
+                    src={user.image}
                     alt={candidate.full_name}
                     fill
                     className="object-cover"
@@ -160,7 +165,9 @@ export function ProfileView({ candidate, user, locale }: ProfileViewProps) {
                 </div>
               )}
               <div className="min-w-0 flex-1">
-                <CardTitle className="text-2xl sm:text-3xl mb-1 wrap-break-word">{candidate.full_name}</CardTitle>
+                <CardTitle className="text-2xl sm:text-3xl mb-1 wrap-break-word">
+                  {candidate.full_name}
+                </CardTitle>
                 <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-sm text-muted-foreground">
                   <div className="flex items-center gap-1">
                     <MapPin className="w-4 h-4 shrink-0" />
@@ -168,16 +175,22 @@ export function ProfileView({ candidate, user, locale }: ProfileViewProps) {
                   </div>
                   <div className="flex items-center gap-1">
                     <Briefcase className="w-4 h-4 shrink-0" />
-                    <span className="whitespace-nowrap">{candidate.years_of_experience} {candidate.years_of_experience === 1 ? getContent("profile.year", locale) : getContent("profile.years", locale)} {getContent("profile.experience", locale).toLowerCase()}</span>
+                    <span className="whitespace-nowrap">
+                      {candidate.years_of_experience}{" "}
+                      {candidate.years_of_experience === 1
+                        ? getContent("profile.year", locale)
+                        : getContent("profile.years", locale)}{" "}
+                      {getContent("profile.experience", locale).toLowerCase()}
+                    </span>
                   </div>
                 </div>
               </div>
             </div>
             {/* Edit/Save/Cancel Buttons */}
             {!isEditing ? (
-              <Button 
-                variant="outline" 
-                size="sm" 
+              <Button
+                variant="outline"
+                size="sm"
                 className="w-full sm:w-auto shrink-0"
                 onClick={() => setIsEditing(true)}
               >
@@ -186,8 +199,8 @@ export function ProfileView({ candidate, user, locale }: ProfileViewProps) {
               </Button>
             ) : (
               <div className="flex gap-2 w-full sm:w-auto">
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   size="sm"
                   onClick={handleCancel}
                   disabled={isSaving}
@@ -196,14 +209,16 @@ export function ProfileView({ candidate, user, locale }: ProfileViewProps) {
                   <X className="w-4 h-4 mr-2" />
                   {getContent("profile.cancel", locale)}
                 </Button>
-                <Button 
+                <Button
                   size="sm"
                   onClick={handleSave}
                   disabled={isSaving}
                   className="flex-1 sm:flex-none"
                 >
                   <Save className="w-4 h-4 mr-2" />
-                  {isSaving ? getContent("profile.saving", locale) : getContent("profile.save", locale)}
+                  {isSaving
+                    ? getContent("profile.saving", locale)
+                    : getContent("profile.save", locale)}
                 </Button>
               </div>
             )}
@@ -217,13 +232,17 @@ export function ProfileView({ candidate, user, locale }: ProfileViewProps) {
           {/* About Section */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-xl">{getContent("profile.about", locale)}</CardTitle>
+              <CardTitle className="text-xl">
+                {getContent("profile.about", locale)}
+              </CardTitle>
             </CardHeader>
             <CardContent>
               {isEditing ? (
-                <Textarea 
+                <Textarea
                   value={formData.bio}
-                  onChange={(e) => setFormData(prev => ({ ...prev, bio: e.target.value }))}
+                  onChange={(e) =>
+                    setFormData((prev) => ({ ...prev, bio: e.target.value }))
+                  }
                   placeholder={getContent("profile.bioPlaceholder", locale)}
                   className="min-h-[120px]"
                 />
@@ -238,20 +257,28 @@ export function ProfileView({ candidate, user, locale }: ProfileViewProps) {
           {/* Skills Section */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-xl">{getContent("profile.skills", locale)}</CardTitle>
+              <CardTitle className="text-xl">
+                {getContent("profile.skills", locale)}
+              </CardTitle>
             </CardHeader>
             <CardContent>
               {isEditing ? (
-                <SkillsInput 
+                <SkillsInput
                   skills={formData.skills}
-                  onChange={(skills) => setFormData(prev => ({ ...prev, skills }))}
+                  onChange={(skills) =>
+                    setFormData((prev) => ({ ...prev, skills }))
+                  }
                   placeholder={getContent("profile.skillsPlaceholder", locale)}
                   locale={locale}
                 />
               ) : (
                 <div className="flex flex-wrap gap-2">
                   {candidate.skills.map((skill, index) => (
-                    <Badge key={index} variant="secondary" className="text-sm px-3 py-1">
+                    <Badge
+                      key={index}
+                      variant="secondary"
+                      className="text-sm px-3 py-1"
+                    >
                       {skill}
                     </Badge>
                   ))}
@@ -264,7 +291,9 @@ export function ProfileView({ candidate, user, locale }: ProfileViewProps) {
           {(candidate.resume_url || isEditing) && (
             <Card>
               <CardHeader>
-                <CardTitle className="text-xl">{getContent("profile.resume", locale)}</CardTitle>
+                <CardTitle className="text-xl">
+                  {getContent("profile.resume", locale)}
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 {isEditing ? (
@@ -277,19 +306,33 @@ export function ProfileView({ candidate, user, locale }: ProfileViewProps) {
                             <FileText className="w-5 h-5 text-primary" />
                           </div>
                           <div className="min-w-0 flex-1">
-                            <p className="font-medium truncate text-sm">{getContent("profile.currentResume", locale)} {candidate.resume_filename}</p>
-                            <p className="text-xs text-muted-foreground">{getContent("profile.pdfDocument", locale)}</p>
+                            <p className="font-medium truncate text-sm">
+                              {getContent("profile.currentResume", locale)}{" "}
+                              {candidate.resume_filename}
+                            </p>
+                            <p className="text-xs text-muted-foreground">
+                              {getContent("profile.pdfDocument", locale)}
+                            </p>
                           </div>
                         </div>
-                        <Button variant="ghost" size="sm" asChild className="w-full sm:w-auto shrink-0">
-                          <a href={candidate.resume_url} target="_blank" rel="noopener noreferrer">
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          asChild
+                          className="w-full sm:w-auto shrink-0"
+                        >
+                          <a
+                            href={candidate.resume_url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
                             <Download className="w-4 h-4 mr-2" />
                             {getContent("profile.view", locale)}
                           </a>
                         </Button>
                       </div>
                     )}
-                    
+
                     {/* Upload New Resume */}
                     <div>
                       <input
@@ -306,10 +349,16 @@ export function ProfileView({ candidate, user, locale }: ProfileViewProps) {
                         className="w-full"
                       >
                         <Upload className="w-4 h-4 mr-2" />
-                        {formData.resume ? `${getContent("profile.selected", locale)} ${formData.resume.name}` : getContent("profile.uploadNewResume", locale)}
+                        {formData.resume
+                          ? `${getContent("profile.selected", locale)} ${
+                              formData.resume.name
+                            }`
+                          : getContent("profile.uploadNewResume", locale)}
                       </Button>
                       <p className="text-xs text-muted-foreground mt-2">
-                        {formData.resume ? getContent("profile.resumeWillUpload", locale) : getContent("profile.resumeFileTypes", locale)}
+                        {formData.resume
+                          ? getContent("profile.resumeWillUpload", locale)
+                          : getContent("profile.resumeFileTypes", locale)}
                       </p>
                     </div>
                   </div>
@@ -320,12 +369,25 @@ export function ProfileView({ candidate, user, locale }: ProfileViewProps) {
                         <FileText className="w-5 h-5 text-primary" />
                       </div>
                       <div className="min-w-0 flex-1">
-                        <p className="font-medium truncate">{candidate.resume_filename}</p>
-                        <p className="text-xs text-muted-foreground">{getContent("profile.pdfDocument", locale)}</p>
+                        <p className="font-medium truncate">
+                          {candidate.resume_filename}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          {getContent("profile.pdfDocument", locale)}
+                        </p>
                       </div>
                     </div>
-                    <Button variant="outline" size="sm" asChild className="w-full sm:w-auto shrink-0">
-                      <a href={candidate.resume_url} target="_blank" rel="noopener noreferrer">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      asChild
+                      className="w-full sm:w-auto shrink-0"
+                    >
+                      <a
+                        href={candidate.resume_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
                         <Download className="w-4 h-4 mr-2" />
                         {getContent("profile.download", locale)}
                       </a>
@@ -335,6 +397,14 @@ export function ProfileView({ candidate, user, locale }: ProfileViewProps) {
               </CardContent>
             </Card>
           )}
+
+          {/* Video Introduction Section */}
+          {candidate.introduction_video_url && (
+            <VideoSection
+              videoUrl={candidate.introduction_video_url}
+              candidateName={candidate.full_name}
+            />
+          )}
         </div>
 
         {/* Sidebar - Right Column */}
@@ -342,51 +412,81 @@ export function ProfileView({ candidate, user, locale }: ProfileViewProps) {
           {/* Contact Information */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg md:text-xl">{getContent("profile.contactInformation", locale)}</CardTitle>
+              <CardTitle className="text-lg md:text-xl">
+                {getContent("profile.contactInformation", locale)}
+              </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3 md:space-y-4">
               <div className="flex items-start gap-3">
                 <Mail className="w-5 h-5 text-muted-foreground mt-0.5 shrink-0" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm text-muted-foreground mb-1">{getContent("profile.email", locale)}</p>
-                  <p className="font-medium break-all text-sm md:text-base">{candidate.email}</p>
+                  <p className="text-sm text-muted-foreground mb-1">
+                    {getContent("profile.email", locale)}
+                  </p>
+                  <p className="font-medium break-all text-sm md:text-base">
+                    {candidate.email}
+                  </p>
                 </div>
               </div>
-              
+
               <Separator />
-              
+
               <div className="flex items-start gap-3">
                 <Phone className="w-5 h-5 text-muted-foreground mt-0.5 shrink-0" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm text-muted-foreground mb-1">{getContent("profile.phone", locale)}</p>
+                  <p className="text-sm text-muted-foreground mb-1">
+                    {getContent("profile.phone", locale)}
+                  </p>
                   {isEditing ? (
-                    <Input 
+                    <Input
                       value={formData.phone}
-                      onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
-                      placeholder={getContent("profile.phonePlaceholder", locale)}
+                      onChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          phone: e.target.value,
+                        }))
+                      }
+                      placeholder={getContent(
+                        "profile.phonePlaceholder",
+                        locale
+                      )}
                       className="text-sm md:text-base"
                     />
                   ) : (
-                    <p className="font-medium text-sm md:text-base">{candidate.phone}</p>
+                    <p className="font-medium text-sm md:text-base">
+                      {candidate.phone}
+                    </p>
                   )}
                 </div>
               </div>
-              
+
               <Separator />
-              
+
               <div className="flex items-start gap-3">
                 <MapPin className="w-5 h-5 text-muted-foreground mt-0.5 shrink-0" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm text-muted-foreground mb-1">{getContent("profile.location", locale)}</p>
+                  <p className="text-sm text-muted-foreground mb-1">
+                    {getContent("profile.location", locale)}
+                  </p>
                   {isEditing ? (
-                    <Input 
+                    <Input
                       value={formData.location}
-                      onChange={(e) => setFormData(prev => ({ ...prev, location: e.target.value }))}
-                      placeholder={getContent("profile.locationPlaceholder", locale)}
+                      onChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          location: e.target.value,
+                        }))
+                      }
+                      placeholder={getContent(
+                        "profile.locationPlaceholder",
+                        locale
+                      )}
                       className="text-sm md:text-base"
                     />
                   ) : (
-                    <p className="font-medium text-sm md:text-base">{candidate.location}</p>
+                    <p className="font-medium text-sm md:text-base">
+                      {candidate.location}
+                    </p>
                   )}
                 </div>
               </div>
@@ -396,45 +496,65 @@ export function ProfileView({ candidate, user, locale }: ProfileViewProps) {
           {/* Personal Details */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg md:text-xl">{getContent("profile.personalDetails", locale)}</CardTitle>
+              <CardTitle className="text-lg md:text-xl">
+                {getContent("profile.personalDetails", locale)}
+              </CardTitle>
             </CardHeader>
             <CardContent className="space-y-3 md:space-y-4">
               <div className="flex items-start gap-3">
                 <Calendar className="w-5 h-5 text-muted-foreground mt-0.5 shrink-0" />
                 <div className="flex-1">
-                  <p className="text-sm text-muted-foreground mb-1">{getContent("profile.age", locale)}</p>
-                  <p className="font-medium text-sm md:text-base">{candidate.age} {getContent("profile.yearsOld", locale)}</p>
+                  <p className="text-sm text-muted-foreground mb-1">
+                    {getContent("profile.age", locale)}
+                  </p>
+                  <p className="font-medium text-sm md:text-base">
+                    {candidate.age} {getContent("profile.yearsOld", locale)}
+                  </p>
                 </div>
               </div>
-              
+
               <Separator />
-              
+
               <div className="flex items-start gap-3">
                 <Globe className="w-5 h-5 text-muted-foreground mt-0.5 shrink-0" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm text-muted-foreground mb-1">{getContent("profile.nationality", locale)}</p>
-                  <p className="font-medium text-sm md:text-base">{candidate.nationality}</p>
+                  <p className="text-sm text-muted-foreground mb-1">
+                    {getContent("profile.nationality", locale)}
+                  </p>
+                  <p className="font-medium text-sm md:text-base">
+                    {candidate.nationality}
+                  </p>
                 </div>
               </div>
-              
+
               <Separator />
-              
+
               <div className="flex items-start gap-3">
                 <Briefcase className="w-5 h-5 text-muted-foreground mt-0.5 shrink-0" />
                 <div className="flex-1">
-                  <p className="text-sm text-muted-foreground mb-1">{getContent("profile.experience", locale)}</p>
+                  <p className="text-sm text-muted-foreground mb-1">
+                    {getContent("profile.experience", locale)}
+                  </p>
                   {isEditing ? (
-                    <Input 
+                    <Input
                       type="number"
                       min="0"
                       max="50"
                       value={formData.yearsOfExperience}
-                      onChange={(e) => setFormData(prev => ({ ...prev, yearsOfExperience: parseInt(e.target.value) || 0 }))}
+                      onChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          yearsOfExperience: parseInt(e.target.value) || 0,
+                        }))
+                      }
                       className="text-sm md:text-base"
                     />
                   ) : (
                     <p className="font-medium text-sm md:text-base">
-                      {candidate.years_of_experience} {candidate.years_of_experience === 1 ? getContent("profile.year", locale) : getContent("profile.years", locale)}
+                      {candidate.years_of_experience}{" "}
+                      {candidate.years_of_experience === 1
+                        ? getContent("profile.year", locale)
+                        : getContent("profile.years", locale)}
                     </p>
                   )}
                 </div>
