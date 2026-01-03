@@ -41,7 +41,9 @@ export function CandidateSignupChart() {
   });
 
   // Create smooth curve path
-  const createSmoothPath = (points: typeof points) => {
+  const createSmoothPath = (
+    points: Array<{ x: number; y: number; signups: number }>
+  ) => {
     if (points.length === 0) return "";
 
     let path = `M ${points[0].x},${points[0].y}`;
