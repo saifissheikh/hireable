@@ -25,7 +25,7 @@ interface PageProps {
 
 export default async function CandidateProfilePage({ params }: PageProps) {
   const { id } = await params;
-  const locale = getLocale();
+  const locale = await getLocale();
 
   const { data: candidate, error } = await supabaseAdmin
     .from("candidates")

@@ -1,120 +1,4 @@
 {
-  "landing": {
-    "recruiterBanner": {
-      "title": "Hiring? Find Top Talent Here",
-      "description": "Access our curated talent pool of pre-screened professionals",
-      "button": "Employer Sign In"
-    },
-    "header": {
-      "nav": {
-        "features": "Features",
-        "howItWorks": "How It Works",
-        "about": "About"
-      }
-    },
-    "hero": {
-      "badge": "Now Hiring",
-      "title": "Find Your Dream Job",
-      "titleHighlight": "Today",
-      "description": "Connect with top employers and discover opportunities that match your skills and aspirations. Your next career move starts here.",
-      "features": {
-        "smartMatching": {
-          "title": "Smart Matching",
-          "description": "AI-powered job recommendations"
-        },
-        "topEmployers": {
-          "title": "Top Employers",
-          "description": "Connect with leading companies"
-        },
-        "careerGrowth": {
-          "title": "Career Growth",
-          "description": "Track your progress and grow"
-        },
-        "profileVisibility": {
-          "title": "Profile Visibility",
-          "description": "Be discovered 24/7 by top employers"
-        }
-      }
-    },
-    "auth": {
-      "card": {
-        "title": "Get Started",
-        "description": "Sign in with your preferred account to create your profile"
-      },
-      "form": {
-        "googleButton": "Continue with Google",
-        "linkedinButton": "Continue with LinkedIn",
-        "secureNote": "Your information is secure and will only be shared with employers you choose."
-      }
-    },
-    "footer": {
-      "copyright": "© 2025 Hireable. All rights reserved.",
-      "links": {
-        "privacy": "Privacy",
-        "terms": "Terms",
-        "contact": "Contact"
-      }
-    }
-  },
-  "recruiter": {
-    "landing": {
-      "topBar": {
-        "forRecruiters": "For Recruiters & Employers",
-        "candidateButton": "Are you a candidate?"
-      },
-      "backToCandidate": "Back to candidate login",
-      "candidateRedirect": "Are you a candidate?",
-      "stats": {
-        "candidates": "Candidates",
-        "skills": "Skills",
-        "access": "Access"
-      },
-      "pills": {
-        "instant": "Instant Access",
-        "verified": "Verified Profiles",
-        "quality": "Quality Talent"
-      },
-      "features": {
-        "title": "Everything You Need to Hire Better",
-        "subtitle": "Powerful tools designed specifically for modern recruiters and hiring managers"
-      },
-      "hero": {
-        "badge": "For Employers",
-        "title": "Find Top Talent",
-        "titleHighlight": "Fast",
-        "description": "Access our curated talent pool of verified professionals. Connect directly with candidates who match your requirements.",
-        "features": {
-          "advancedSearch": {
-            "title": "Advanced Search",
-            "description": "Filter by skills, experience, and location"
-          },
-          "talentPool": {
-            "title": "Quality Talent Pool",
-            "description": "Pre-screened and verified candidates"
-          },
-          "verified": {
-            "title": "Verified Profiles",
-            "description": "All candidates have complete profiles"
-          },
-          "directContact": {
-            "title": "Direct Contact",
-            "description": "Connect with candidates instantly"
-          }
-        }
-      },
-      "auth": {
-        "card": {
-          "title": "Employer Sign In",
-          "description": "Access our talent pool and find your next hire"
-        },
-        "form": {
-          "googleButton": "Continue with Google",
-          "linkedinButton": "Continue with LinkedIn",
-          "secureNote": "Join hundreds of companies finding talent on Hireable."
-        }
-      }
-    }
-  },
   "app": {
     "name": "Hireable",
     "tagline": "Find Your Dream Job Today",
@@ -349,7 +233,7 @@
     }
   },
   "landingCTAs": {
-    "signUpCandidate": "Sign Up as Candidate",
+    "signUpCandidate": "Login as Candidate",
     "loginRecruiter": "Login as Recruiter"
   },
   "footer": {
@@ -372,12 +256,6 @@
       "cookies": "Cookie Policy"
     },
     "copyright": "All rights reserved."
-  },
-  "common": {
-    "loading": "Loading...",
-    "error": "An error occurred",
-    "retry": "Retry",
-    "switchLanguage": "التبديل إلى العربية"
   },
   "unauthorized": {
     "recruiterOnly": {

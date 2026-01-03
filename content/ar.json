@@ -1,120 +1,4 @@
 {
-  "landing": {
-    "recruiterBanner": {
-      "title": "توظيف؟ اعثر على أفضل المواهب هنا",
-      "description": "احصل على وصول لمجموعة المواهب المنتقاة من المحترفين المعتمدين",
-      "button": "تسجيل دخول صاحب العمل"
-    },
-    "header": {
-      "nav": {
-        "features": "المميزات",
-        "howItWorks": "كيف يعمل",
-        "about": "حول"
-      }
-    },
-    "hero": {
-      "badge": "التوظيف الآن",
-      "title": "اعثر على وظيفة أحلامك",
-      "titleHighlight": "اليوم",
-      "description": "تواصل مع أفضل أصحاب العمل واكتشف الفرص التي تتناسب مع مهاراتك وطموحاتك. خطوتك المهنية التالية تبدأ من هنا.",
-      "features": {
-        "smartMatching": {
-          "title": "مطابقة ذكية",
-          "description": "توصيات وظائف مدعومة بالذكاء الاصطناعي"
-        },
-        "topEmployers": {
-          "title": "أفضل أصحاب العمل",
-          "description": "تواصل مع الشركات الرائدة"
-        },
-        "careerGrowth": {
-          "title": "النمو المهني",
-          "description": "تتبع تقدمك وانمو"
-        },
-        "profileVisibility": {
-          "title": "ظهور الملف الشخصي",
-          "description": "كن مرئياً على مدار الساعة لأفضل أصحاب العمل"
-        }
-      }
-    },
-    "auth": {
-      "card": {
-        "title": "ابدأ الآن",
-        "description": "سجل الدخول باستخدام حسابك المفضل لإنشاء ملفك الشخصي"
-      },
-      "form": {
-        "googleButton": "المتابعة مع جوجل",
-        "linkedinButton": "المتابعة مع لينكد إن",
-        "secureNote": "معلوماتك آمنة ولن تتم مشاركتها إلا مع أصحاب العمل الذين تختارهم."
-      }
-    },
-    "footer": {
-      "copyright": "© 2025 Hireable. جميع الحقوق محفوظة.",
-      "links": {
-        "privacy": "الخصوصية",
-        "terms": "الشروط",
-        "contact": "اتصل بنا"
-      }
-    }
-  },
-  "recruiter": {
-    "landing": {
-      "topBar": {
-        "forRecruiters": "لمسؤولي التوظيف وأصحاب العمل",
-        "candidateButton": "هل أنت مرشح؟"
-      },
-      "backToCandidate": "العودة إلى تسجيل دخول المرشح",
-      "candidateRedirect": "هل أنت مرشح؟",
-      "stats": {
-        "candidates": "مرشح",
-        "skills": "مهارة",
-        "access": "وصول"
-      },
-      "pills": {
-        "instant": "وصول فوري",
-        "verified": "ملفات موثقة",
-        "quality": "مواهب عالية الجودة"
-      },
-      "features": {
-        "title": "كل ما تحتاجه للتوظيف الأفضل",
-        "subtitle": "أدوات قوية مصممة خصيصاً لمسؤولي التوظيف ومديري التوظيف الحديثين"
-      },
-      "hero": {
-        "badge": "لأصحاب العمل",
-        "title": "ابحث عن أفضل المواهب",
-        "titleHighlight": "بسرعة",
-        "description": "احصل على وصول لمجموعة المواهب المنتقاة من المحترفين المعتمدين. تواصل مباشرة مع المرشحين الذين يتطابقون مع متطلباتك.",
-        "features": {
-          "advancedSearch": {
-            "title": "بحث متقدم",
-            "description": "تصفية حسب المهارات والخبرة والموقع"
-          },
-          "talentPool": {
-            "title": "مجموعة مواهب عالية الجودة",
-            "description": "مرشحون تم فحصهم والتحقق منهم مسبقاً"
-          },
-          "verified": {
-            "title": "ملفات شخصية موثقة",
-            "description": "جميع المرشحين لديهم ملفات شخصية كاملة"
-          },
-          "directContact": {
-            "title": "تواصل مباشر",
-            "description": "تواصل مع المرشحين فوراً"
-          }
-        }
-      },
-      "auth": {
-        "card": {
-          "title": "تسجيل دخول صاحب العمل",
-          "description": "احصل على وصول لمجموعة المواهب وابحث عن موظفك القادم"
-        },
-        "form": {
-          "googleButton": "المتابعة مع جوجل",
-          "linkedinButton": "المتابعة مع لينكد إن",
-          "secureNote": "انضم إلى مئات الشركات التي تجد المواهب على Hireable."
-        }
-      }
-    }
-  },
   "app": {
     "name": "Hireable",
     "tagline": "اعثر على وظيفة أحلامك اليوم",
@@ -349,7 +233,7 @@
     }
   },
   "landingCTAs": {
-    "signUpCandidate": "التسجيل كمرشح",
+    "signUpCandidate": "تسجيل الدخول كمرشح",
     "loginRecruiter": "تسجيل الدخول كمسؤول توظيف"
   },
   "footer": {
@@ -372,12 +256,6 @@
       "cookies": "سياسة ملفات تعريف الارتباط"
     },
     "copyright": "جميع الحقوق محفوظة."
-  },
-  "common": {
-    "loading": "جاري التحميل...",
-    "error": "حدث خطأ",
-    "retry": "أعد المحاولة",
-    "switchLanguage": "Switch to English"
   },
   "unauthorized": {
     "recruiterOnly": {
