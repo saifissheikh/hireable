@@ -11,15 +11,22 @@ import type { Locale } from "@/lib/i18n-config";
 
 interface ProfessionalInfoStepProps {
   formData: {
+    jobTitle: string;
     yearsOfExperience: string;
     skills: string[];
     bio: string;
   };
-  updateFormData: (data: Partial<ProfessionalInfoStepProps['formData']>) => void;
+  updateFormData: (
+    data: Partial<ProfessionalInfoStepProps["formData"]>
+  ) => void;
   locale: Locale;
 }
 
-export function ProfessionalInfoStep({ formData, updateFormData, locale }: ProfessionalInfoStepProps) {
+export function ProfessionalInfoStep({
+  formData,
+  updateFormData,
+  locale,
+}: ProfessionalInfoStepProps) {
   const [skillInput, setSkillInput] = useState("");
 
   const addSkill = () => {
@@ -30,7 +37,9 @@ export function ProfessionalInfoStep({ formData, updateFormData, locale }: Profe
   };
 
   const removeSkill = (skillToRemove: string) => {
-    updateFormData({ skills: formData.skills.filter((s) => s !== skillToRemove) });
+    updateFormData({
+      skills: formData.skills.filter((s) => s !== skillToRemove),
+    });
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -43,26 +52,57 @@ export function ProfessionalInfoStep({ formData, updateFormData, locale }: Profe
   return (
     <div className="space-y-6">
       <div className="space-y-2">
-        <Label htmlFor="yearsOfExperience">{getContent("onboarding.step2.experience", locale)}</Label>
+        <Label htmlFor="jobTitle">
+          {getContent("onboarding.step2.jobTitle", locale)}
+        </Label>
+        <Input
+          id="jobTitle"
+          type="text"
+          placeholder={getContent(
+            "onboarding.step2.jobTitlePlaceholder",
+            locale
+          )}
+          value={formData.jobTitle}
+          onChange={(e) => updateFormData({ jobTitle: e.target.value })}
+          required
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="yearsOfExperience">
+          {getContent("onboarding.step2.experience", locale)}
+        </Label>
         <Input
           id="yearsOfExperience"
           type="number"
-          placeholder={getContent("onboarding.step2.experiencePlaceholder", locale)}
+          placeholder={getContent(
+            "onboarding.step2.experiencePlaceholder",
+            locale
+          )}
           value={formData.yearsOfExperience}
-          onChange={(e) => updateFormData({ yearsOfExperience: e.target.value })}
+          onChange={(e) =>
+            updateFormData({ yearsOfExperience: e.target.value })
+          }
           min="0"
           max="50"
           required
         />
-        <p className="text-xs text-muted-foreground">{getContent("onboarding.step2.experienceHint", locale)}</p>
+        <p className="text-xs text-muted-foreground">
+          {getContent("onboarding.step2.experienceHint", locale)}
+        </p>
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="skills">{getContent("onboarding.step2.skills", locale)}</Label>
+        <Label htmlFor="skills">
+          {getContent("onboarding.step2.skills", locale)}
+        </Label>
         <div className="flex gap-2">
           <Input
             id="skills"
-            placeholder={getContent("onboarding.step2.skillsPlaceholder", locale)}
+            placeholder={getContent(
+              "onboarding.step2.skillsPlaceholder",
+              locale
+            )}
             value={skillInput}
             onChange={(e) => setSkillInput(e.target.value)}
             onKeyPress={handleKeyPress}
@@ -78,7 +118,11 @@ export function ProfessionalInfoStep({ formData, updateFormData, locale }: Profe
         {formData.skills.length > 0 && (
           <div className="flex flex-wrap gap-2 mt-2">
             {formData.skills.map((skill) => (
-              <Badge key={skill} variant="secondary" className="flex items-center gap-1">
+              <Badge
+                key={skill}
+                variant="secondary"
+                className="flex items-center gap-1"
+              >
                 {skill}
                 <button
                   type="button"
@@ -91,11 +135,15 @@ export function ProfessionalInfoStep({ formData, updateFormData, locale }: Profe
             ))}
           </div>
         )}
-        <p className="text-xs text-muted-foreground">{getContent("onboarding.step2.skillsHint", locale)}</p>
+        <p className="text-xs text-muted-foreground">
+          {getContent("onboarding.step2.skillsHint", locale)}
+        </p>
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="bio">{getContent("onboarding.step2.bio", locale)}</Label>
+        <Label htmlFor="bio">
+          {getContent("onboarding.step2.bio", locale)}
+        </Label>
         <Textarea
           id="bio"
           placeholder={getContent("onboarding.step2.bioPlaceholder", locale)}
@@ -105,11 +153,15 @@ export function ProfessionalInfoStep({ formData, updateFormData, locale }: Profe
           required
         />
         <p className="text-xs text-muted-foreground">
-          {getContent("onboarding.step2.bioCount", locale, { count: formData.bio.length.toString() })}
+          {getContent("onboarding.step2.bioCount", locale, {
+            count: formData.bio.length.toString(),
+          })}
         </p>
       </div>
 
-      <p className="text-sm text-muted-foreground">{getContent("onboarding.step2.required", locale)}</p>
+      <p className="text-sm text-muted-foreground">
+        {getContent("onboarding.step2.required", locale)}
+      </p>
     </div>
   );
 }

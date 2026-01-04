@@ -1,7 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { BasicInfoStep } from "./onboarding-steps/basic-info-step";
@@ -26,12 +32,13 @@ interface FormData {
   nationality: string;
   location: string;
   phone: string;
-  
+
   // Professional Info
+  jobTitle: string;
   yearsOfExperience: string;
   skills: string[];
   bio: string;
-  
+
   // Resume, Profile Picture & Video
   resumeFile: File | null;
   profilePicture: File | null;
@@ -48,6 +55,7 @@ export function OnboardingForm({ user, locale }: OnboardingFormProps) {
     nationality: "",
     location: "",
     phone: "",
+    jobTitle: "",
     yearsOfExperience: "",
     skills: [],
     bio: "",
@@ -65,17 +73,27 @@ export function OnboardingForm({ user, locale }: OnboardingFormProps) {
 
   const validateStep1 = (): boolean => {
     const { fullName, age, nationality, location, phone } = formData;
-    
+
     // Check all required fields are filled
-    if (!fullName.trim() || !age || !nationality || !location.trim() || !phone.trim()) {
-      setValidationError(getContent("onboarding.validation.fillAllFields", locale));
+    if (
+      !fullName.trim() ||
+      !age ||
+      !nationality ||
+      !location.trim() ||
+      !phone.trim()
+    ) {
+      setValidationError(
+        getContent("onboarding.validation.fillAllFields", locale)
+      );
       return false;
     }
 
     // Validate name (only letters, spaces, hyphens, apostrophes)
     const nameRegex = /^[a-zA-Z\s\-']+$/;
     if (!nameRegex.test(fullName)) {
-      setValidationError(getContent("onboarding.validation.nameInvalid", locale));
+      setValidationError(
+        getContent("onboarding.validation.nameInvalid", locale)
+      );
       return false;
     }
 
@@ -87,9 +105,12 @@ export function OnboardingForm({ user, locale }: OnboardingFormProps) {
     }
 
     // Validate phone
-    const phoneRegex = /^[\+]?[(]?[0-9]{1,4}[)]?[-\s\.]?[(]?[0-9]{1,4}[)]?[-\s\.]?[0-9]{1,9}$/;
-    if (!phoneRegex.test(phone.replace(/\s/g, ''))) {
-      setValidationError(getContent("onboarding.validation.phoneInvalid", locale));
+    const phoneRegex =
+      /^[\+]?[(]?[0-9]{1,4}[)]?[-\s\.]?[(]?[0-9]{1,4}[)]?[-\s\.]?[0-9]{1,9}$/;
+    if (!phoneRegex.test(phone.replace(/\s/g, ""))) {
+      setValidationError(
+        getContent("onboarding.validation.phoneInvalid", locale)
+      );
       return false;
     }
 
@@ -98,20 +119,31 @@ export function OnboardingForm({ user, locale }: OnboardingFormProps) {
   };
 
   const validateStep2 = (): boolean => {
-    const { yearsOfExperience, skills, bio } = formData;
-    
+    const { jobTitle, yearsOfExperience, skills, bio } = formData;
+
+    if (!jobTitle.trim()) {
+      setValidationError("Job title is required");
+      return false;
+    }
+
     if (!yearsOfExperience) {
-      setValidationError(getContent("onboarding.validation.experienceRequired", locale));
+      setValidationError(
+        getContent("onboarding.validation.experienceRequired", locale)
+      );
       return false;
     }
 
     if (skills.length < 3) {
-      setValidationError(getContent("onboarding.validation.skillsMinimum", locale));
+      setValidationError(
+        getContent("onboarding.validation.skillsMinimum", locale)
+      );
       return false;
     }
 
     if (!bio.trim() || bio.length < 50) {
-      setValidationError(getContent("onboarding.validation.bioMinimum", locale));
+      setValidationError(
+        getContent("onboarding.validation.bioMinimum", locale)
+      );
       return false;
     }
 
@@ -121,7 +153,9 @@ export function OnboardingForm({ user, locale }: OnboardingFormProps) {
 
   const validateStep3 = (): boolean => {
     if (!formData.resumeFile) {
-      setValidationError(getContent("onboarding.validation.resumeRequired", locale));
+      setValidationError(
+        getContent("onboarding.validation.resumeRequired", locale)
+      );
       return false;
     }
     if (!formData.profilePicture) {
@@ -160,40 +194,45 @@ export function OnboardingForm({ user, locale }: OnboardingFormProps) {
 
     setIsSubmitting(true);
     setValidationError("");
-    
+
     try {
       // Prepare form data for submission
       const submitData = new FormData();
-      submitData.append('fullName', formData.fullName);
-      submitData.append('age', formData.age);
-      submitData.append('nationality', formData.nationality);
-      submitData.append('location', formData.location);
-      submitData.append('phone', formData.phone);
-      submitData.append('yearsOfExperience', formData.yearsOfExperience);
-      submitData.append('skills', formData.skills.join(','));
-      submitData.append('bio', formData.bio);
-      
+      submitData.append("fullName", formData.fullName);
+      submitData.append("age", formData.age);
+      submitData.append("nationality", formData.nationality);
+      submitData.append("location", formData.location);
+      submitData.append("phone", formData.phone);
+      submitData.append("jobTitle", formData.jobTitle);
+      submitData.append("yearsOfExperience", formData.yearsOfExperience);
+      submitData.append("skills", formData.skills.join(","));
+      submitData.append("bio", formData.bio);
+
       if (formData.resumeFile) {
-        submitData.append('resume', formData.resumeFile);
+        submitData.append("resume", formData.resumeFile);
       }
-      
+
       if (formData.profilePicture) {
-        submitData.append('profilePicture', formData.profilePicture);
+        submitData.append("profilePicture", formData.profilePicture);
       }
 
       if (formData.introductionVideo) {
-        submitData.append('introductionVideo', formData.introductionVideo, 'introduction.webm');
+        submitData.append(
+          "introductionVideo",
+          formData.introductionVideo,
+          "introduction.webm"
+        );
       }
 
       // Submit to API
-      const response = await fetch('/api/candidates', {
-        method: 'POST',
+      const response = await fetch("/api/candidates", {
+        method: "POST",
         body: submitData,
       });
 
       if (!response.ok) {
         const error = await response.json();
-        throw new Error(error.error || 'Failed to submit form');
+        throw new Error(error.error || "Failed to submit form");
       }
 
       // Redirect to thank you page
@@ -201,8 +240,8 @@ export function OnboardingForm({ user, locale }: OnboardingFormProps) {
     } catch (error) {
       console.error("Error submitting form:", error);
       setValidationError(
-        error instanceof Error 
-          ? error.message 
+        error instanceof Error
+          ? error.message
           : "Failed to submit form. Please try again."
       );
     } finally {
@@ -211,20 +250,20 @@ export function OnboardingForm({ user, locale }: OnboardingFormProps) {
   };
 
   const steps = [
-    { 
-      number: 1, 
-      title: getContent("onboarding.progress.step1.title", locale), 
-      description: getContent("onboarding.progress.step1.description", locale) 
+    {
+      number: 1,
+      title: getContent("onboarding.progress.step1.title", locale),
+      description: getContent("onboarding.progress.step1.description", locale),
     },
-    { 
-      number: 2, 
-      title: getContent("onboarding.progress.step2.title", locale), 
-      description: getContent("onboarding.progress.step2.description", locale) 
+    {
+      number: 2,
+      title: getContent("onboarding.progress.step2.title", locale),
+      description: getContent("onboarding.progress.step2.description", locale),
     },
-    { 
-      number: 3, 
-      title: getContent("onboarding.progress.step3.title", locale), 
-      description: getContent("onboarding.progress.step3.description", locale) 
+    {
+      number: 3,
+      title: getContent("onboarding.progress.step3.title", locale),
+      description: getContent("onboarding.progress.step3.description", locale),
     },
   ];
 
@@ -234,7 +273,11 @@ export function OnboardingForm({ user, locale }: OnboardingFormProps) {
       <div className="mb-10">
         <div className="flex items-start justify-between mb-6 relative">
           {steps.map((step, index) => (
-            <div key={step.number} className="flex flex-col items-center relative" style={{ flex: index === 1 ? '0 0 auto' : '1' }}>
+            <div
+              key={step.number}
+              className="flex flex-col items-center relative"
+              style={{ flex: index === 1 ? "0 0 auto" : "1" }}
+            >
               {/* Connector Line */}
               {index < steps.length - 1 && (
                 <div className="absolute top-5 left-[calc(50%+20px)] w-[calc(100%+40px)] h-0.5 -z-10">
@@ -245,7 +288,7 @@ export function OnboardingForm({ user, locale }: OnboardingFormProps) {
                   />
                 </div>
               )}
-              
+
               {/* Step Circle */}
               <div
                 className={`w-11 h-11 rounded-full flex items-center justify-center text-sm font-semibold transition-all duration-300 mb-3 ${
@@ -262,10 +305,16 @@ export function OnboardingForm({ user, locale }: OnboardingFormProps) {
                   step.number
                 )}
               </div>
-              
+
               {/* Step Info */}
               <div className="text-center max-w-[120px]">
-                <p className={`text-sm font-medium mb-1 ${currentStep >= step.number ? "text-foreground" : "text-muted-foreground"}`}>
+                <p
+                  className={`text-sm font-medium mb-1 ${
+                    currentStep >= step.number
+                      ? "text-foreground"
+                      : "text-muted-foreground"
+                  }`}
+                >
                   {step.title}
                 </p>
                 <p className="text-xs text-muted-foreground hidden md:block">
@@ -290,9 +339,12 @@ export function OnboardingForm({ user, locale }: OnboardingFormProps) {
             {currentStep === 3 && getContent("onboarding.step3.title", locale)}
           </CardTitle>
           <CardDescription>
-            {currentStep === 1 && getContent("onboarding.step1.description", locale)}
-            {currentStep === 2 && getContent("onboarding.step2.description", locale)}
-            {currentStep === 3 && getContent("onboarding.step3.description", locale)}
+            {currentStep === 1 &&
+              getContent("onboarding.step1.description", locale)}
+            {currentStep === 2 &&
+              getContent("onboarding.step2.description", locale)}
+            {currentStep === 3 &&
+              getContent("onboarding.step3.description", locale)}
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -300,19 +352,33 @@ export function OnboardingForm({ user, locale }: OnboardingFormProps) {
           {validationError && (
             <div className="mb-6 p-4 bg-red-50 dark:bg-red-950 border border-red-200 dark:border-red-800 rounded-lg flex items-start gap-3">
               <AlertCircle className="h-5 w-5 text-red-600 dark:text-red-400 shrink-0 mt-0.5" />
-              <p className="text-sm text-red-800 dark:text-red-200">{validationError}</p>
+              <p className="text-sm text-red-800 dark:text-red-200">
+                {validationError}
+              </p>
             </div>
           )}
 
           {/* Step Content */}
           {currentStep === 1 && (
-            <BasicInfoStep formData={formData} updateFormData={updateFormData} locale={locale} />
+            <BasicInfoStep
+              formData={formData}
+              updateFormData={updateFormData}
+              locale={locale}
+            />
           )}
           {currentStep === 2 && (
-            <ProfessionalInfoStep formData={formData} updateFormData={updateFormData} locale={locale} />
+            <ProfessionalInfoStep
+              formData={formData}
+              updateFormData={updateFormData}
+              locale={locale}
+            />
           )}
           {currentStep === 3 && (
-            <ResumeUploadStep formData={formData} updateFormData={updateFormData} locale={locale} />
+            <ResumeUploadStep
+              formData={formData}
+              updateFormData={updateFormData}
+              locale={locale}
+            />
           )}
 
           {/* Navigation Buttons */}
@@ -330,10 +396,9 @@ export function OnboardingForm({ user, locale }: OnboardingFormProps) {
               </Button>
             ) : (
               <Button onClick={handleSubmit} disabled={isSubmitting}>
-                {isSubmitting 
+                {isSubmitting
                   ? getContent("onboarding.navigation.submitting", locale)
-                  : getContent("onboarding.navigation.submit", locale)
-                }
+                  : getContent("onboarding.navigation.submit", locale)}
               </Button>
             )}
           </div>

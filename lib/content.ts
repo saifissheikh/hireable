@@ -18,7 +18,7 @@ const contentMap: Record<Locale, Record<string, unknown>> = {
  */
 export function getContent(
   path: ContentPath,
-  locale: Locale = 'en',
+  locale: Locale = "en",
   replacements?: Record<string, string>
 ): string {
   const content = contentMap[locale] || contentMap.en;
@@ -50,9 +50,36 @@ export function getContent(
 }
 
 /**
+ * Get raw content (arrays, objects, etc.) from the centralized content JSON file
+ * Supports nested paths using dot notation (e.g., "pricing.payPerResume.features")
+ */
+export function getRawContent(
+  path: ContentPath,
+  locale: Locale = "en"
+): unknown {
+  const content = contentMap[locale] || contentMap.en;
+  const keys = path.split(".");
+  let value: ContentValue | unknown = content;
+
+  for (const key of keys) {
+    if (value && typeof value === "object" && key in value) {
+      value = (value as Record<string, unknown>)[key];
+    } else {
+      console.warn(`Content path not found: ${path} for locale: ${locale}`);
+      return null;
+    }
+  }
+
+  return value;
+}
+
+/**
  * Get the entire content object (useful for accessing multiple related values)
  */
-export function getContentSection(path: ContentPath, locale: Locale = 'en'): Record<string, unknown> {
+export function getContentSection(
+  path: ContentPath,
+  locale: Locale = "en"
+): Record<string, unknown> {
   const content = contentMap[locale] || contentMap.en;
   const keys = path.split(".");
   let value: ContentValue = content;

@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@/auth';
-import { createClient } from '@supabase/supabase-js';
+import { NextRequest, NextResponse } from "next/server";
+import { auth } from "@/auth";
+import { createClient } from "@supabase/supabase-js";
 
 // Create a Supabase client with service role key for admin operations
 const supabaseAdmin = createClient(
@@ -13,27 +13,31 @@ export async function POST(request: NextRequest) {
     // Verify user is authenticated
     const session = await auth();
     if (!session?.user?.email) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const formData = await request.formData();
-    
+
     // Extract form fields
-    const fullName = formData.get('fullName') as string;
-    const age = parseInt(formData.get('age') as string);
-    const nationality = formData.get('nationality') as string;
-    const location = formData.get('location') as string;
-    const phone = formData.get('phone') as string;
-    const yearsOfExperience = parseInt(formData.get('yearsOfExperience') as string);
-    const skillsString = formData.get('skills') as string;
-    const skills = skillsString ? skillsString.split(',').map(s => s.trim()) : [];
-    const bio = formData.get('bio') as string;
-    const resumeFile = formData.get('resume') as File | null;
-    const profilePictureFile = formData.get('profilePicture') as File | null;
-    const introductionVideoFile = formData.get('introductionVideo') as File | null;
+    const fullName = formData.get("fullName") as string;
+    const age = parseInt(formData.get("age") as string);
+    const nationality = formData.get("nationality") as string;
+    const location = formData.get("location") as string;
+    const phone = formData.get("phone") as string;
+    const jobTitle = formData.get("jobTitle") as string;
+    const yearsOfExperience = parseInt(
+      formData.get("yearsOfExperience") as string
+    );
+    const skillsString = formData.get("skills") as string;
+    const skills = skillsString
+      ? skillsString.split(",").map((s) => s.trim())
+      : [];
+    const bio = formData.get("bio") as string;
+    const resumeFile = formData.get("resume") as File | null;
+    const profilePictureFile = formData.get("profilePicture") as File | null;
+    const introductionVideoFile = formData.get(
+      "introductionVideo"
+    ) as File | null;
 
     let resumeUrl = null;
     let resumeFilename = null;
@@ -42,29 +46,27 @@ export async function POST(request: NextRequest) {
 
     // Upload profile picture to Supabase Storage if provided
     if (profilePictureFile) {
-      const fileExt = profilePictureFile.name.split('.').pop();
+      const fileExt = profilePictureFile.name.split(".").pop();
       const fileName = `${session.user.email}-${Date.now()}.${fileExt}`;
-      
-      const { error: uploadError } = await supabaseAdmin
-        .storage
-        .from('profile-pictures')
+
+      const { error: uploadError } = await supabaseAdmin.storage
+        .from("profile-pictures")
         .upload(fileName, profilePictureFile, {
           contentType: profilePictureFile.type,
           upsert: true,
         });
 
       if (uploadError) {
-        console.error('Profile picture upload error:', uploadError);
+        console.error("Profile picture upload error:", uploadError);
         return NextResponse.json(
-          { error: 'Failed to upload profile picture' },
+          { error: "Failed to upload profile picture" },
           { status: 500 }
         );
       }
 
       // Get public URL for the uploaded profile picture
-      const { data: urlData } = supabaseAdmin
-        .storage
-        .from('profile-pictures')
+      const { data: urlData } = supabaseAdmin.storage
+        .from("profile-pictures")
         .getPublicUrl(fileName);
 
       profilePictureUrl = urlData.publicUrl;
@@ -72,29 +74,27 @@ export async function POST(request: NextRequest) {
 
     // Upload resume to Supabase Storage if provided
     if (resumeFile) {
-      const fileExt = resumeFile.name.split('.').pop();
+      const fileExt = resumeFile.name.split(".").pop();
       const fileName = `${session.user.email}-${Date.now()}.${fileExt}`;
-      
-      const { error: uploadError } = await supabaseAdmin
-        .storage
-        .from('resumes')
+
+      const { error: uploadError } = await supabaseAdmin.storage
+        .from("resumes")
         .upload(fileName, resumeFile, {
           contentType: resumeFile.type,
           upsert: true,
         });
 
       if (uploadError) {
-        console.error('Storage upload error:', uploadError);
+        console.error("Storage upload error:", uploadError);
         return NextResponse.json(
-          { error: 'Failed to upload resume' },
+          { error: "Failed to upload resume" },
           { status: 500 }
         );
       }
 
       // Get public URL for the uploaded file
-      const { data: urlData } = supabaseAdmin
-        .storage
-        .from('resumes')
+      const { data: urlData } = supabaseAdmin.storage
+        .from("resumes")
         .getPublicUrl(fileName);
 
       resumeUrl = urlData.publicUrl;
@@ -103,29 +103,27 @@ export async function POST(request: NextRequest) {
 
     // Upload introduction video to Supabase Storage if provided
     if (introductionVideoFile && introductionVideoFile.size > 0) {
-      const fileExt = 'webm'; // Browser records in WebM format
+      const fileExt = "webm"; // Browser records in WebM format
       const fileName = `${session.user.email}-${Date.now()}.${fileExt}`;
-      
-      const { error: uploadError } = await supabaseAdmin
-        .storage
-        .from('introduction-videos')
+
+      const { error: uploadError } = await supabaseAdmin.storage
+        .from("introduction-videos")
         .upload(fileName, introductionVideoFile, {
-          contentType: 'video/webm',
+          contentType: "video/webm",
           upsert: true,
         });
 
       if (uploadError) {
-        console.error('Video upload error:', uploadError);
+        console.error("Video upload error:", uploadError);
         return NextResponse.json(
-          { error: 'Failed to upload introduction video' },
+          { error: "Failed to upload introduction video" },
           { status: 500 }
         );
       }
 
       // Get public URL for the uploaded video
-      const { data: urlData } = supabaseAdmin
-        .storage
-        .from('introduction-videos')
+      const { data: urlData } = supabaseAdmin.storage
+        .from("introduction-videos")
         .getPublicUrl(fileName);
 
       introductionVideoUrl = urlData.publicUrl;
@@ -133,7 +131,7 @@ export async function POST(request: NextRequest) {
 
     // Insert candidate data into database
     const { data, error } = await supabaseAdmin
-      .from('candidates')
+      .from("candidates")
       .insert({
         user_id: session.user.email,
         email: session.user.email,
@@ -142,6 +140,7 @@ export async function POST(request: NextRequest) {
         nationality,
         location,
         phone,
+        job_title: jobTitle,
         years_of_experience: yearsOfExperience,
         skills,
         bio,
@@ -154,18 +153,18 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (error) {
-      console.error('Database insert error:', error);
+      console.error("Database insert error:", error);
       return NextResponse.json(
-        { error: 'Failed to save candidate data' },
+        { error: "Failed to save candidate data" },
         { status: 500 }
       );
     }
 
     return NextResponse.json({ success: true, data }, { status: 201 });
   } catch (error) {
-    console.error('API error:', error);
+    console.error("API error:", error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: "Internal server error" },
       { status: 500 }
     );
   }
@@ -176,39 +175,33 @@ export async function GET() {
     // Verify user is authenticated
     const session = await auth();
     if (!session?.user?.email) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     // Fetch candidate data for the logged-in user
     const { data, error } = await supabaseAdmin
-      .from('candidates')
-      .select('*')
-      .eq('user_id', session.user.email)
+      .from("candidates")
+      .select("*")
+      .eq("user_id", session.user.email)
       .single();
 
     if (error) {
-      if (error.code === 'PGRST116') {
+      if (error.code === "PGRST116") {
         // No profile found
-        return NextResponse.json(
-          { exists: false },
-          { status: 404 }
-        );
+        return NextResponse.json({ exists: false }, { status: 404 });
       }
-      console.error('Database query error:', error);
+      console.error("Database query error:", error);
       return NextResponse.json(
-        { error: 'Failed to fetch candidate data' },
+        { error: "Failed to fetch candidate data" },
         { status: 500 }
       );
     }
 
     return NextResponse.json({ exists: true, data }, { status: 200 });
   } catch (error) {
-    console.error('API error:', error);
+    console.error("API error:", error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: "Internal server error" },
       { status: 500 }
     );
   }
@@ -219,22 +212,25 @@ export async function PATCH(request: NextRequest) {
     // Verify user is authenticated
     const session = await auth();
     if (!session?.user?.email) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const formData = await request.formData();
-    
+
     // Extract editable fields
-    const bio = formData.get('bio') as string;
-    const skillsString = formData.get('skills') as string;
-    const skills = skillsString ? skillsString.split(',').map(s => s.trim()).filter(Boolean) : [];
-    const phone = formData.get('phone') as string;
-    const location = formData.get('location') as string;
-    const yearsOfExperience = formData.get('yearsOfExperience') as string;
-    const resumeFile = formData.get('resume') as File | null;
+    const bio = formData.get("bio") as string;
+    const skillsString = formData.get("skills") as string;
+    const skills = skillsString
+      ? skillsString
+          .split(",")
+          .map((s) => s.trim())
+          .filter(Boolean)
+      : [];
+    const phone = formData.get("phone") as string;
+    const location = formData.get("location") as string;
+    const jobTitle = formData.get("jobTitle") as string;
+    const yearsOfExperience = formData.get("yearsOfExperience") as string;
+    const resumeFile = formData.get("resume") as File | null;
 
     // Prepare update object
     const updateData: {
@@ -242,6 +238,7 @@ export async function PATCH(request: NextRequest) {
       skills: string[];
       phone: string;
       location: string;
+      job_title?: string;
       years_of_experience: number;
       resume_url?: string;
       resume_filename?: string;
@@ -253,31 +250,34 @@ export async function PATCH(request: NextRequest) {
       years_of_experience: parseInt(yearsOfExperience),
     };
 
+    // Add job title if provided
+    if (jobTitle) {
+      updateData.job_title = jobTitle;
+    }
+
     // Handle resume upload if new file provided
     if (resumeFile && resumeFile.size > 0) {
-      const fileExt = resumeFile.name.split('.').pop();
+      const fileExt = resumeFile.name.split(".").pop();
       const fileName = `${session.user.email}-${Date.now()}.${fileExt}`;
-      
-      const { error: uploadError } = await supabaseAdmin
-        .storage
-        .from('resumes')
+
+      const { error: uploadError } = await supabaseAdmin.storage
+        .from("resumes")
         .upload(fileName, resumeFile, {
           contentType: resumeFile.type,
           upsert: true,
         });
 
       if (uploadError) {
-        console.error('Storage upload error:', uploadError);
+        console.error("Storage upload error:", uploadError);
         return NextResponse.json(
-          { error: 'Failed to upload resume' },
+          { error: "Failed to upload resume" },
           { status: 500 }
         );
       }
 
       // Get public URL for the uploaded file
-      const { data: urlData } = supabaseAdmin
-        .storage
-        .from('resumes')
+      const { data: urlData } = supabaseAdmin.storage
+        .from("resumes")
         .getPublicUrl(fileName);
 
       updateData.resume_url = urlData.publicUrl;
@@ -286,25 +286,25 @@ export async function PATCH(request: NextRequest) {
 
     // Update candidate data in database
     const { data, error } = await supabaseAdmin
-      .from('candidates')
+      .from("candidates")
       .update(updateData)
-      .eq('user_id', session.user.email)
+      .eq("user_id", session.user.email)
       .select()
       .single();
 
     if (error) {
-      console.error('Database update error:', error);
+      console.error("Database update error:", error);
       return NextResponse.json(
-        { error: 'Failed to update candidate data' },
+        { error: "Failed to update candidate data" },
         { status: 500 }
       );
     }
 
     return NextResponse.json({ success: true, data }, { status: 200 });
   } catch (error) {
-    console.error('API error:', error);
+    console.error("API error:", error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: "Internal server error" },
       { status: 500 }
     );
   }

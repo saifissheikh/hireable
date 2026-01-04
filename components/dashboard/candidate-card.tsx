@@ -12,6 +12,7 @@ import { useLocale } from "@/lib/use-locale";
 interface Candidate {
   id: string;
   full_name: string;
+  job_title?: string;
   bio: string;
   location: string;
   years_of_experience: number;
@@ -63,6 +64,11 @@ export function CandidateCard({
             )}
             <div>
               <h3 className="text-xl font-bold">{candidate.full_name}</h3>
+              {candidate.job_title && (
+                <p className="text-sm text-primary font-semibold mt-0.5">
+                  {candidate.job_title}
+                </p>
+              )}
               <div className="flex items-center gap-2 mt-1">
                 <MapPin className="w-4 h-4 text-muted-foreground" />
                 <span className="text-sm text-muted-foreground">

@@ -8,6 +8,7 @@ import { useLocale } from "@/lib/use-locale";
 
 interface Candidate {
   full_name: string;
+  job_title?: string;
   profile_picture_url?: string;
   location: string;
   years_of_experience: number;
@@ -52,7 +53,12 @@ export function ProfileHeroSection({ candidate }: ProfileHeroSectionProps) {
           {/* Right: Info & Actions */}
           <div className="flex-1 space-y-6">
             <div>
-              <h1 className="text-4xl font-bold mb-3">{candidate.full_name}</h1>
+              <h1 className="text-4xl font-bold mb-2">{candidate.full_name}</h1>
+              {candidate.job_title && (
+                <p className="text-xl text-primary font-semibold mb-3">
+                  {candidate.job_title}
+                </p>
+              )}
               <div className="flex flex-wrap gap-4 text-lg text-muted-foreground mb-6">
                 <div className="flex items-center gap-2">
                   <MapPin className="w-5 h-5 text-primary" />

@@ -34,7 +34,7 @@ export default async function Home() {
   const { data: candidates, count } = await supabaseAdmin
     .from("candidates")
     .select(
-      "id, full_name, bio, location, years_of_experience, skills, profile_picture_url",
+      "id, full_name, job_title, bio, location, years_of_experience, skills, profile_picture_url",
       { count: "exact" }
     )
     .order("created_at", { ascending: false })

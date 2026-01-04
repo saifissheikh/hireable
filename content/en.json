@@ -41,6 +41,8 @@
     "step2": {
       "title": "Professional Background",
       "description": "Tell us about your professional experience",
+      "jobTitle": "Job Title *",
+      "jobTitlePlaceholder": "e.g., Senior Software Engineer, Marketing Manager...",
       "experience": "Years of Experience *",
       "experiencePlaceholder": "3",
       "experienceHint": "Enter 0 if you're a fresh graduate",
@@ -176,7 +178,7 @@
       "locations": "Locations"
     },
     "searchBar": {
-      "searchPlaceholder": "Search by name or skills...",
+      "searchPlaceholder": "Search by name, job title, or skills...",
       "locationPlaceholder": "Location",
       "nationalityPlaceholder": "Nationality",
       "experiencePlaceholder": "Experience",
@@ -235,6 +237,72 @@
   "landingCTAs": {
     "signUpCandidate": "Login as Candidate",
     "loginRecruiter": "Login as Recruiter"
+  },
+  "pricing": {
+    "header": {
+      "title": "Simple, Transparent Pricing",
+      "subtitle": "Choose the perfect plan for your hiring needs"
+    },
+    "payPerResume": {
+      "name": "Pay Per Resume",
+      "price": "10",
+      "currency": "AED",
+      "perResume": "per resume",
+      "description": "Perfect for occasional hiring needs",
+      "features": [
+        "Pay only for resumes you view",
+        "Full candidate profile access",
+        "Download resume in PDF",
+        "Contact information included",
+        "No monthly commitment",
+        "View video introductions"
+      ],
+      "buttonText": "Get Started"
+    },
+    "subscription": {
+      "name": "Subscription",
+      "price": "500",
+      "currency": "AED",
+      "perMonth": "per month",
+      "description": "Best value for active recruiters",
+      "badge": "Most Popular",
+      "features": [
+        "Unlimited resume views",
+        "Full candidate profile access",
+        "Download all resumes",
+        "Priority support",
+        "Advanced search filters",
+        "Monthly hiring analytics",
+        "Save favorite candidates",
+        "Email notifications"
+      ],
+      "buttonText": "Start Free Trial"
+    },
+    "comparison": {
+      "title": "Still not sure which plan is right for you?",
+      "subtitle": "Both plans give you access to our talented pool of candidates"
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "questions": [
+        {
+          "question": "Can I switch between plans?",
+          "answer": "Yes! You can switch from Pay Per Resume to Subscription at any time. Your remaining credits will be preserved."
+        },
+        {
+          "question": "What payment methods do you accept?",
+          "answer": "We accept all major credit cards, debit cards, and bank transfers in AED."
+        },
+        {
+          "question": "Is there a free trial?",
+          "answer": "Yes! The Subscription plan comes with a 7-day free trial. No credit card required."
+        },
+        {
+          "question": "What happens after I view a resume?",
+          "answer": "With Pay Per Resume, you'll have unlimited access to that candidate's profile. With Subscription, you can view all candidates."
+        }
+      ]
+    }
   },
   "footer": {
     "product": {

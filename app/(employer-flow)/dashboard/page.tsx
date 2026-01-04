@@ -42,7 +42,7 @@ export default async function EmployerDashboard({ searchParams }: PageProps) {
   let query = supabaseAdmin
     .from("candidates")
     .select(
-      "id, full_name, bio, location, nationality, years_of_experience, skills, profile_picture_url",
+      "id, full_name, job_title, bio, location, nationality, years_of_experience, skills, profile_picture_url",
       { count: "exact" }
     )
     .order("created_at", { ascending: false })
@@ -51,7 +51,7 @@ export default async function EmployerDashboard({ searchParams }: PageProps) {
   // Server-side search
   if (searchQuery) {
     query = query.or(
-      `full_name.ilike.%${searchQuery}%,location.ilike.%${searchQuery}%,skills.cs.{${searchQuery}}`
+      `full_name.ilike.%${searchQuery}%,job_title.ilike.%${searchQuery}%,location.ilike.%${searchQuery}%,skills.cs.{${searchQuery}}`
     );
   }
 
