@@ -4,13 +4,22 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { X } from "lucide-react";
 import { useState } from "react";
 import { getContent } from "@/lib/content";
 import type { Locale } from "@/lib/i18n-config";
+import { professions } from "@/lib/professions";
 
 interface ProfessionalInfoStepProps {
   formData: {
+    profession: string;
     jobTitle: string;
     yearsOfExperience: string;
     skills: string[];
@@ -51,6 +60,32 @@ export function ProfessionalInfoStep({
 
   return (
     <div className="space-y-6">
+      <div className="space-y-2">
+        <Label htmlFor="profession">
+          {getContent("onboarding.step2.profession", locale)} *
+        </Label>
+        <Select
+          value={formData.profession}
+          onValueChange={(value) => updateFormData({ profession: value })}
+        >
+          <SelectTrigger id="profession">
+            <SelectValue
+              placeholder={getContent(
+                "onboarding.step2.professionPlaceholder",
+                locale
+              )}
+            />
+          </SelectTrigger>
+          <SelectContent>
+            {professions.map((profession) => (
+              <SelectItem key={profession} value={profession}>
+                {profession}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
       <div className="space-y-2">
         <Label htmlFor="jobTitle">
           {getContent("onboarding.step2.jobTitle", locale)}

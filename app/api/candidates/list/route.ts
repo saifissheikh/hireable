@@ -15,13 +15,14 @@ export async function GET(request: NextRequest) {
   const locationFilter = searchParams.get("location") || "";
   const nationalityFilter = searchParams.get("nationality") || "";
   const experienceFilter = searchParams.get("experience") || "";
+  const professionFilter = searchParams.get("profession") || "";
 
   try {
     // Build query with optimized field selection
     let query = supabaseAdmin
       .from("candidates")
       .select(
-        "id, full_name, job_title, bio, location, nationality, years_of_experience, skills, profile_picture_url",
+        "id, full_name, profession, job_title, bio, location, nationality, years_of_experience, skills, profile_picture_url",
         { count: "exact" }
       )
       .order("created_at", { ascending: false })
@@ -55,6 +56,11 @@ export async function GET(request: NextRequest) {
         // 13+ case
         query = query.gte("years_of_experience", min);
       }
+    }
+
+    // Profession filter
+    if (professionFilter) {
+      query = query.eq("profession", professionFilter);
     }
 
     const { data: candidates, error, count } = await query;

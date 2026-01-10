@@ -5,13 +5,9 @@ import { useLocale } from "@/lib/use-locale";
 
 interface WelcomeSectionProps {
   userName: string;
-  totalCandidates: number;
 }
 
-export function WelcomeSection({
-  userName,
-  totalCandidates,
-}: WelcomeSectionProps) {
+export function WelcomeSection({ userName }: WelcomeSectionProps) {
   const locale = useLocale();
 
   return (
@@ -20,9 +16,7 @@ export function WelcomeSection({
         {getContent("dashboard.welcome.title", locale, { name: userName })}
       </h2>
       <p className="text-muted-foreground text-lg">
-        {getContent("dashboard.welcome.subtitle", locale, {
-          count: String(totalCandidates),
-        })}
+        {getContent("dashboard.welcome.subtitle")}
       </p>
     </div>
   );

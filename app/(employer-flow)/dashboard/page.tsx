@@ -2,7 +2,6 @@ import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { createClient } from "@supabase/supabase-js";
 import { WelcomeSection } from "@/components/dashboard/welcome-section";
-import { StatsCards } from "@/components/dashboard/stats-cards";
 import { CandidatesGrid } from "@/components/dashboard/candidates-grid";
 
 // Create a Supabase client
@@ -19,6 +18,7 @@ interface PageProps {
     location?: string;
     nationality?: string;
     experience?: string;
+    profession?: string;
   }>;
 }
 
@@ -37,12 +37,13 @@ export default async function EmployerDashboard({ searchParams }: PageProps) {
   const locationFilter = params.location || "";
   const nationalityFilter = params.nationality || "";
   const experienceFilter = params.experience || "";
+  const professionFilter = params.profession || "";
 
   // Build query with optimized field selection
   let query = supabaseAdmin
     .from("candidates")
     .select(
-      "id, full_name, job_title, bio, location, nationality, years_of_experience, skills, profile_picture_url",
+      "id, full_name, profession, job_title, bio, location, nationality, years_of_experience, skills, profile_picture_url",
       { count: "exact" }
     )
     .order("created_at", { ascending: false })
@@ -78,6 +79,11 @@ export default async function EmployerDashboard({ searchParams }: PageProps) {
     }
   }
 
+  // Profession filter
+  if (professionFilter) {
+    query = query.eq("profession", professionFilter);
+  }
+
   const { data: candidates, error, count } = await query;
 
   if (error) {
@@ -87,33 +93,11 @@ export default async function EmployerDashboard({ searchParams }: PageProps) {
   const candidatesList = candidates || [];
   const totalCandidates = count || 0;
 
-  // Calculate stats from all candidates (for accurate numbers)
-  const { data: allCandidates } = await supabaseAdmin
-    .from("candidates")
-    .select("skills, location");
-
-  const allSkills = new Set(
-    allCandidates?.flatMap((c) => c.skills || []) || []
-  );
-  const totalSkills = allSkills.size;
-
-  const allLocations = new Set(
-    allCandidates?.map((c) => c.location).filter(Boolean) || []
-  );
-  const totalLocations = allLocations.size;
-
   return (
     <div className="min-h-screen bg-linear-to-br from-primary/5 via-background to-primary/10">
       <main className="container mx-auto px-4 py-8">
         <WelcomeSection
           userName={session.user?.name?.split(" ")[0] || "Recruiter"}
-          totalCandidates={totalCandidates}
-        />
-
-        <StatsCards
-          totalCandidates={totalCandidates}
-          totalSkills={totalSkills}
-          totalLocations={totalLocations}
         />
 
         <CandidatesGrid
@@ -123,6 +107,7 @@ export default async function EmployerDashboard({ searchParams }: PageProps) {
           initialLocationFilter={locationFilter}
           initialNationalityFilter={nationalityFilter}
           initialExperienceFilter={experienceFilter}
+          initialProfessionFilter={professionFilter}
         />
       </main>
     </div>

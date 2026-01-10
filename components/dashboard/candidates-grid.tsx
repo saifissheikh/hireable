@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Users, Loader2 } from "lucide-react";
 import { CandidateCard } from "./candidate-card";
+import { CandidateCardSkeleton } from "./candidate-card-skeleton";
 import { SearchBar } from "./search-bar";
 import {
   Dialog,
@@ -21,6 +22,7 @@ import { useLocale } from "@/lib/use-locale";
 interface Candidate {
   id: string;
   full_name: string;
+  profession?: string;
   bio: string;
   location: string;
   years_of_experience: number;
@@ -35,6 +37,7 @@ interface CandidatesGridProps {
   initialLocationFilter?: string;
   initialNationalityFilter?: string;
   initialExperienceFilter?: string;
+  initialProfessionFilter?: string;
   isPublicView?: boolean;
 }
 
@@ -45,6 +48,7 @@ export function CandidatesGrid({
   initialLocationFilter = "",
   initialNationalityFilter = "",
   initialExperienceFilter = "",
+  initialProfessionFilter = "",
   isPublicView = false,
 }: CandidatesGridProps) {
   const router = useRouter();
@@ -58,7 +62,11 @@ export function CandidatesGrid({
   const [experienceFilter, setExperienceFilter] = useState(
     initialExperienceFilter
   );
+  const [professionFilter, setProfessionFilter] = useState(
+    initialProfessionFilter
+  );
   const [isLoading, setIsLoading] = useState(false);
+  const [isFilterLoading, setIsFilterLoading] = useState(false);
   const [hasMore, setHasMore] = useState(initialCandidates.length < totalCount);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const observerRef = useRef<IntersectionObserver | null>(null);
@@ -79,6 +87,9 @@ export function CandidatesGrid({
       clearTimeout(filterTimeoutRef.current);
     }
 
+    // Show loading state when filters change
+    setIsFilterLoading(true);
+
     filterTimeoutRef.current = setTimeout(() => {
       const params = new URLSearchParams();
 
@@ -86,6 +97,7 @@ export function CandidatesGrid({
       if (locationFilter) params.set("location", locationFilter);
       if (nationalityFilter) params.set("nationality", nationalityFilter);
       if (experienceFilter) params.set("experience", experienceFilter);
+      if (professionFilter) params.set("profession", professionFilter);
 
       const newUrl = params.toString()
         ? `?${params.toString()}`
@@ -103,6 +115,7 @@ export function CandidatesGrid({
     locationFilter,
     nationalityFilter,
     experienceFilter,
+    professionFilter,
     router,
   ]);
 
@@ -117,6 +130,7 @@ export function CandidatesGrid({
     setCandidates(initialCandidates);
     setHasMore(initialCandidates.length < totalCount);
     setIsLoading(false);
+    setIsFilterLoading(false);
     isLoadingMoreRef.current = false;
   }, [initialCandidates, totalCount]);
 
@@ -136,6 +150,7 @@ export function CandidatesGrid({
       if (locationFilter) params.set("location", locationFilter);
       if (nationalityFilter) params.set("nationality", nationalityFilter);
       if (experienceFilter) params.set("experience", experienceFilter);
+      if (professionFilter) params.set("profession", professionFilter);
 
       const response = await fetch(`/api/candidates/list?${params.toString()}`);
       const data = await response.json();
@@ -195,10 +210,18 @@ export function CandidatesGrid({
           onNationalityChange={setNationalityFilter}
           experienceFilter={experienceFilter}
           onExperienceChange={setExperienceFilter}
+          professionFilter={professionFilter}
+          onProfessionChange={setProfessionFilter}
         />
       )}
 
-      {candidates.length === 0 ? (
+      {isFilterLoading ? (
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {[1, 2, 3, 4, 5, 6].map((i) => (
+            <CandidateCardSkeleton key={i} />
+          ))}
+        </div>
+      ) : candidates.length === 0 ? (
         <Card className="p-12 text-center">
           <div className="flex flex-col items-center gap-4">
             <div className="w-20 h-20 rounded-full bg-muted flex items-center justify-center">

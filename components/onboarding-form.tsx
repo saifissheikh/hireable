@@ -34,6 +34,7 @@ interface FormData {
   phone: string;
 
   // Professional Info
+  profession: string;
   jobTitle: string;
   yearsOfExperience: string;
   skills: string[];
@@ -43,6 +44,7 @@ interface FormData {
   resumeFile: File | null;
   profilePicture: File | null;
   introductionVideo: Blob | null;
+  introductionAudio: Blob | null;
 }
 
 export function OnboardingForm({ user, locale }: OnboardingFormProps) {
@@ -55,6 +57,7 @@ export function OnboardingForm({ user, locale }: OnboardingFormProps) {
     nationality: "",
     location: "",
     phone: "",
+    profession: "",
     jobTitle: "",
     yearsOfExperience: "",
     skills: [],
@@ -62,6 +65,7 @@ export function OnboardingForm({ user, locale }: OnboardingFormProps) {
     resumeFile: null,
     profilePicture: null,
     introductionVideo: null,
+    introductionAudio: null,
   });
 
   const totalSteps = 3;
@@ -119,7 +123,12 @@ export function OnboardingForm({ user, locale }: OnboardingFormProps) {
   };
 
   const validateStep2 = (): boolean => {
-    const { jobTitle, yearsOfExperience, skills, bio } = formData;
+    const { profession, jobTitle, yearsOfExperience, skills, bio } = formData;
+
+    if (!profession.trim()) {
+      setValidationError("Profession is required");
+      return false;
+    }
 
     if (!jobTitle.trim()) {
       setValidationError("Job title is required");
@@ -203,6 +212,7 @@ export function OnboardingForm({ user, locale }: OnboardingFormProps) {
       submitData.append("nationality", formData.nationality);
       submitData.append("location", formData.location);
       submitData.append("phone", formData.phone);
+      submitData.append("profession", formData.profession);
       submitData.append("jobTitle", formData.jobTitle);
       submitData.append("yearsOfExperience", formData.yearsOfExperience);
       submitData.append("skills", formData.skills.join(","));
@@ -221,6 +231,14 @@ export function OnboardingForm({ user, locale }: OnboardingFormProps) {
           "introductionVideo",
           formData.introductionVideo,
           "introduction.webm"
+        );
+      }
+
+      if (formData.introductionAudio) {
+        submitData.append(
+          "introductionAudio",
+          formData.introductionAudio,
+          "audio-introduction.webm"
         );
       }
 

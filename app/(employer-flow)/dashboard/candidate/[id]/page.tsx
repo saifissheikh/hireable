@@ -7,6 +7,7 @@ import { ProfileHeroSection } from "@/components/candidate-profile/profile-hero-
 import { AboutSection } from "@/components/candidate-profile/about-section";
 import { SkillsSection } from "@/components/candidate-profile/skills-section";
 import { VideoSection } from "@/components/candidate-profile/video-section";
+import { AudioSection } from "@/components/candidate-profile/audio-section";
 import { ResumeSection } from "@/components/candidate-profile/resume-section";
 import { ContactInfoCard } from "@/components/candidate-profile/contact-info-card";
 import { ProfessionalDetailsCard } from "@/components/candidate-profile/professional-details-card";
@@ -66,6 +67,14 @@ export default async function CandidateProfilePage({ params }: PageProps) {
             {candidate.introduction_video_url && (
               <VideoSection
                 videoUrl={candidate.introduction_video_url}
+                candidateName={candidate.full_name}
+                className="order-3"
+              />
+            )}
+
+            {candidate.introduction_audio_url && (
+              <AudioSection
+                audioUrl={candidate.introduction_audio_url}
                 candidateName={candidate.full_name}
                 className="order-3"
               />

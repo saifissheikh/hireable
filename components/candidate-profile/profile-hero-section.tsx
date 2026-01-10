@@ -8,6 +8,7 @@ import { useLocale } from "@/lib/use-locale";
 
 interface Candidate {
   full_name: string;
+  profession?: string;
   job_title?: string;
   profile_picture_url?: string;
   location: string;
@@ -54,6 +55,13 @@ export function ProfileHeroSection({ candidate }: ProfileHeroSectionProps) {
           <div className="flex-1 space-y-6">
             <div>
               <h1 className="text-4xl font-bold mb-2">{candidate.full_name}</h1>
+              {candidate.profession && (
+                <div className="mb-2">
+                  <span className="inline-block px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium">
+                    {candidate.profession}
+                  </span>
+                </div>
+              )}
               {candidate.job_title && (
                 <p className="text-xl text-primary font-semibold mb-3">
                   {candidate.job_title}

@@ -41,6 +41,8 @@
     "step2": {
       "title": "Professional Background",
       "description": "Tell us about your professional experience",
+      "profession": "Profession",
+      "professionPlaceholder": "Select your profession",
       "jobTitle": "Job Title *",
       "jobTitlePlaceholder": "e.g., Senior Software Engineer, Marketing Manager...",
       "experience": "Years of Experience *",
@@ -66,7 +68,14 @@
       "fileTypes": "PDF, DOC, or DOCX (max 5MB)",
       "chooseFile": "Choose File",
       "hint": "Your resume will be visible to employers. Make sure it's up to date!",
-      "uploaded": "Uploaded successfully"
+      "uploaded": "Uploaded successfully",
+      "introductionMedia": "Introduction Media",
+      "optionalChooseOne": "(Optional - Choose One)",
+      "introMediaDescription": "Record either a video or audio introduction. Both are optional but highly recommended!",
+      "videoIntroduction": "Video Introduction (1 minute)",
+      "audioIntroduction": "Audio Introduction (1 minute)",
+      "videoDisabled": "Video recording is disabled because you have an audio introduction.",
+      "audioDisabled": "Audio recording is disabled because you have a video introduction."
     },
     "navigation": {
       "back": "Back",
@@ -170,7 +179,7 @@
     },
     "welcome": {
       "title": "Welcome back, {name}! 👋",
-      "subtitle": "Browse through our talent pool of {count} verified candidates"
+      "subtitle": "Browse through thousands of verified candidates in our talent pool"
     },
     "stats": {
       "totalCandidates": "Total Candidates",
@@ -182,6 +191,7 @@
       "locationPlaceholder": "Location",
       "nationalityPlaceholder": "Nationality",
       "experiencePlaceholder": "Experience",
+      "professionPlaceholder": "Profession",
       "clearButton": "Clear",
       "experience": {
         "0-3": "0-3 years",

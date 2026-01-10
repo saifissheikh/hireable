@@ -12,6 +12,7 @@ import { useLocale } from "@/lib/use-locale";
 interface Candidate {
   id: string;
   full_name: string;
+  profession?: string;
   job_title?: string;
   bio: string;
   location: string;
@@ -62,10 +63,19 @@ export function CandidateCard({
                   .join("")}
               </div>
             )}
-            <div>
-              <h3 className="text-xl font-bold">{candidate.full_name}</h3>
+            <div className="flex-1 min-w-0">
+              <h3 className="text-xl font-bold truncate">
+                {candidate.full_name}
+              </h3>
+              {candidate.profession && (
+                <div className="mt-1">
+                  <Badge variant="outline" className="text-xs">
+                    {candidate.profession}
+                  </Badge>
+                </div>
+              )}
               {candidate.job_title && (
-                <p className="text-sm text-primary font-semibold mt-0.5">
+                <p className="text-sm text-primary font-semibold mt-1 truncate">
                   {candidate.job_title}
                 </p>
               )}

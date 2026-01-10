@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { VideoSection } from "@/components/candidate-profile/video-section";
+import { AudioSection } from "@/components/candidate-profile/audio-section";
 import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -44,6 +45,7 @@ interface Candidate {
   resume_filename: string | null;
   profile_picture_url: string | null;
   introduction_video_url: string | null;
+  introduction_audio_url: string | null;
   created_at: string;
 }
 
@@ -402,6 +404,14 @@ export function ProfileView({ candidate, user, locale }: ProfileViewProps) {
           {candidate.introduction_video_url && (
             <VideoSection
               videoUrl={candidate.introduction_video_url}
+              candidateName={candidate.full_name}
+            />
+          )}
+
+          {/* Audio Introduction Section */}
+          {candidate.introduction_audio_url && (
+            <AudioSection
+              audioUrl={candidate.introduction_audio_url}
               candidateName={candidate.full_name}
             />
           )}

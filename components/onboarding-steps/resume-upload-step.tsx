@@ -7,18 +7,29 @@ import { getContent } from "@/lib/content";
 import { Locale } from "@/lib/i18n-config";
 import Image from "next/image";
 import { VideoRecorder } from "@/components/video-recorder";
+import { AudioRecorder } from "@/components/audio-recorder";
 
 interface ResumeUploadStepProps {
   formData: {
     resumeFile: File | null;
     profilePicture: File | null;
     introductionVideo: Blob | null;
+    introductionAudio: Blob | null;
   };
-  updateFormData: (data: { resumeFile?: File | null; profilePicture?: File | null; introductionVideo?: Blob | null }) => void;
+  updateFormData: (data: {
+    resumeFile?: File | null;
+    profilePicture?: File | null;
+    introductionVideo?: Blob | null;
+    introductionAudio?: Blob | null;
+  }) => void;
   locale: Locale;
 }
 
-export function ResumeUploadStep({ formData, updateFormData, locale }: ResumeUploadStepProps) {
+export function ResumeUploadStep({
+  formData,
+  updateFormData,
+  locale,
+}: ResumeUploadStepProps) {
   const [isDraggingResume, setIsDraggingResume] = useState(false);
   const [isDraggingImage, setIsDraggingImage] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -146,7 +157,7 @@ export function ResumeUploadStep({ formData, updateFormData, locale }: ResumeUpl
       {/* Profile Picture Upload */}
       <div className="space-y-2">
         <Label className="text-base">Profile Picture *</Label>
-        
+
         {!formData.profilePicture ? (
           <div
             onDragOver={handleImageDragOver}
@@ -198,7 +209,9 @@ export function ResumeUploadStep({ formData, updateFormData, locale }: ResumeUpl
                 </div>
               )}
               <div className="flex-1 min-w-0">
-                <p className="font-medium truncate">{formData.profilePicture.name}</p>
+                <p className="font-medium truncate">
+                  {formData.profilePicture.name}
+                </p>
                 <p className="text-sm text-muted-foreground">
                   {formatFileSize(formData.profilePicture.size)}
                 </p>
@@ -223,8 +236,10 @@ export function ResumeUploadStep({ formData, updateFormData, locale }: ResumeUpl
 
       {/* Resume Upload */}
       <div className="space-y-2">
-        <Label className="text-base">{getContent("onboarding.step3.resume", locale)}</Label>
-        
+        <Label className="text-base">
+          {getContent("onboarding.step3.resume", locale)}
+        </Label>
+
         {!formData.resumeFile ? (
           <div
             onDragOver={handleResumeDragOver}
@@ -241,7 +256,9 @@ export function ResumeUploadStep({ formData, updateFormData, locale }: ResumeUpl
                 <Upload className="h-8 w-8 text-muted-foreground" />
               </div>
               <div>
-                <p className="font-medium">{getContent("onboarding.step3.dropzone", locale)}</p>
+                <p className="font-medium">
+                  {getContent("onboarding.step3.dropzone", locale)}
+                </p>
                 <p className="text-sm text-muted-foreground mt-1">
                   {getContent("onboarding.step3.fileTypes", locale)}
                 </p>
@@ -270,7 +287,9 @@ export function ResumeUploadStep({ formData, updateFormData, locale }: ResumeUpl
                   <File className="h-5 w-5 text-primary" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="font-medium truncate">{formData.resumeFile.name}</p>
+                  <p className="font-medium truncate">
+                    {formData.resumeFile.name}
+                  </p>
                   <p className="text-sm text-muted-foreground">
                     {formatFileSize(formData.resumeFile.size)}
                   </p>
@@ -295,22 +314,65 @@ export function ResumeUploadStep({ formData, updateFormData, locale }: ResumeUpl
         </p>
       </div>
 
-      {/* Video Introduction (Optional) */}
-      <div className="space-y-2">
-        <div className="flex items-center gap-2">
-          <Label className="text-base">Video Introduction</Label>
-          <span className="text-xs text-muted-foreground">(Optional)</span>
+      {/* Video OR Audio Introduction (Optional) */}
+      <div className="space-y-4">
+        <div>
+          <div className="flex items-center gap-2">
+            <Label className="text-base">
+              {getContent("onboarding.step3.introductionMedia", locale)}
+            </Label>
+            <span className="text-xs text-muted-foreground">
+              {getContent("onboarding.step3.optionalChooseOne", locale)}
+            </span>
+          </div>
+          <p className="text-xs text-muted-foreground mt-1">
+            {getContent("onboarding.step3.introMediaDescription", locale)}
+          </p>
         </div>
-        
-        <VideoRecorder
-          onVideoRecorded={(videoBlob) => updateFormData({ introductionVideo: videoBlob })}
-          onVideoRemoved={() => updateFormData({ introductionVideo: null })}
-          existingVideo={formData.introductionVideo}
-        />
-        
-        <p className="text-xs text-muted-foreground">
-          Record a 1-minute video introducing yourself to potential employers. This is optional but highly recommended!
-        </p>
+
+        {/* Video Option */}
+        <div className="space-y-2">
+          <Label className="text-sm font-medium">
+            {getContent("onboarding.step3.videoIntroduction", locale)}
+          </Label>
+          {formData.introductionAudio ? (
+            <div className="border-2 border-dashed rounded-lg p-6 text-center bg-muted/50">
+              <p className="text-sm text-muted-foreground">
+                {getContent("onboarding.step3.videoDisabled", locale)}
+              </p>
+            </div>
+          ) : (
+            <VideoRecorder
+              onVideoRecorded={(videoBlob) =>
+                updateFormData({ introductionVideo: videoBlob })
+              }
+              onVideoRemoved={() => updateFormData({ introductionVideo: null })}
+              existingVideo={formData.introductionVideo}
+            />
+          )}
+        </div>
+
+        {/* Audio Option */}
+        <div className="space-y-2">
+          <Label className="text-sm font-medium">
+            {getContent("onboarding.step3.audioIntroduction", locale)}
+          </Label>
+          {formData.introductionVideo ? (
+            <div className="border-2 border-dashed rounded-lg p-6 text-center bg-muted/50">
+              <p className="text-sm text-muted-foreground">
+                {getContent("onboarding.step3.audioDisabled", locale)}
+              </p>
+            </div>
+          ) : (
+            <AudioRecorder
+              onAudioRecorded={(audioBlob) =>
+                updateFormData({ introductionAudio: audioBlob })
+              }
+              onAudioRemoved={() => updateFormData({ introductionAudio: null })}
+              existingAudio={formData.introductionAudio}
+            />
+          )}
+        </div>
       </div>
     </div>
   );

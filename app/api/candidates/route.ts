@@ -24,6 +24,7 @@ export async function POST(request: NextRequest) {
     const nationality = formData.get("nationality") as string;
     const location = formData.get("location") as string;
     const phone = formData.get("phone") as string;
+    const profession = formData.get("profession") as string;
     const jobTitle = formData.get("jobTitle") as string;
     const yearsOfExperience = parseInt(
       formData.get("yearsOfExperience") as string
@@ -38,11 +39,15 @@ export async function POST(request: NextRequest) {
     const introductionVideoFile = formData.get(
       "introductionVideo"
     ) as File | null;
+    const introductionAudioFile = formData.get(
+      "introductionAudio"
+    ) as File | null;
 
     let resumeUrl = null;
     let resumeFilename = null;
     let profilePictureUrl = null;
     let introductionVideoUrl = null;
+    let introductionAudioUrl = null;
 
     // Upload profile picture to Supabase Storage if provided
     if (profilePictureFile) {
@@ -129,6 +134,34 @@ export async function POST(request: NextRequest) {
       introductionVideoUrl = urlData.publicUrl;
     }
 
+    // Upload introduction audio to Supabase Storage if provided
+    if (introductionAudioFile && introductionAudioFile.size > 0) {
+      const fileExt = "webm"; // Browser records in WebM format
+      const fileName = `${session.user.email}-${Date.now()}.${fileExt}`;
+
+      const { error: uploadError } = await supabaseAdmin.storage
+        .from("introduction-audios")
+        .upload(fileName, introductionAudioFile, {
+          contentType: "audio/webm",
+          upsert: true,
+        });
+
+      if (uploadError) {
+        console.error("Audio upload error:", uploadError);
+        return NextResponse.json(
+          { error: "Failed to upload introduction audio" },
+          { status: 500 }
+        );
+      }
+
+      // Get public URL for the uploaded audio
+      const { data: urlData } = supabaseAdmin.storage
+        .from("introduction-audios")
+        .getPublicUrl(fileName);
+
+      introductionAudioUrl = urlData.publicUrl;
+    }
+
     // Insert candidate data into database
     const { data, error } = await supabaseAdmin
       .from("candidates")
@@ -140,6 +173,7 @@ export async function POST(request: NextRequest) {
         nationality,
         location,
         phone,
+        profession,
         job_title: jobTitle,
         years_of_experience: yearsOfExperience,
         skills,
@@ -148,6 +182,7 @@ export async function POST(request: NextRequest) {
         resume_filename: resumeFilename,
         profile_picture_url: profilePictureUrl,
         introduction_video_url: introductionVideoUrl,
+        introduction_audio_url: introductionAudioUrl,
       })
       .select()
       .single();
@@ -228,6 +263,7 @@ export async function PATCH(request: NextRequest) {
       : [];
     const phone = formData.get("phone") as string;
     const location = formData.get("location") as string;
+    const profession = formData.get("profession") as string;
     const jobTitle = formData.get("jobTitle") as string;
     const yearsOfExperience = formData.get("yearsOfExperience") as string;
     const resumeFile = formData.get("resume") as File | null;
@@ -238,6 +274,7 @@ export async function PATCH(request: NextRequest) {
       skills: string[];
       phone: string;
       location: string;
+      profession?: string;
       job_title?: string;
       years_of_experience: number;
       resume_url?: string;
@@ -249,6 +286,11 @@ export async function PATCH(request: NextRequest) {
       location,
       years_of_experience: parseInt(yearsOfExperience),
     };
+
+    // Add profession if provided
+    if (profession) {
+      updateData.profession = profession;
+    }
 
     // Add job title if provided
     if (jobTitle) {

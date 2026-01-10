@@ -9,8 +9,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Search, X, MapPin, Globe, Briefcase } from "lucide-react";
+import { Search, X, MapPin, Globe, Briefcase, UserCog } from "lucide-react";
 import { countries } from "@/lib/countries";
+import { professions } from "@/lib/professions";
 import { getContent } from "@/lib/content";
 import { useLocale } from "@/lib/use-locale";
 
@@ -33,6 +34,8 @@ interface SearchBarProps {
   onNationalityChange?: (value: string) => void;
   experienceFilter?: string;
   onExperienceChange?: (value: string) => void;
+  professionFilter?: string;
+  onProfessionChange?: (value: string) => void;
 }
 
 export function SearchBar({
@@ -44,6 +47,8 @@ export function SearchBar({
   onNationalityChange,
   experienceFilter = "",
   onExperienceChange,
+  professionFilter = "",
+  onProfessionChange,
 }: SearchBarProps) {
   const locale = useLocale();
 
@@ -67,12 +72,13 @@ export function SearchBar({
   ];
 
   const hasActiveFilters =
-    locationFilter || nationalityFilter || experienceFilter;
+    locationFilter || nationalityFilter || experienceFilter || professionFilter;
 
   const clearAllFilters = () => {
     onLocationChange?.("");
     onNationalityChange?.("");
     onExperienceChange?.("");
+    onProfessionChange?.("");
   };
 
   return (
@@ -171,6 +177,34 @@ export function SearchBar({
                   className="cursor-pointer"
                 >
                   {range.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+
+          {/* Profession Filter */}
+          <Select value={professionFilter} onValueChange={onProfessionChange}>
+            <SelectTrigger className="h-10 w-full lg:w-[180px] cursor-pointer border-2">
+              <div className="flex items-center gap-2 w-full min-w-0">
+                <UserCog className="w-4 h-4 text-muted-foreground shrink-0" />
+                <div className="truncate flex-1">
+                  <SelectValue
+                    placeholder={getContent(
+                      "dashboard.searchBar.professionPlaceholder",
+                      locale
+                    )}
+                  />
+                </div>
+              </div>
+            </SelectTrigger>
+            <SelectContent className="max-h-[300px]">
+              {professions.map((profession) => (
+                <SelectItem
+                  key={profession}
+                  value={profession}
+                  className="cursor-pointer"
+                >
+                  {profession}
                 </SelectItem>
               ))}
             </SelectContent>

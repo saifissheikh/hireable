@@ -12,6 +12,25 @@ import type { Locale } from "@/lib/i18n-config";
 import { countries } from "@/lib/countries";
 import { useState } from "react";
 
+// Phone country codes with flags
+const phoneCountries = [
+  { code: "+971", name: "UAE", flag: "🇦🇪" },
+  { code: "+966", name: "Saudi Arabia", flag: "🇸🇦" },
+  { code: "+974", name: "Qatar", flag: "🇶🇦" },
+  { code: "+973", name: "Bahrain", flag: "🇧🇭" },
+  { code: "+968", name: "Oman", flag: "🇴🇲" },
+  { code: "+965", name: "Kuwait", flag: "🇰🇼" },
+  { code: "+20", name: "Egypt", flag: "🇪🇬" },
+  { code: "+962", name: "Jordan", flag: "🇯🇴" },
+  { code: "+961", name: "Lebanon", flag: "🇱🇧" },
+  { code: "+92", name: "Pakistan", flag: "🇵🇰" },
+  { code: "+91", name: "India", flag: "🇮🇳" },
+  { code: "+63", name: "Philippines", flag: "🇵🇭" },
+  { code: "+880", name: "Bangladesh", flag: "🇧🇩" },
+  { code: "+1", name: "USA/Canada", flag: "🇺🇸" },
+  { code: "+44", name: "UK", flag: "🇬🇧" },
+];
+
 interface BasicInfoStepProps {
   formData: {
     fullName: string;
@@ -34,6 +53,7 @@ export function BasicInfoStep({
     age: "",
     phone: "",
   });
+  const [phoneCountryCode, setPhoneCountryCode] = useState("+971");
 
   const validateFullName = (value: string) => {
     // Only allow letters, spaces, hyphens, and apostrophes
@@ -77,17 +97,18 @@ export function BasicInfoStep({
   };
 
   const validatePhone = (value: string) => {
-    // Allow international phone formats: +, digits, spaces, hyphens, parentheses
-    const phoneRegex =
-      /^[\+]?[(]?[0-9]{1,4}[)]?[-\s\.]?[(]?[0-9]{1,4}[)]?[-\s\.]?[0-9]{1,9}$/;
-    if (!value.trim()) {
+    // Remove the country code and spaces for validation
+    const phoneOnly = value.replace(/^\+\d+\s*/, "").replace(/\s/g, "");
+    // Validate that the remaining part contains only digits
+    const phoneRegex = /^\d{8,15}$/;
+    if (!phoneOnly.trim()) {
       setErrors((prev) => ({
         ...prev,
         phone: getContent("onboarding.validation.phoneRequired", locale),
       }));
       return false;
     }
-    if (!phoneRegex.test(value.replace(/\s/g, ""))) {
+    if (!phoneRegex.test(phoneOnly)) {
       setErrors((prev) => ({
         ...prev,
         phone: getContent("onboarding.validation.phoneInvalid", locale),
@@ -112,8 +133,18 @@ export function BasicInfoStep({
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    updateFormData({ phone: value });
-    if (value) validatePhone(value);
+    // Only allow digits and spaces
+    const cleanValue = value.replace(/[^\d\s]/g, "");
+    const fullPhone = `${phoneCountryCode} ${cleanValue}`;
+    updateFormData({ phone: fullPhone });
+    if (cleanValue) validatePhone(fullPhone);
+  };
+
+  const handleCountryCodeChange = (newCode: string) => {
+    setPhoneCountryCode(newCode);
+    // Update phone with new country code
+    const phoneOnly = formData.phone.replace(/^\+\d+\s*/, "");
+    updateFormData({ phone: `${newCode} ${phoneOnly}` });
   };
 
   const handleEmirateChange = (value: string) => {
@@ -215,19 +246,36 @@ export function BasicInfoStep({
           <Label htmlFor="phone">
             {getContent("onboarding.step1.phone", locale)} *
           </Label>
-          <Input
-            id="phone"
-            type="tel"
-            placeholder={getContent(
-              "onboarding.step1.phonePlaceholder",
-              locale
-            )}
-            value={formData.phone}
-            onChange={handlePhoneChange}
-            onBlur={() => formData.phone && validatePhone(formData.phone)}
-            required
-            className={errors.phone ? "border-red-500" : ""}
-          />
+          <div className="flex gap-2">
+            <Select
+              value={phoneCountryCode}
+              onValueChange={handleCountryCodeChange}
+            >
+              <SelectTrigger className="w-[140px]">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {phoneCountries.map((country) => (
+                  <SelectItem key={country.code} value={country.code}>
+                    <span className="flex items-center gap-2">
+                      <span className="text-base">{country.flag}</span>
+                      <span className="text-sm">{country.code}</span>
+                    </span>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Input
+              id="phone"
+              type="tel"
+              placeholder="50********"
+              value={formData.phone.replace(/^\+\d+\s*/, "")}
+              onChange={handlePhoneChange}
+              onBlur={() => formData.phone && validatePhone(formData.phone)}
+              required
+              className={`flex-1 ${errors.phone ? "border-red-500" : ""}`}
+            />
+          </div>
           {errors.phone && (
             <p className="text-sm text-red-500">{errors.phone}</p>
           )}
